@@ -1,0 +1,290 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+}}
+
+<div class="cadocentral">
+  {{#logourl}}
+      <div id="cad-logo"> 
+          <img class="img-responsive" src="{{{logourl}}}" alt="logo">
+      </div>
+  {{/logourl}}
+  <div id="cad-title" class = "cado-title">
+    <h1>{{fullname}}</h1>
+    <h3>{{# str }} CADO, mod_cado {{/ str }}          
+        <span id="cado-grouping">
+          {{#groupingname}}
+            {{# str }} forgroup, mod_cado {{/ str }} {{groupingname}}
+          {{/groupingname}} 
+        </span>         
+    </h3>
+  </div>
+  <div style="clear:both;">
+    <hr>
+  </div>
+  <div id="cado-intro">
+    {{#cadointro}} 
+      {{{cadointro}}}
+    {{/cadointro}}
+  </div>
+  <div id="cado-coursesummary">
+    {{#summary}}       
+      <h2>{{# str }} description, mod_cado {{/ str }}</h2>
+      <div>{{{summary}}}</div>
+    {{/summary}}
+  </div>
+  <div id="cado-schedule">
+    {{#scheduleexists}}
+      <h2>{{# str }} schedule, mod_cado {{/ str }}</h2>
+      <table class="table table-hover table-bordered">
+        <thead>
+          <tr class="cado-t0">
+            {{#weekly}}<th class="cado-tc1">{{# str }} week, mod_cado {{/ str }}</th>{{/weekly}}
+            {{^weekly}}<th class="cado-tc1">{{# str }} section, mod_cado {{/ str }}</th>{{/weekly}}
+            {{#weekly}}<th class="cado-tc2">{{# str }} weekdate, mod_cado {{/ str }}</th>{{/weekly}}
+            <th class="cado-tc3">{{# str }} topic, mod_cado {{/ str }}</th>
+            <th class="cado-t0">
+              <table class="table table-hover cado-inner-table">
+                <tr class="cado-t0">
+                  <th class="cado-tc3">{{# str }} task, mod_cado {{/ str }}</th>
+                  <th class="cado-tc2">{{# str }} datedue, mod_cado {{/ str }}</th>
+                  {{#tagsinsched}}
+                    {{#headtag0}}<th class="cado-tc1">{{headtag0}}</th>{{/headtag0}}
+                    {{#headtag1}}<th class="cado-tc1">{{headtag1}}</th>{{/headtag1}}
+                    {{#headtag2}}<th class="cado-tc1">{{headtag2}}</th>{{/headtag2}}
+                  {{/tagsinsched}}
+                </tr>
+              </table>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#schedule}}
+            <tr class="cado-t0">
+              <td class="cado-tc1">{{^sum}}{{section}}{{/sum}}</td>
+              {{#weekly}}<td class="cado-tc2">{{#startdate}}{{#userdate}} {{startdate}}, {{#str}} strftimedate {{/str}} {{/userdate}}{{/startdate}}</td>{{/weekly}}
+              <td class="cado-tc3{{#sum}} cado-sched-total{{/sum}}">{{name}} </td> 
+              <td class="cado-t0">
+                <table class="table table-hover cado-inner-table">
+                  {{#tasks}}
+                    {{#.}}
+                      <tr class="cado-t0">
+                        <td class="cado-tc3">{{^sum}}{{name}}{{/sum}}</td>
+                        <td class="cado-tc2">{{#date}}{{#userdate}} {{date}}, {{#str}} strftimedatetimeshort {{/str}} {{/userdate}}{{/date}}</td>
+                        {{#tagsinsched}}                        
+                          {{#headtag0}}<td class="cado-tc1{{#sum}} cado-sched-total{{/sum}}">{{tag0}}</td>{{/headtag0}}
+                          {{#headtag1}}<td class="cado-tc1{{#sum}} cado-sched-total{{/sum}}">{{tag1}}</td>{{/headtag1}}
+                          {{#headtag2}}<td class="cado-tc1{{#sum}} cado-sched-total{{/sum}}">{{tag2}}</td>{{/headtag2}}
+                        {{/tagsinsched}}                        
+                      </tr>
+                    {{/.}}
+                  {{/tasks}}
+                </table>
+              </td>
+            </tr> 
+          {{/schedule}}
+        </tbody>
+      </table>
+    {{/scheduleexists}}
+  </div>
+  <div id="cado-comment">
+    {{#cadocomment}} 
+      {{{cadocomment}}}
+    {{/cadocomment}}
+  </div>
+  <div id="cado-forum">
+    {{#forumexists}}
+      <h2 class="cad-header">{{# str }} forum, mod_cado {{/ str }}</h2>
+      {{#forum}}
+        {{#.}}
+          <h2 id="cadoi-forum-name_{{cmodid}}">{{name}} <a class="cad-link" href="{{link}}&amp;forceview=1" target="_blank">&#9741;</a></h2>
+          <div id="cadoi-forum-dates_{{cmodid}}">
+              <h4>{{# str }} duedates, mod_cado {{/ str }}</h4>
+              {{#duedate}} <div class="row">
+                <div class = "col-sm-3">{{# str }} duedate, forum {{/ str }}</div>
+                <div class = "col-sm-3">{{#userdate}} {{duedate}} , {{#str}} strftimedatetime {{/str}} {{/userdate}}</div>
+              </div>{{/duedate}}
+              {{#date}}<div class="row">
+                <div class = "col-sm-3">{{# str }} forumexpectcompleted, mod_cado {{/ str }}:</div>
+                <div class = "col-sm-3">{{#userdate}} {{date}} , {{#str}} strftimedatetime {{/str}} {{/userdate}}</div>
+              </div>{{/date}}
+              {{#cutoffdate}}<div class="row">
+                  <div class = "col-sm-3">{{# str }} cutoffdate, forum {{/ str }}</div>
+                  <div class = "col-sm-3">{{#userdate}} {{cutoffdate}}, {{#str}} strftimedatetime {{/str}} {{/userdate}}</div>
+              </div>{{/cutoffdate}}
+          </div>
+          <div id="cadoi-forum-completion_{{cmodid}}">
+            <h4>{{# str }} completion, mod_cado {{/ str }}</h4>
+            <div class="row">
+              <div class = "col-sm-3">{{# str }} completiondiscussions, forum {{/ str }}</div>
+              <div class = "col-sm-3">{{completiondiscussions}}</div>
+            </div>
+            <div class="row">
+              <div class = "col-sm-3">{{# str }} completionreplies, forum {{/ str }}</div>
+              <div class = "col-sm-3">{{completionreplies}}</div>
+            </div>
+            {{#completionposts}}<div class="row">
+              <div class = "col-sm-3">{{# str }} completionposts, forum {{/ str }} </div>
+              <div class = "col-sm-3">{{completionposts}}</div>
+            </div>{{/completionposts}}
+          </div>
+          <div id="cadoi-forum-extra_{{cmodid}}">
+            {{#extra}}           
+              {{#.}}
+                <div class="row">
+                  <div class = "col-sm-3 cad-tag-head"><h4>{{tagheading}}:</h4></div>
+                  <div class = "col-sm-3"><h4>{{tagcontent}}</h4></div>
+                </div>
+              {{/.}}
+            {{/extra}}   
+          </div>
+          <div id="cadoi-forum-intro_{{cmodid}}"><p> </p>{{{intro}}}<p> </p></div>
+          {{#rubricexists}}
+            <h4>{{# str }} rubric, mod_cado {{/ str }} </h4>
+            <div id="cadoi-assign-rubric_{{cmodid}}">
+              <table class="table table-hover">
+                <tbody>
+                {{#rubric}}
+                  {{#.}}<tr>
+                    <td class="cado-rubric-row-head">{{critdesc}}</td>
+                    {{#levels}}
+                      <td>{{leveldesc}}<br>({{points}})</td>
+                    {{/levels}}
+                  </tr>{{/.}}
+                {{/rubric}}
+                </tbody>
+              </table><br>
+            </div>
+          {{/rubricexists}}
+        {{/.}}
+      {{/forum}}
+    {{/forumexists}}
+  </div>
+  <div id="cado-quiz">
+    {{#quizexists}}
+      <h2 class="cad-header">{{# str }} quiz, mod_cado {{/ str }}</h2>
+      {{#quiz}}
+        {{#.}}
+          <h2 id="cadoi-quiz-name_{{cmodid}}">{{name}} <a class="cad-link" href="{{link}}&amp;forceview=1" target="_blank">&#9741;</a></h2>
+          <div id="cadoi-quiz-dates_{{cmodid}}">
+            <h4>{{# str }} duedates, mod_cado {{/ str }}</h4>
+            {{#date}}<div class="row">
+                <div class = "col-sm-3">{{# str }} quizexpectcompleted, mod_cado {{/ str }}: </div>
+                <div class = "col-sm-3">{{#userdate}} {{date}}, {{#str}} strftimedatetime {{/str}} {{/userdate}}</div>
+            </div>{{/date}}  
+            {{#timeclose}}
+            <div class="row">
+              <div class = "col-sm-3">{{# str }} quizclose, quiz {{/ str }}: </div>
+              <div class = "col-sm-3">{{#userdate}} {{timeclose}}, {{#str}} strftimedatetime {{/str}} {{/userdate}}</div>
+            </div>{{/timeclose}}
+            {{#timeopen}}
+            <div class="row">
+              <div class = "col-sm-3">{{# str }} quizopen, quiz {{/ str }}: </div>
+              <div class = "col-sm-3">{{#userdate}} {{timeopen}}, {{#str}} strftimedatetime {{/str}} {{/userdate}}</div>
+            </div>{{/timeopen}}
+          </div>
+          <div id="cadoi-quiz-completion_{{cmodid}}"><h4>{{# str }} completion, mod_cado {{/ str }} </h4>
+            <div class="row">
+              <div class = "col-sm-3">{{# str }} timelimit, quiz {{/ str }} {{# str }} minutes, mod_cado {{/ str }}: </div>
+              <div class = "col-sm-3">{{timelimit}}</div>
+            </div>
+            <div class="row">
+              <div class = "col-sm-3">{{# str }} attempts, quiz {{/ str }}: </div>
+              <div class = "col-sm-3">{{attempts}}</div>
+            </div>
+          </div>
+          <div id="cadoi-quiz-extra_{{cmodid}}">
+            {{#extra}}
+              {{#.}}
+                <div class = "row">
+                  <div class = "col-sm-3 cad-tag-head"><h4>{{tagheading}}:</h4></div>
+                  <div class = "col-sm-3"><h4>{{tagcontent}}</h4></div>
+                </div>
+              {{/.}}
+            {{/extra}}
+          </div>
+          <div id="cadoi-quiz_intro_{{cmodid}}"><p> </p>{{{intro}}}<p> </p></div>
+        {{/.}}
+      {{/quiz}}
+    {{/quizexists}}
+  </div>
+  <div id="cado-assign">
+    {{#assignexists}}
+      <h2 class="cad-header">{{# str }} assign, mod_cado {{/ str }}</h2>
+      {{#assign}}
+        {{#.}}
+          <h2 id="cadoi-assign-name_{{cmodid}}">{{name}} <a class="cad-link" href="{{link}}&amp;forceview=1" target="_blank">&#9741;</a></h2>
+          <div id="cadoi-assign-dates_{{cmodid}}">
+            <h4>{{# str }} duedates, mod_cado {{/ str }} </h4>
+            {{#date}}
+              <div class = "row">
+                <div class = "col-sm-3">{{# str }} assignexpectcompleted, mod_cado {{/ str }}:  </div>
+                <div class = "col-sm-3">{{#userdate}} {{date}}, {{#str}} strftimedatetime {{/str}} {{/userdate}}</div>
+              </div>
+            {{/date}}
+            <div class = "row">
+              <div class = "col-sm-3">{{# str }} duedate, assign {{/ str }}: </div>
+              <div class = "col-sm-3">{{#userdate}} {{duedate}}, {{#str}} strftimedatetime {{/str}} {{/userdate}}</div>
+            </div>
+            <div class = "row">
+              <div class = "col-sm-3">{{# str }} cutoffdate, assign {{/ str }}:  </div>
+              <div class = "col-sm-3">{{#userdate}} {{cutoffdate}}, {{#str}} strftimedatetime {{/str}} {{/userdate}}</div>
+            </div>
+          </div> 
+          <div id="cadoi-assign-extra_{{cmodid}}">
+            {{#extra}}
+              {{#.}}
+                <div class = "row">
+                  <div class = "col-sm-3 cad-tag-head"><h4>{{tagheading}}:</h4></div>
+                  <div class = "col-sm-3"><h4>{{tagcontent}}</h4></div>
+                </div>
+              {{/.}}
+            {{/extra}}
+          </div>
+          <div id="cadoi-assign-intro_{{cmodid}}"><p> </p>{{{intro}}}<p> </p></div>
+          {{#rubricexists}}
+            <h4>{{# str }} rubric, mod_cado {{/ str }} </h4>
+            <div id="cadoi-assign-rubric_{{cmodid}}">
+              <table class="table table-hover">
+                <tbody>
+                {{#rubric}}
+                  {{#.}}<tr>
+                    <td class="cado-rubric-row-head">{{critdesc}}</td>
+                    {{#levels}}
+                      <td>{{leveldesc}}<br>({{points}})</td>
+                    {{/levels}}
+                  </tr>{{/.}}
+                {{/rubric}}
+                </tbody>
+              </table><br>
+            </div>
+          {{/rubricexists}}
+        {{/.}}
+      {{/assign}}
+      <br><hr><br>
+    {{/assignexists}}
+  </div>
+  <div id="cado-sitecomment"> 
+    {{#sitecomment}}
+      <div>{{{sitecomment}}}</div>
+    {{/sitecomment}}
+  </div>
+  <div id="cado-biblio">
+    {{#cadobiblio}} 
+      <div >{{{cadobiblio}}}</div>
+    {{/cadobiblio}}
+  </div>
+</div>

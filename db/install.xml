@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="mod/cado/db" VERSION="2020022100" COMMENT="XMLDB file for Moodle mod/cado"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="cado" COMMENT="This is the main database table for mod CADO">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Time record is updated"/>
+        <FIELD NAME="timegenerated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Time cado is generated or regenerated"/>
+        <FIELD NAME="timeproposed" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Time cado is proposed, 0 if not proposed or not approved"/>
+        <FIELD NAME="generateuser" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="User who has last generated cado or proposed cado"/>
+        <FIELD NAME="approveuser" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="User who has been requested to approve cado, or if timeapproved is set, then has approved the cado"/>
+        <FIELD NAME="timeapproved" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Time cado is approved"/>
+        <FIELD NAME="approvecomment" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Comment by approver, regardless of whether approved or not approved" />
+        <FIELD NAME="generatedpage" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="The generated html cado report"/>
+        <FIELD NAME="cadocomment" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="One of the free text fields available"/>
+        <FIELD NAME="cadobiblio" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="One of the free text fields available"/>
+        <FIELD NAME="cadointro" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="One of the free text fields available"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="course" UNIQUE="false" FIELDS="course"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>

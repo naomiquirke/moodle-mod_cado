@@ -1,0 +1,109 @@
+
+
+div#cado-schedule .table, div#cado-schedule .table * {
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    vertical-align:top;
+  }
+  div#cado-schedule table.table table *[class^=cado-tc] {
+    border: none;
+    padding: 0 0 4px 0;
+}
+div#cado-schedule *.cado-tc3 {
+  width:20%;
+}
+div#cado-schedule *.cado-tc2, div#cado-schedule *.cado-tc1 {
+  width:10%;
+}
+ div#cado-schedule, [id^="cadoi-assign-rubric_"] td {
+   font-size: smaller;
+ }
+ td.cado-sched-total {
+   font-weight: bolder;
+ }
+ a.cad-link {
+   color:blue;
+ }
+ a.cad-link:hover {
+  text-shadow:1px 1px 2px red, 0 0 1em blue, 0 0 0.2em blue;
+  text-decoration:none;
+}
+
+td.cado-rubric-row-head {
+    font-weight: bolder;
+ }
+
+ div.cado-title {
+  margin-bottom:0;
+ }
+
+[id^="cado"].cado-different, p.cado-different {
+  background-color:pink;
+  text-decoration: dotted lightgrey;
+}
+[id^="cado"].cado-othermissing, p.cado-othermissing {
+  background-color:lightgreen;
+}
+[id^="cado"].cado-originmissing, div.cado-originmissing , p.cado-originmissing{
+  background-color:yellow;
+}
+tbody tr th[class^="cado-tc"] {
+  border:none;
+}
+div#cad-title {
+  min-height: 100px;
+  float:left;
+}
+div#cad-logo {
+  min-height: 100px;
+  width: 30%;
+  float: right;
+  clear:right;
+}
+p#cad-statecomment {
+  margin-bottom: 0;
+}
+p.approvecommentreviewed {
+  font-size: x-small;
+  font-style: italic;
+  margin-bottom: 0;
+}
+div.prevapprovecomment {
+  margin-left: 30px;
+}
+div.cadocentral h2 {
+  margin-top:30px;
+  margin-bottom:15px;
+  font-weight: bolder;
+}
+div.cadocentral h3 {
+  margin-top:20px;
+}
+div.cadocentral h2.cad-header {
+  background-color: lightgray;
+  padding:15px;
+}
+div.cadocentral h4 {
+  margin-top:15px;
+}
+@media print {
+  a.cad-link {
+    color:transparent;
+  }
+  section#region-main {
+    border:none;
+    padding: 0;
+  }
+  div.cadocentral div[id^="cado-"]{
+      widows: 2;
+      orphans: 3;
+  }
+  div.cadocentral h2 , div.cadocentral h3 , div.cadocentral h4 {
+    break-after: avoid;
+  }
+  div.cadocentral table, div.cadocentral div[id*="-dates_"], div.cadocentral div[id*="-completion_"], div.cadocentral div[id*="-extra_"], div.cadocentral div[id*="-intro_"] {
+    break-inside: avoid;
+    widows: 2;
+    orphans: 3;
+  }
+}

@@ -1,0 +1,1 @@
+SELECT * FROM moodle.mdl_cado;
