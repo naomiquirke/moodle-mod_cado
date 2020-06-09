@@ -186,63 +186,91 @@ public function cadogenerate($reportrenderer) {
  */
     private function report_course() {
         global $DB;
-        $passedid = $this->course->id;
+        $courseid = $this->course->id;
         $grouping = $this->coursemodule->groupingid;
+        $visible = mod_cado_check::includehidden() == 1 ? 0 : 1;
 
         $courseext = new stdClass;
         $courseext->groupingname = $grouping ? $DB->get_record('groupings',array('id'=>$grouping),'name')->name : null;
-        $inchidden = mod_cado_check::includehidden();
     //SCHEDULE and TAGS SETUP
-        $sched = new mod_cado_check($passedid);
+        $sched = new mod_cado_check($courseid);
         $schedule = $sched->schedulesetup ? $this->startschedule($sched) : null;
         $courseext -> tagsinsched = $sched->tagsinsched; 
         $courseext -> weekly = $this->course->format == "weeks"; //so that schedule can have week information removed if not relevant
 
+    // COMBINED
+        $sql = "WITH mod_groups AS ( --get all the groups that may access each activity module
+                SELECT cmod.id AS cmod, cmod.instance, gm.id AS modgroup, mod.name AS type, cmod.groupingid, cmod.completionexpected, cmod.section 
+                FROM  {course} AS c 
+                    JOIN {course_modules} AS cmod on cmod.course = c.id
+                    JOIN {modules} AS mod on cmod.module = mod.id  
+                    LEFT JOIN {groupings} AS ggm on ggm.id =  cmod.groupingid
+                    LEFT JOIN {groupings_groups} AS gggm on gggm.groupingid = ggm.id
+                    LEFT JOIN {groups} AS gm on gggm.groupid = gm.id
+                WHERE c.id=:course and cmod.completion<>0 and cmod.visible >= :visible and mod.name in ( 'assign' ,'forum' ,'quiz')
+            )
+
+            , course_grouping AS ( --get all the groups that are in our target grouping
+                SELECT g.id AS coursegroup 
+                FROM {groupings} AS gg
+                    JOIN {groupings_groups} AS ggg on ggg.groupingid = gg.id
+                    JOIN {groups} AS g on  ggg.groupid = g.id
+                WHERE gg.id = :grouping
+            )
+
+            , chosen_mods AS ( --find all the activities that have groups accessing that activity that are in our target grouping, or activities that do not have grouping restrictions
+                SELECT mg.cmod AS id, mg.instance, mg.type, mg.completionexpected, mg.section
+                FROM mod_groups AS mg 
+                    LEFT JOIN course_grouping AS cg on cg.coursegroup = mg.modgroup
+                WHERE mg.groupingid= 0 or cg.coursegroup = mg.modgroup
+            )
+
+            SELECT cm.*
+                , f.name AS fname, f.intro AS fintro, f.duedate AS fduedate, f.cutoffdate AS fcutoffdate, completiondiscussions, completionreplies, completionposts
+                , q.name AS qname, q.intro AS qintro, timeclose, timeopen, timelimit, attempts
+                , a.name AS aname, a.intro AS aintro, a.duedate AS aduedate, a.cutoffdate AS acutoffdate
+            FROM chosen_mods AS cm
+                LEFT JOIN {forum} AS f on f.id = cm.instance and cm.type = 'forum'
+                LEFT JOIN {quiz} AS q on q.id = cm.instance and cm.type = 'quiz'
+                LEFT JOIN {assign} AS a on a.id = cm.instance and cm.type = 'assign'
+            ORDER BY cm.type, timeclose, f.duedate, a.duedate, cm.completionexpected, fcutoffdate, acutoffdate";    
+
+        $allmodinfo = $DB->get_records_sql($sql,['course'=>$courseid,'grouping'=>$grouping, 'visible'=>$visible]); 
+
     //FORUM
         if (mod_cado_check::options('forum','activityoptions')) {
-
-            $modules = get_coursemodules_in_course("forum",$passedid,'intro, duedate, cutoffdate, completiondiscussions, completionreplies, completionposts',TRUE);
-            $temparray = array();
-            foreach ($modules as $thismod) {
-                if (($thismod->completion <> 0)
-                && ( $thismod->visible || $inchidden)
-                && ( $thismod->groupingid == 0 || $thismod->groupingid == $grouping || $thismod->groupmode == 0 ) ) { //this last or in because possibly they might have had a grouping and then set to no groups, leaving the grouping in the database
+            foreach ($allmodinfo as $thismod) {
+                if ($thismod->type == 'forum') { 
                     $temparray[] = self::getmoddetails('forum', $thismod, $sched, $schedule); //sched is updated directly
                 }
             }
 
             $courseext -> forumexists = ($temparray == TRUE); //include for mustache header
-            $courseext -> forum = cadosort($temparray, 'orderdate');
+            $courseext -> forum = $temparray; //cadosort($temparray, 'orderdate');
         }
     //QUIZ    
         if (mod_cado_check::options('quiz','activityoptions')) {
                 
             $temparray = array();
-            $modules = get_coursemodules_in_course("quiz",$passedid,'groupingid, intro,timeclose,timeopen,timelimit,attempts');
-            foreach ($modules as $thismod) {
-                if (($thismod->completion <> 0)
-                && ( $thismod->visible || $inchidden)
-                && ( $thismod->groupingid == 0 || $thismod->groupingid == $grouping || $thismod->groupmode == 0 ) ) { //this last or in because possibly they might have had a grouping and then set to no groups, leaving the grouping in the database
+            foreach ($allmodinfo as $thismod) {
+                if ($thismod->type == 'quiz') { 
                     $temparray[] = self::getmoddetails('quiz', $thismod, $sched, $schedule); //sched is updated directly
                 }
             }
-            $courseext -> quizexists = ($temparray == TRUE);
-            $courseext -> quiz = cadosort($temparray, 'orderdate');
+           $courseext -> quizexists = ($temparray == TRUE);
+            $courseext -> quiz = $temparray; // cadosort($temparray, 'orderdate');
         }
     //ASSIGN            
         if (mod_cado_check::options('assign','activityoptions')) {
                 
             $temparray = array();
-            $modules = get_coursemodules_in_course("assign",$passedid,'groupingid, intro, duedate, cutoffdate');
-            foreach ($modules as $thismod) {
-                if (($thismod->completion <> 0)
-                && ( $thismod->visible || $inchidden)
-                && ( $thismod->groupingid == 0 || $thismod->groupingid == $grouping || $thismod->groupmode == 0 ) ) { //this last or in because possibly they might have had a grouping and then set to no groups, leaving the grouping in the database
+            foreach ($allmodinfo as $thismod) {
+                if ($thismod->type == 'assign') { 
                     $temparray[] = self::getmoddetails('assign', $thismod, $sched, $schedule); //sched is updated directly
                 }
             }
             $courseext -> assignexists = ($temparray == TRUE);           
-            $courseext -> assign = cadosort($temparray, 'orderdate');
+            $courseext -> assign = $temparray; // cadosort($temparray, 'orderdate');
         }
     //ALL        
         if ($sched->schedulesetup) {
@@ -301,19 +329,17 @@ public function cadogenerate($reportrenderer) {
         //for forum and assign take as !$quiz; no options have assign alone in below
 
         $thisrubric = $quiz ? FALSE : $this->get_rubric($thismod->id);
-        $orderdate = $quiz ? ($thismod->timeclose ? $thismod->timeclose : 
-            ($thismod->completionexpected ? $thismod->completionexpected : 
-            0) ) :
-            ($thismod->duedate ? $thismod->duedate : 
-            ($thismod->completionexpected ? $thismod->completionexpected :
-            ($thismod->cutoffdate ?$thismod->cutoffdate : 
-            0)));
+
+        //from the sql we get either null or the matching details so we can use max
+        $thismod->intro = max($thismod->fintro, $thismod->qintro, $thismod->aintro);
+        $thismod->duedate = max($thismod->fduedate, $thismod->aduedate);
+        $thismod->cutoffdate = max($thismod->fcutoffdate, $thismod->acutoffdate);
+        $thismod->name = max($thismod->fname, $thismod->aname);
 
         $contents = [ //seems to need automatically defined keys for mustache
             'cmodid'=>$thismod->id,
             'name'=>htmlspecialchars_decode($thismod->name), 
-            'orderdate'=>$orderdate,
-            'intro'=>$thismod->intro, 
+            'intro'=>$thismod->intro,
             'date'=>($thismod->completionexpected == "0" ? FALSE : $thismod->completionexpected),
             'extra'=>  $sched->get_tags($thismod->id),
             'link'=> $quiz ? new moodle_url('/mod/quiz/view.php', ['id'=>$thismod->id]) : ($forum ? new moodle_url('/mod/forum/view.php',  ['id'=>$thismod->id]) : new moodle_url('/mod/assign/view.php',  ['id'=>$thismod->id]) ),
@@ -336,7 +362,15 @@ public function cadogenerate($reportrenderer) {
             'attempts'=> $quiz ? ($thismod->attempts == "0" ? get_string('notapplicable','cado') : $thismod->attempts) : FALSE
 
         ];
-        if ($sched->schedulesetup) {                          
+        if ($sched->schedulesetup) {    
+            $orderdate = $quiz ? ($thismod->timeclose ? $thismod->timeclose : 
+                ($thismod->completionexpected ? $thismod->completionexpected : 
+                0) ) :
+                    ($thismod->duedate ? $thismod->duedate : 
+                        ($thismod->completionexpected ? $thismod->completionexpected :
+                            ($thismod->cutoffdate ?$thismod->cutoffdate : 
+                                 0)));
+                      
             $scheduleentry = [
                 'name' => $contents['name'],
                 'date'=> $orderdate == 0 ? null : $orderdate

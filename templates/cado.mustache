@@ -235,14 +235,18 @@
                 <div class = "col-sm-3">{{#userdate}} {{date}}, {{#str}} strftimedatetime {{/str}} {{/userdate}}</div>
               </div>
             {{/date}}
-            <div class = "row">
-              <div class = "col-sm-3">{{# str }} duedate, assign {{/ str }}: </div>
-              <div class = "col-sm-3">{{#userdate}} {{duedate}}, {{#str}} strftimedatetime {{/str}} {{/userdate}}</div>
-            </div>
-            <div class = "row">
-              <div class = "col-sm-3">{{# str }} cutoffdate, assign {{/ str }}:  </div>
-              <div class = "col-sm-3">{{#userdate}} {{cutoffdate}}, {{#str}} strftimedatetime {{/str}} {{/userdate}}</div>
-            </div>
+            {{#duedate}}
+              <div class = "row">
+                <div class = "col-sm-3">{{# str }} duedate, assign {{/ str }}: </div>
+                <div class = "col-sm-3">{{#userdate}} {{duedate}}, {{#str}} strftimedatetime {{/str}} {{/userdate}}</div>
+              </div>
+            {{/duedate}}
+            {{#cutoffdate}}
+              <div class = "row">
+                <div class = "col-sm-3">{{# str }} cutoffdate, assign {{/ str }}:  </div>
+                <div class = "col-sm-3">{{#userdate}} {{cutoffdate}}, {{#str}} strftimedatetime {{/str}} {{/userdate}}</div>
+              </div>
+            {{/cutoffdate}}
           </div> 
           <div id="cadoi-assign-extra_{{cmodid}}">
             {{#extra}}
