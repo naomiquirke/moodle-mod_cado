@@ -238,6 +238,7 @@ public function cadogenerate($reportrenderer) {
         $allmodinfo = $DB->get_records_sql($sql,['course'=>$courseid,'grouping'=>$grouping, 'visible'=>$visible]); 
 
     //FORUM
+        $temparray = [];
         if (mod_cado_check::options('forum','activityoptions')) {
             foreach ($allmodinfo as $thismod) {
                 if ($thismod->type == 'forum') { 
@@ -251,7 +252,7 @@ public function cadogenerate($reportrenderer) {
     //QUIZ    
         if (mod_cado_check::options('quiz','activityoptions')) {
                 
-            $temparray = array();
+            $temparray = [];
             foreach ($allmodinfo as $thismod) {
                 if ($thismod->type == 'quiz') { 
                     $temparray[] = self::getmoddetails('quiz', $thismod, $sched, $schedule); //sched is updated directly
@@ -263,7 +264,7 @@ public function cadogenerate($reportrenderer) {
     //ASSIGN            
         if (mod_cado_check::options('assign','activityoptions')) {
                 
-            $temparray = array();
+            $temparray = [];
             foreach ($allmodinfo as $thismod) {
                 if ($thismod->type == 'assign') { 
                     $temparray[] = self::getmoddetails('assign', $thismod, $sched, $schedule); //sched is updated directly
@@ -334,7 +335,7 @@ public function cadogenerate($reportrenderer) {
         $thismod->intro = max($thismod->fintro, $thismod->qintro, $thismod->aintro);
         $thismod->duedate = max($thismod->fduedate, $thismod->aduedate);
         $thismod->cutoffdate = max($thismod->fcutoffdate, $thismod->acutoffdate);
-        $thismod->name = max($thismod->fname, $thismod->aname);
+        $thismod->name = max($thismod->fname, $thismod->qname, $thismod->aname);
 
         $contents = [ //seems to need automatically defined keys for mustache
             'cmodid'=>$thismod->id,
