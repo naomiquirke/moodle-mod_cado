@@ -198,33 +198,33 @@ public function cadogenerate($reportrenderer) {
         $courseext -> weekly = $this->course->format == "weeks"; //so that schedule can have week information removed if not relevant
 
     // COMBINED
-        $sql = "WITH mod_groups AS ( --get all the groups that may access each activity module
-                SELECT cmod.id AS cmod, cmod.instance, gm.id AS modgroup, mod.name AS type, cmod.groupingid, cmod.completionexpected, cmod.section 
-                FROM  {course} AS c 
-                    JOIN {course_modules} AS cmod on cmod.course = c.id
-                    JOIN {modules} AS mod on cmod.module = mod.id  
-                    LEFT JOIN {groupings} AS ggm on ggm.id =  cmod.groupingid
+        $sql = "WITH mod_groups AS ( " .  //get all the groups that may access each activity module
+                "SELECT cm.id AS cmod, cm.instance, gm.id AS modgroup, mo.name AS type, cm.groupingid, cm.completionexpected, cm.section 
+                FROM {course} AS c 
+                    JOIN {course_modules} AS cm on cm.course = c.id
+                    JOIN {modules} AS mo on mo.id = cm.module
+                    LEFT JOIN {groupings} AS ggm on ggm.id =  cm.groupingid
                     LEFT JOIN {groupings_groups} AS gggm on gggm.groupingid = ggm.id
                     LEFT JOIN {groups} AS gm on gggm.groupid = gm.id
-                WHERE c.id=:course and cmod.completion<>0 and cmod.visible >= :visible and mod.name in ( 'assign' ,'forum' ,'quiz')
+                WHERE c.id=:course and cm.completion<>0 and cm.visible >= :visible and mo.name in ( 'assign' ,'forum' ,'quiz')
             )
 
-            , course_grouping AS ( --get all the groups that are in our target grouping
-                SELECT g.id AS coursegroup 
+            , course_grouping AS ( ". //get all the groups that are in our target grouping
+                "SELECT g.id AS coursegroup 
                 FROM {groupings} AS gg
                     JOIN {groupings_groups} AS ggg on ggg.groupingid = gg.id
                     JOIN {groups} AS g on  ggg.groupid = g.id
                 WHERE gg.id = :grouping
             )
 
-            , chosen_mods AS ( --find all the activities that have groups accessing that activity that are in our target grouping, or activities that do not have grouping restrictions
-                SELECT mg.cmod AS id, mg.instance, mg.type, mg.completionexpected, mg.section
+            , chosen_mods AS ( ". //find all the activities that have groups accessing that activity that are in our target grouping, or activities that do not have grouping restrictions
+                "SELECT distinct mg.cmod AS id, mg.instance, mg.type, mg.completionexpected, mg.section
                 FROM mod_groups AS mg 
                     LEFT JOIN course_grouping AS cg on cg.coursegroup = mg.modgroup
                 WHERE mg.groupingid= 0 or cg.coursegroup = mg.modgroup
             )
-
-            SELECT cm.*
+            " . //access all the mod info now given that we have already gathered half the information
+            "SELECT cm.*
                 , f.name AS fname, f.intro AS fintro, f.duedate AS fduedate, f.cutoffdate AS fcutoffdate, completiondiscussions, completionreplies, completionposts
                 , q.name AS qname, q.intro AS qintro, timeclose, timeopen, timelimit, attempts
                 , a.name AS aname, a.intro AS aintro, a.duedate AS aduedate, a.cutoffdate AS acutoffdate
