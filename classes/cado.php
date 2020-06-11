@@ -506,7 +506,7 @@ public function cadogenerate($reportrenderer) {
                                     $otherinner[$othkey1]['name'] = 'done';
                                     continue 2; //now go to next $orival1
                                 }
-                                if ($orival1['name']==$othval1['name']){
+                                if (isset($orival1['name']) && isset($othval1['name']) && ($orival1['name']==$othval1['name'])){
                                     foreach ($orival1 as $orikey2 => $orival2) { // the key here is the descriptor name
                                         if(strcmp($orival2 , $othval1[$orikey2]) != 0) { //mark the descriptor as different
                                             $class=' class="cado-different"';
