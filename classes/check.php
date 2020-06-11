@@ -24,11 +24,7 @@ defined('MOODLE_INTERNAL') || die;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
 */
 
-function console( $data ){
-    echo '<script>';
-    echo 'console.log('. json_encode( $data ) .')';
-    echo '</script>';
-}
+
 function cadosorter($key) {
     return function ($a, $b) use ($key) {
 		$al = $a[$key];
@@ -158,5 +154,11 @@ class mod_cado_check {
 
         $thisuser = $DB->get_record('user', ['id'=> $userid]);
         return fullname($thisuser);
+    }
+
+    public static function console( $data ){
+        echo '<script>';
+        echo 'console.log('. json_encode( $data ) .')';
+        echo '</script>';
     }
 } 

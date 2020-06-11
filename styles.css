@@ -41,7 +41,7 @@ td.cado-rubric-row-head {
   background-color:pink;
   text-decoration: dotted lightgrey;
 }
-[id^="cado"].cado-othermissing, p.cado-othermissing {
+[id^="cado"].cado-othermissing, p.cado-othermissing, div.othermissing {
   background-color:lightgreen;
 }
 [id^="cado"].cado-originmissing, div.cado-originmissing , p.cado-originmissing{

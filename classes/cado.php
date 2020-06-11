@@ -477,8 +477,8 @@ public function cadogenerate($reportrenderer) {
                 
                 $otherstart = strpos($otherarray[$splitcount], ">", 0) ;
                 $othercontent = substr($otherarray[$splitcount], $otherstart + 1);
-                $a1=mod_cado_cado::baseclean($origincontent);
-                $a2=mod_cado_cado::baseclean($othercontent);
+                $a1=self::baseclean($origincontent);
+                $a2=self::baseclean($othercontent);
                 $result = strcasecmp( $a1 , $a2 );
                 if ($result != 0) {
                     if ( in_array($value, ['forum','quiz','assign'])) {
@@ -499,7 +499,7 @@ public function cadogenerate($reportrenderer) {
                             $otherinner[$value2['cmid']][$value2['type']]=$value2['content'];
                         }
                             
-                        //now check for partial matches from origin to other
+                        //now check for matches from origin to other
                         foreach ($origininner as $orikey1 => $orival1) {
                             foreach ($otherinner as $othkey1 => $othval1) {
                                 if (array_values($orival1) == array_values($othval1)) {//content match
@@ -507,11 +507,17 @@ public function cadogenerate($reportrenderer) {
                                     continue 2; //now go to next $orival1
                                 }
                                 if (isset($orival1['name']) && isset($othval1['name']) && ($orival1['name']==$othval1['name'])){
+                                    //then activities match, but we know the content doesn't
                                     foreach ($orival1 as $orikey2 => $orival2) { // the key here is the descriptor name
-                                        if(strcmp($orival2 , $othval1[$orikey2]) != 0) { //mark the descriptor as different
+                                        if (!isset($othval1[$orikey2])) {//a component of an activity is missing.
+                                            $class=' class="cado-othermissing"';
+                                            $idname = $value . '-' . $orikey2 . '_' . $orikey1 . '"';
+                                            $originarray[$splitcount] = self::addalert($originarray[$splitcount], $idname, $class);
+                                            $allmatched = FALSE;
+                                        } else if (strcmp($orival2 , $othval1[$orikey2]) != 0) { //mark the descriptor as different
                                             $class=' class="cado-different"';
                                             $idname = $value . '-' . $orikey2 . '_' . $orikey1 . '"';
-                                            $originarray[$splitcount] = mod_cado_cado::addalert($originarray[$splitcount], $idname, $class);
+                                            $originarray[$splitcount] = self::addalert($originarray[$splitcount], $idname, $class);
                                             $allmatched = FALSE;
                                         }
                                     }
@@ -519,9 +525,10 @@ public function cadogenerate($reportrenderer) {
                                     continue 2; //now go to next $orival1
                                 } //otherwise see if can find a match on the next loop, and if not, then note after the second foreach
                             }
+                            //if arrived here then missing entire activities from other
                             $class=' class="cado-othermissing"';
                             $idname = $value . '-name_' . $orikey1 . '"';
-                            $originarray[$splitcount] = mod_cado_cado::addalert($originarray[$splitcount], $idname, $class);
+                            $originarray[$splitcount] = self::addalert($originarray[$splitcount], $idname, $class);
                             $allmatched = FALSE;
                         }
                         //now check for missing matches from other to origin
