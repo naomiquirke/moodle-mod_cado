@@ -43,6 +43,7 @@ class mod_cado_check {
 
     public $taglist;
     public $tagset;
+    public $schedtag;
     public $schedulesetup;
     public $tagsinsched;
 
@@ -64,6 +65,7 @@ class mod_cado_check {
             foreach ($tags as $key => $value) {
                 $this->tagset['tag' . $key] = trim($value);
             }
+            $this->schedtag['tag0'] = $this->schedtag['tag1'] = $this->schedtag['tag2'] = FALSE; //will set these to TRUE if some activity has this tag, used to determine whether to include heading in schedule
 
             $sql = 'SELECT ti.id, t.rawname, ti.itemid FROM {tag} t
                 JOIN {tag_instance} ti on t.id = ti.tagid
@@ -77,6 +79,9 @@ class mod_cado_check {
                 $thistaglist = explode ("::",$thisresult->rawname); 
                 $tagkey = array_search($thistaglist[0] , $this->tagset, TRUE);
                 if ($tagkey !== FALSE) {
+                    if (isset($this->schedtag[$tagkey])) { // then it may be included in schedule
+                        $this->schedtag[$tagkey] = TRUE;
+                    }
                     $tagdetails->tagcode = $tagkey;
                     $tagdetails->tagheading = $this->tagset[$tagkey];
                     $tagdetails->tagcontent = $thistaglist[1];

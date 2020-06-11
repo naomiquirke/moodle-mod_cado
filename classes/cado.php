@@ -195,7 +195,6 @@ public function cadogenerate($reportrenderer) {
     //SCHEDULE and TAGS SETUP
         $sched = new mod_cado_check($courseid);
         $schedule = $sched->schedulesetup ? $this->startschedule($sched) : null;
-        $courseext -> tagsinsched = $sched->tagsinsched; 
         $courseext -> weekly = $this->course->format == "weeks"; //so that schedule can have week information removed if not relevant
 
     // COMBINED
@@ -258,7 +257,7 @@ public function cadogenerate($reportrenderer) {
                     $temparray[] = self::getmoddetails('quiz', $thismod, $sched, $schedule); //sched is updated directly
                 }
             }
-           $courseext -> quizexists = ($temparray == TRUE);
+            $courseext -> quizexists = ($temparray == TRUE);
             $courseext -> quiz = $temparray; // cadosort($temparray, 'orderdate');
         }
     //ASSIGN            
@@ -277,14 +276,20 @@ public function cadogenerate($reportrenderer) {
         if ($sched->schedulesetup) {
             $courseext -> schedule = cadosort($schedule, 'section');
             $courseext -> scheduleexists = 1;
-            if ((is_object($sched->tagset) || is_array($sched->tagset)) and $courseext -> tagsinsched) { //checks to see if there actually are any relevant tags, when tags are turned on in the schedule
+            if ((is_object($sched->tagset) || is_array($sched->tagset)) and $sched->tagsinsched) { //checks to see if there actually are any relevant tags, when tags are turned on in the schedule
                 foreach ($sched->tagset as $tagkey => $tag) {
-                    $heading = 'head' . $tagkey;
-                    $courseext -> $heading = $tag;
-                }
+                    if (isset($sched->schedtag[$tagkey]) && $sched->schedtag[$tagkey]) {
+                        $heading = 'head' . $tagkey;
+                        $courseext -> $heading = $tag;
+                        $courseext -> tagsinsched = TRUE;
+                    }
+                } 
             }
 
         }
+        mod_cado_check::console($sched);
+        //        mod_cado_check::console($courseext);
+
         return $courseext; 
     }
     /**
