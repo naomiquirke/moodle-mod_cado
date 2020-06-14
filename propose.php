@@ -15,7 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version 0.1
+ * Version 1.0
+ * Set up the form to enable a user with generation capability to propose the CADO for approval, and trigger the appropriate events
  *
  * @package    mod_CADO
  * @copyright  2020 Naomi Quirke

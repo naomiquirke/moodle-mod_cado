@@ -18,7 +18,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Version 0.1
+ * Version 1.0
  * Renderer for cado report.
  *
  * @package    mod_cado

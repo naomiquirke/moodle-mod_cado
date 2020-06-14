@@ -15,16 +15,15 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+ defined('MOODLE_INTERNAL') || die();
 /**
+ * Version 1.0
  * Library of functions and constants for CADO
  *
  * @package   mod_cado
  * @copyright 2020 Naomi Quirke
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
- //NQ if I want to have Excel:   require_once($CFG->dirroot.'/lib/excellib.class.php');
- defined('MOODLE_INTERNAL') || die();
 
  class mod_cado_cado {
     public $instance; //read from db
@@ -45,7 +44,6 @@
  */
 public static function getcadorecord($recordid) {
         global $DB;
- //       if (confirm_sesskey()) {return $DB->get_record('cado', array('id'=>$recordid));}
         return $DB->get_record('cado', ['id'=>$recordid]);
         
     }
@@ -56,7 +54,6 @@ public static function getcadorecord($recordid) {
  */
 public static function getnewcadorecord(stdClass $newrec) {
         global $DB;
- //       if (confirm_sesskey()) {return $DB->insert_record('cado', $newrec);}
         return $DB->insert_record('cado', $newrec);
     }
 
@@ -66,7 +63,6 @@ public static function getnewcadorecord(stdClass $newrec) {
  */
     public static function delete_instance( $id) {
         global $DB;
- //       if (confirm_sesskey()) {return $DB->delete_records('cado', array('id'=>$id));}
         return $DB->delete_records('cado', array('id'=>$id));
     }    
 

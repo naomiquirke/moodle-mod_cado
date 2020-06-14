@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace mod_cado\event;
-
 defined('MOODLE_INTERNAL') || die();
 
 /**
+ * Version 1.0
  * The mod_cado approval event class.
  *
  * @property-read array $other {
@@ -31,6 +31,7 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  2020 Naomi Quirke
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 class approve_cado extends \core\event\base {
     /**
      * Init method.

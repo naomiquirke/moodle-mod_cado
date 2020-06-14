@@ -15,13 +15,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version 0.1
+ * Version 1.0
+ * Basic view page, starting point to every CADO type user interaction
  *
  * @package    mod_cado
  * @copyright  2020 Naomi Quirke
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-require_once(__DIR__ . '/../../config.php');
+require_once('../../config.php');
 
 $cmid = required_param('id', PARAM_INT);
 $reportformat= optional_param('reportformat', null, PARAM_ALPHA);

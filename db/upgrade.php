@@ -5,7 +5,7 @@ function xmldb_cado_upgrade($oldversion) {
     $dbman = $DB->get_manager();
     $result = TRUE;
  
-    if ($oldversion < 2020022100) {
+/*    if ($oldversion < 2020022100) {
 
         // Define field id to be added to cado.
         $table = new xmldb_table('cado');
@@ -20,6 +20,7 @@ function xmldb_cado_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2020022100, 'cado');
     }
 
+    */
     return $result;
 }
 ?>

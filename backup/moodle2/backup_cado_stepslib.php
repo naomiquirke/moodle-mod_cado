@@ -14,18 +14,16 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
-* Version 0.1
+ * Version 1.0
  * Classes that represent the backup steps added in define_my_steps within backup_cado_activity_task
  *
  * @package   mod_cado
  * @copyright 2020 Naomi Quirke
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-if (!defined('MOODLE_INTERNAL')) {
-    die('Direct access to this script is forbidden.'); // It must be included from a Moodle page.
-}
 
  class backup_cado_activity_structure_step extends backup_activity_structure_step {
     protected function define_structure() {

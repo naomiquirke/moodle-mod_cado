@@ -14,17 +14,17 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+defined('MOODLE_INTERNAL') || die();
+require_once($CFG->libdir . '/formslib.php');
+
 /**
+ * Version 1.0
  * CADO approval form
  *
  * @package   mod_cado
  * @copyright 2020 Naomi Quirke
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-
-
-require_once($CFG->libdir . '/formslib.php');
 
 class mod_cado_approve_form extends moodleform {
     /* from https://docs.moodle.org/dev/lib/formslib.php_Form_Definition#select */

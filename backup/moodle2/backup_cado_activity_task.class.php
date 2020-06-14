@@ -15,16 +15,15 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
-* Version 0.1
+ * Version 1.0
  * Backup cado module class
  *
  * @package   mod_cado
  * @copyright 2020 Naomi Quirke
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
- if (!defined('MOODLE_INTERNAL')) {
-     die('Direct access to this script is forbidden.'); // It must be included from a Moodle page.
- }
+ 
+defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/mod/cado/backup/moodle2/backup_cado_stepslib.php'); // Because it exists (must)
 require_once($CFG->dirroot . '/mod/cado/backup/moodle2/backup_cado_settingslib.php'); // Because it exists (optional)

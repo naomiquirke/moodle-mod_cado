@@ -15,6 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * Version 1.0
  * CADO mod settings page
  *
  * @package   mod_cado

@@ -15,10 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace mod_cado\event;
-
 defined('MOODLE_INTERNAL') || die();
-
 /**
+ * Version 1.0
  * The mod_cado proposal event class.
  *
  * @property-read array $other {

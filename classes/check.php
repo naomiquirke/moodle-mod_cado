@@ -17,6 +17,7 @@
 defined('MOODLE_INTERNAL') || die;
 
 /**
+ * Version 1.0
  * Misc set of functions used to get a) cado module configuration settings, b) names of users, c) debugging, and d) the constructor used for schedule info
  *
  * @package   mod_cado

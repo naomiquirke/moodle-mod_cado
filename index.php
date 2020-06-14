@@ -15,14 +15,15 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version 0.1
- *
+ * Version 1.0
+ * Enable a list view of CADOs in a course
+ * 
  * @package    mod_CADO
  * @copyright  2020 Naomi Quirke
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once(__DIR__ . '/../../config.php');
+require_once('../../config.php');
  
 $id = required_param('id', PARAM_INT);           // Course ID
 $course = $DB->get_record('course', array('id' => $id), '*', MUST_EXIST);

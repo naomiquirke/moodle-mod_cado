@@ -15,8 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version 0.1
- *
+ * Version 1.0
+ * Set up the form to approve / comment on the CADO, and trigger the appropriate events
+*
  * @package    mod_CADO
  * @copyright  2020 Naomi Quirke
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
