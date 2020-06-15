@@ -72,7 +72,6 @@ public static function getnewcadorecord(stdClass $newrec) {
  */
 public static function updatecadorecord(stdClass $update) {
     global $DB;
-    //if (confirm_sesskey()) {return $DB->update_('cado', $update);}
     $update->timemodified = time();
     return $DB->update_record('cado', $update);
 }
