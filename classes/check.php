@@ -157,7 +157,7 @@ class mod_cado_check {
  */
     public static function getusername(int $userid) {
         global $DB;
-
+        if ($userid == 0) {return "Anonymous";} //this is the case if the privacy component has deleted a user record
         $thisuser = $DB->get_record('user', ['id'=> $userid]);
         return fullname($thisuser);
     }
