@@ -51,8 +51,8 @@ appear under a "{$a}" heading';
 $string['chooseapprover'] = 'To which approver(s) do you wish to propose your CADO?';
 $string['course'] = 'Enter course code';
 $string['comparelink'] = 'Compare';
-$string['comparing'] = 'Result of comparing "{$a->other}" against "{$a->origin}"';
-$string['comparisondifferent'] = 'Comparison: highlighting differences; pink for changes, green for additions, yellow for deletions.';
+$string['comparing'] = 'Result of comparing other: "{$a->other}" against origin: "{$a->origin}"';
+$string['comparisondifferent'] = 'Comparison: pink highlights changes between origin and other, green highlights when only origin CADO has an activity, yellow highlights when only other CADO has an activity.';
 $string['comparisonidentical'] = 'Comparison: identical';
 $string['comparemissing'] = 'MISSING: ';
 $string['completion'] = 'Completion information';
@@ -82,11 +82,11 @@ $string['inchidden_desc'] = 'Whether hidden activities should appear in the CADO
 $string['messageprovider:cadoshare'] = 'CADO share';
 $string['messageprovider:cadoworkflow'] = 'CADO workflow notification';
 $string['modulename'] = 'CADO Report';
-$string['modulename_help'] = 'The CADO module enables a teacher to create a course overview "CADO" document. 
+$string['modulename_help'] = 'The CADO module enables a teacher to automatically create a course overview "CADO" document, and compare this against other CADOs, either generated within the same course or in different courses. 
 Then any with cado/approve rights may subsequently approve the CADO for student or guest view from the module settings menu.  
-A CADO generation takes into account global and local settings to determine the modules included in the report.  
-If a grouping setting is included, only modules that are available to that grouping will be included.
-If a grouping setting is not included, only modules that are available to all will be included in the report.
+A CADO generation takes into account global and local settings to determine the modules included in the report. Activity information used for the CADO include description, dates, completion information, and selected tags.
+If a grouping setting is included, only modules that are available to that grouping will be included.  
+If a grouping setting is not included, only modules that are available to all will be included in the report.  
 Upon approval, any specific CADO settings, including grouping, are frozen.  
 Multiple CADO resources, created with different CADO settings, may be established in a course.  
 CADOs may be presented in a page ready for printing upon selection of the print view option in the module settings menu.
