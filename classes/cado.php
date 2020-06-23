@@ -490,12 +490,12 @@ public function cadogenerate($reportrenderer) {
                         //make new arrays with key as cmid
                         $origininner = [];
                         foreach ($ori1 as $value1) {
-                            if (!$value1) {continue;}
+                            if (!is_numeric($value1['cmid'])) {continue;} //skip the blurb at the beginning of the section; there will be no cmid found for this section
                             $origininner[$value1['cmid']][$value1['type']]=$value1['content'];
                         }
                         $otherinner = [];
                         foreach ($oth1 as $value2) {
-                            if (!$value2) {continue;}
+                            if (!is_numeric($value2['cmid'])) {continue;} //skip the blurb at the beginning of the section; there will be no cmid found for this section
                             $otherinner[$value2['cmid']][$value2['type']]=$value2['content'];
                         }
                             
