@@ -612,7 +612,7 @@ public function cadogenerate($reportrenderer) {
  * @param string $note is the string to be inserted
  * 
 */
-public static function addalert($base, $positioning, $note) {
+    public static function addalert($base, $positioning, $note) {
         $lengthid = strlen($positioning);
         $noteplace = strpos($base, $positioning);
         return substr_replace($base, $note, $noteplace + $lengthid, 0);               
@@ -667,7 +667,7 @@ public static function addalert($base, $positioning, $note) {
  * @param string $subjectline
  * @param string $url
 */
-function notify($userfrom, $userto, $fullmessage, $subjectline, $url){
+    function notify($userfrom, $userto, $fullmessage, $subjectline, $url){
         $fullplainmessage = strip_tags($fullmessage,'<p><br>');
         $fullplainmessage = str_ireplace ( "</p>","\r\n\r\n",$fullplainmessage);
         $fullplainmessage = str_ireplace ( "<p>","",$fullplainmessage);
@@ -696,70 +696,6 @@ function notify($userfrom, $userto, $fullmessage, $subjectline, $url){
 
         $messageid = message_send($message);
 
-}
-
-/*
-
-        if ($notifyusers = $this->get_notifiable_users($user->id)) {
-            foreach ($notifyusers as $notifyuser) {
-                $this->send_notification($user,
-                                         $notifyuser,
-                                         'gradersubmissionupdated',
-                                         'assign_notification',
-                                         $submission->timemodified);
-*/
-
-
-    /**
-     * Returns a list of users that should receive notification about cado generated.
-     *
-     * @param int $
-     * @return array
-     */
-    protected function get_notifiable_users() {
-        // Potential users should be active users only.
-        $potentialusers = get_enrolled_users($this->context, "mod/cado:approve",
-                                             null, 'u.*', null, null, null, true);
-
-        $notifiableusers = array();
-        if (groups_get_activity_groupmode($this->get_course_module()) == SEPARATEGROUPS) {
-            if ($groups = groups_get_all_groups($this->get_course()->id, $userid, $this->get_course_module()->groupingid)) {
-                foreach ($groups as $group) {
-                    foreach ($potentialusers as $potentialuser) {
-                        if ($potentialuser->id == $userid) {
-                            // Do not send self.
-                            continue;
-                        }
-                        if (groups_is_member($group->id, $potentialuser->id)) {
-                            $notifiableusers[$potentialuser->id] = $potentialuser;
-                        }
-                    }
-                }
-            } else {
-                // User not in group, try to find graders without group.
-                foreach ($potentialusers as $potentialuser) {
-                    if ($potentialuser->id == $userid) {
-                        // Do not send self.
-                        continue;
-                    }
-                    if (!groups_has_membership($this->get_course_module(), $potentialuser->id)) {
-                        $notifiableusers[$potentialuser->id] = $potentialuser;
-                    }
-                }
-            }
-        } else {
-            foreach ($potentialusers as $potentialuser) {
-                if ($potentialuser->id == $userid) {
-                    // Do not send self.
-                    continue;
-                }
-                // Must be enrolled.
-                if (is_enrolled($this->get_course_context(), $potentialuser->id)) {
-                    $notifiableusers[$potentialuser->id] = $potentialuser;
-                }
-            }
-        }
-        return $notifiableusers;
     }
-
+//For version 2, allow option to send out notification of approval update to all course users
 }
