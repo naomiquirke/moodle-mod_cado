@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version 1.0
+ * Version 1.1
  *
  * @package    mod_CADO
  * @copyright  2020 Naomi Quirke
@@ -62,7 +62,8 @@ $string['coursenotchosen'] = 'Default: update filter settings';
 $string['confirmpropose'] = 'Are you sure you want to propose this CADO to be approved?';
 $string['datedue'] = 'Date due';
 $string['duedates'] = 'Dates';
-$string['dateinstruction'] = 'Choose date start for course';
+$string['datestartselector'] = 'Filter course by start date, date range start';
+$string['dateendselector'] = 'Filter course by start date, date range end';
 $string['description'] = 'Course overview';
 $string['eventapprovecado'] = 'CADO approved';
 $string['eventnotapprovecado'] = 'CADO not approved';

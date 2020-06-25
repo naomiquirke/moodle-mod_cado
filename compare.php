@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version 1.0
+ * Version 1.1
  * Set up the form to select the CADO for the comparison, and return this information to View
  *
  * @package   mod_cado
@@ -47,7 +47,8 @@ if ($mform_cado->is_cancelled()) {
     
 } else if (($fromform = $mform_cado->get_data())) {
     if ($fromform->cadoid == "default") {
-        $mform_cado = new mod_cado_compare_form($url,array("yearstart"=>$fromform->courseyearstart, "coursepart"=>$fromform->coursename));
+        $mform_cado = new mod_cado_compare_form($url, $cm->instance, $fromform->coursename, $fromform->comparestartdate, $fromform->compareenddate);
+        $formrenderer = $PAGE->get_renderer('mod_cado');
         $formrenderer->render_form_header();
         $mform_cado->display();
         $formrenderer->render_form_footer();
