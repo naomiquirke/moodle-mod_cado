@@ -37,7 +37,7 @@ $urlparams = ['id' => $cmid, 'sesskey' => sesskey()];
 $url = new moodle_url('/mod/cado/approve.php', $urlparams);
 $PAGE->set_url($url);
 
-$title = get_string('pluginname', 'cado');
+$title = get_string('modulename', 'cado');
 $PAGE->set_title($title);
 
 $approvecado = new mod_cado_cado($context, $cm, $course);

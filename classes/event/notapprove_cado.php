@@ -50,9 +50,9 @@ class notapprove_cado extends \core\event\base {
      * @return string
      */
     public function get_description() {
-        $extra = $this->other['groupmode'] ? " for grouping {$this->other['groupmode']}" : '';
+        $extra = $this->other['groupmode'] ? get_string('forgroup','cado') . " {$this->other['groupmode']}" : '';
         return "The user with id '$this->userid' has not approved the cado with id '$this->objectid' 
-            and course module id '$this->contextinstanceid' in course id '{$this->other['courseid']}'{$extra}.";
+            and course module id '$this->contextinstanceid' in course id '{$this->other['courseid']}' $extra.";
     }
 
     /**

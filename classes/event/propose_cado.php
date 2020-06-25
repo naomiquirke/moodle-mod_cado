@@ -51,7 +51,7 @@ class propose_cado extends \core\event\base {
     public function get_description() {
         $extra = $this->other['groupmode'] ? " for grouping {$this->other['groupmode']}" : '';
         return "The user with id '$this->userid' has requested approval from {$this->other['proposeid']} for the cado with id '$this->objectid' 
-            and course module id '$this->contextinstanceid' in course id '{$this->other['courseid']}'{$extra}.";
+            and course module id '$this->contextinstanceid' in course id '{$this->other['courseid']}' $extra.";
     }
 
     /**

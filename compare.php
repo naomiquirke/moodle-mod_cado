@@ -37,7 +37,7 @@ $origincado = new mod_cado_cado($context, $cm, $course);
 $url = new moodle_url('/mod/cado/compare.php',['id' => $cmid]);
 $PAGE->set_url($url);
 
-$title = get_string('pluginname', 'cado');
+$title = get_string('modulename', 'cado');
 $PAGE->set_title($title);
 
 $mform_cado = new mod_cado_compare_form($url,$cm->instance);

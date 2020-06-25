@@ -37,7 +37,7 @@ $viewedcado = new mod_cado_cado($context, $cm, $course);
 $url = new moodle_url('/mod/cado/propose.php',['id' => $cmid]);
 $PAGE->set_url($url,['id'=>$cmid]);
 
-$title = get_string('pluginname', 'cado');
+$title = get_string('modulename', 'cado');
 $PAGE->set_title($title);
 
 $nexturl = new moodle_url('/mod/cado/view.php', array('id' => $cmid));

@@ -46,7 +46,7 @@ $urlparams = ['id' => $cmid,
 $url = new moodle_url('/mod/cado/view.php', $urlparams);
 $PAGE->set_url($url);
 $reportformat ? $PAGE->set_pagelayout($reportformat) : $PAGE->set_pagelayout('standard') ;
-$title = get_string('pluginname', 'cado');
+$title = get_string('modulename', 'cado');
 $PAGE->set_title($title);
 $PAGE->set_heading($viewedcado->instance->name);
 

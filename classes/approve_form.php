@@ -47,7 +47,7 @@ class mod_cado_approve_form extends moodleform {
     function set_last_data($thiscado) {
         $data = $thiscado->instance;
         $checkboxval = $data->timeapproved == 0 ? 0 : 1;
-        $this->_form->setDefault('comment',['text'=>'<p>Update: </p><div class="prevapprovecomment">'
+        $this->_form->setDefault('comment',['text'=>'<p>' . get_string('update','cado') . '</p><div class="prevapprovecomment">'
             . $data->approvecomment . '</div>']); //add update line at beginning to make it easy to add stuff
         $this->_form->setDefault('approved',$checkboxval);
     }

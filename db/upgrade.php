@@ -22,11 +22,11 @@
  * @copyright 2020 onwards  Naomi Quirke
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
- /*
 function xmldb_cado_upgrade($oldversion) {
-    global $DB;
-    $dbman = $DB->get_manager();
+//    global $DB;
+//    $dbman = $DB->get_manager();
     $result = TRUE;
+ /*
  
     if ($oldversion < 2020022100) {
 
@@ -43,7 +43,6 @@ function xmldb_cado_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2020022100, 'cado');
     }
 
-    
+*/    
     return $result;
 }
-*/

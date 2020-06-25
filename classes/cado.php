@@ -642,7 +642,7 @@ public static function addalert($base, $positioning, $note) {
             $userfrom = $this->instance->approveuser;
             $userto = $this->instance->generateuser;
             $fullmessage = '<p><strong>' . get_string('course') . ": " . '</strong>'. $this->course->shortname . "</p><br>" . 
-            '<p><strong>' . get_string('CADO','cado') . ": " . '</strong>'. $this->instance->name . "</p><br>" .
+            '<p><strong>' . get_string('cado','cado') . ": " . '</strong>'. $this->instance->name . "</p><br>" .
                 $fullmessage;
             self::notify($userfrom, $userto, $fullmessage, $subjectline, $url);
         }
@@ -651,7 +651,7 @@ public static function addalert($base, $positioning, $note) {
             $userto = $recipients;
             $subjectline = get_string('requestapprovalsubject','cado');
             $fullmessage = '<p><strong>' . get_string('course') . ": " . '</strong>'. $this->course->fullname . "</p><br>" . 
-            '<p><strong>' . get_string('CADO','cado') . ": " . '</strong>'. $this->instance->name . "</p><br>" .
+            '<p><strong>' . get_string('cado','cado') . ": " . '</strong>'. $this->instance->name . "</p><br>" .
             get_string('requestapproval','cado',$this->course->shortname);
             self::notify($userfrom, $userto, $fullmessage, $subjectline, $url);
         }
