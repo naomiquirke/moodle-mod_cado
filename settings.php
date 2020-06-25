@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version 1.0
+ * Version 1.1
  *
  * @package    mod_CADO
  * @copyright  2020 Naomi Quirke
@@ -27,9 +27,6 @@ defined('MOODLE_INTERNAL') || die;
 //doco found in lib/adminlib.php
 
 if ($ADMIN->fulltree) {
-    require_once(__DIR__.'/lib.php');
-
-    // General settings
 
     $settings->add(new admin_setting_configcheckbox('cado/showlogo',
         get_string('showlogo', 'cado'), get_string('showlogo_desc', 'cado'), 0));
