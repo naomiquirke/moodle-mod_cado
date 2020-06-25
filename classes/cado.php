@@ -241,7 +241,7 @@ public function cadogenerate($reportrenderer) {
             }
 
             $courseext -> forumexists = ($temparray == TRUE); //include for mustache header
-            $courseext -> forum = $temparray; //cadosort($temparray, 'orderdate');
+            $courseext -> forum = $temparray; 
         }
     //QUIZ    
         if (mod_cado_check::options('quiz','activityoptions')) {
@@ -253,7 +253,7 @@ public function cadogenerate($reportrenderer) {
                 }
             }
             $courseext -> quizexists = ($temparray == TRUE);
-            $courseext -> quiz = $temparray; // cadosort($temparray, 'orderdate');
+            $courseext -> quiz = $temparray; 
         }
     //ASSIGN            
         if (mod_cado_check::options('assign','activityoptions')) {
@@ -265,11 +265,11 @@ public function cadogenerate($reportrenderer) {
                 }
             }
             $courseext -> assignexists = ($temparray == TRUE);           
-            $courseext -> assign = $temparray; // cadosort($temparray, 'orderdate');
+            $courseext -> assign = $temparray; 
         }
     //ALL        
         if ($sched->schedulesetup) {
-            $courseext -> schedule = cadosort($schedule, 'section');
+            $courseext -> schedule = $this->cadosort($schedule, 'section');
             $courseext -> scheduleexists = 1;
             if ((is_object($sched->tagset) || is_array($sched->tagset)) and $sched->tagsinsched) { //checks to see if there actually are any relevant tags, when tags are turned on in the schedule
                 foreach ($sched->tagset as $tagkey => $tag) {
@@ -433,8 +433,30 @@ public function cadogenerate($reportrenderer) {
                     $criterion[$counter]['levels'] = $levels; //update criterion with new array after it has been added to
                 }
             }
-        return cadosort($criterion,'totalpoints'); //now sort the criteria by the most negative
+        return $this->cadosort($criterion,'totalpoints'); //now sort the criteria by the most negative
     }
+
+    /**
+     * Sorts a multidimensional array by the given key
+     * Why can't I find this built into PHP?  Am I blind?
+     * 
+     * @param array $sortarray is the array we want to sort
+     * @param string $sortkey is the key we want the array to be sorted by
+     */
+    public static function cadosort($sortarray,$sortkey) {
+
+        $callback = function ($a, $b) use ($sortkey) {
+            $al = $a[$sortkey];
+            $bl = $b[$sortkey];
+            if ($al == $bl) {
+                return 0;
+            }
+            return ($al > $bl) ? +1 : -1;
+        };
+
+        usort($sortarray, $callback);
+        return $sortarray;
+    }  
 
     /**
      * Generate the comparison between cados, using generated html.

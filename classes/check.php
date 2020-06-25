@@ -25,21 +25,6 @@ defined('MOODLE_INTERNAL') || die;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
 */
 
-
-function cadosorter($key) {
-    return function ($a, $b) use ($key) {
-		$al = $a[$key];
-		$bl = $b[$key];
-		if ($al == $bl) {
-			return 0;
-		}
-		return ($al > $bl) ? +1 : -1;
-	};
-}
-function cadosort($sortarray,$sortkey) {
-	usort($sortarray, cadosorter($sortkey));
-	return $sortarray;
-}  
 class mod_cado_check {
 
     public $taglist;
@@ -138,16 +123,6 @@ class mod_cado_check {
         //this only gets called after check if there is a schedule
         return get_config('cado')->sumschedule;
     }
-
-/*    static function cmp_obj($a, $b)
-    {
-        $al = $a->section;
-        $bl = $b->section;
-        if ($al == $bl) {
-            return 0;
-        }
-        return ($al > $bl) ? +1 : -1;
-    } */
 
 
 /**
