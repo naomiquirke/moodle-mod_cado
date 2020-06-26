@@ -17,7 +17,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Version 1.0
+ * Version 1.1
  * Get recipients and create CADO approval form
  *
  * @package   mod_cado
@@ -53,10 +53,10 @@ class mod_cado_get_recipients_form extends moodleform {
  * @param  $context
  */
     function getapproveusers($context) {
-        $approveusers = get_users_by_capability($context, "mod/cado:approve", "u.id,u.firstname,u.lastname,u.username","u.firstname");
+        $approveusers = get_users_by_capability($context, "mod/cado:approve", "u.id, u.username","u.firstname");
         $approvelist = [];
         foreach ($approveusers as $thisuser) {
-            $approvelist = $approvelist + [$thisuser->id => "$thisuser->firstname $thisuser->lastname ($thisuser->username)"];
+            $approvelist = $approvelist + [$thisuser->id =>  mod_cado_check::getusername($thisuser->id) . " ($thisuser->username)"];
         }
         return $approvelist;
 
