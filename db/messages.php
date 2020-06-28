@@ -26,7 +26,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $messageproviders = [
-    //cado workflow notifications a) informing approvers that a CADO is ready for approval, or b)i. approvers notifying that CADO is approved or b)ii. not
+    // Cado workflow notifications a) informing approvers that a CADO is ready for approval,
+    // or b)i. approvers notifying that CADO is approved or b)ii. not.
     'cadoworkflow' => [
         'defaults' => [
             'airnotifier' => MESSAGE_PERMITTED + MESSAGE_DEFAULT_LOGGEDIN + MESSAGE_DEFAULT_LOGGEDOFF,
@@ -34,7 +35,7 @@ $messageproviders = [
             'email' => MESSAGE_FORCED + MESSAGE_DEFAULT_LOGGEDIN + MESSAGE_DEFAULT_LOGGEDOFF
         ]
     ],
-    //cado users sharing cado with others
+    // Cado users sharing cado with others.
     'cadoshare' => [
         'defaults' => [
             'airnotifier' => MESSAGE_PERMITTED + MESSAGE_DEFAULT_LOGGEDIN + MESSAGE_DEFAULT_LOGGEDOFF,

@@ -28,34 +28,36 @@ require_once($CFG->dirroot.'/course/moodleform_mod.php');
 require_once($CFG->dirroot.'/mod/cado/lib.php');
 
 class mod_cado_mod_form extends moodleform_mod {
- 
-    function definition() {
+    /**
+     * Called to define this moodle form
+     *
+     * @return void
+     */
+    public function definition() {
         global $CFG, $OUTPUT;
- 
+
         $mform =& $this->_form;
- 
-        $mform->addElement('text', 'name', get_string('cadoname', 'cado'), array('size'=>'64'));
+
+        $mform->addElement('text', 'name', get_string('cadoname', 'cado'), array('size' => '64'));
         $mform->setType('name', PARAM_TEXT);
         $mform->addRule('name', null, 'required', null, 'client');
 
         $mform->addElement('editor', 'cadointro', get_string('cadointro', 'cado'));
         $mform->setType('cadointro', PARAM_RAW);
 
-        
-        if ($this->comment = mod_cado_check::options('cadocomment','cadooptions')) {
+        if ($this->comment = mod_cado_check::options('cadocomment', 'cadooptions')) {
             $mform->addElement('editor', 'cadocomment', get_string('cadocomment', 'cado'));
             $mform->setType('cadocomment', PARAM_RAW);
         }
-        
-        if ($this->biblio = mod_cado_check::options('cadobiblio','cadooptions')) {
+
+        if ($this->biblio = mod_cado_check::options('cadobiblio', 'cadooptions')) {
             $mform->addElement('editor', 'cadobiblio', get_string('cadobiblio', 'cado'));
             $mform->setType('cadobiblio', PARAM_RAW);
         }
-        
+
         $mform->addElement('hidden', 'isapproved', 0);
         $mform->setType('isapproved', PARAM_INT);
 
-        //$this->standard_hidden_coursemodule_elements();
         $this->standard_coursemodule_elements();
         $this->add_action_buttons();
     }
@@ -66,25 +68,33 @@ class mod_cado_mod_form extends moodleform_mod {
         parent::definition_after_data();
         $mform = $this->_form;
 
-        //never allow editing of groupmode, because we want to allow editing of grouping
+        // Note never allow editing of groupmode, because we want to allow editing of grouping.
         $mform->getElement('groupmode')->_values[0] = "1";
         $mform->freeze('groupmode');
 
         $id = $mform->_defaultValues['instance'];
-        
-        if ($id) { //then it is not new
-            $instance =  mod_cado_cado::getcadorecord($id);
-            $mform->setDefault('isapproved', $instance->timeapproved ? 1 : 0);
-            if ($this->comment) {$mform->setDefault('cadocomment', array('text'=>$instance->cadocomment));}
-            if ($this->biblio) { $mform->setDefault('cadobiblio', array('text'=>$instance->cadobiblio));}
-            $mform->setDefault('cadointro', array('text'=>$instance->cadointro));
 
-            if ($instance->timeapproved) { //check for approved, if approved don't allow editing of these
+        if ($id) { // Note then it is not new.
+            $instance = mod_cado_cado::getcadorecord($id);
+            $mform->setDefault('isapproved', $instance->timeapproved ? 1 : 0);
+            if ($this->comment) {
+                $mform->setDefault('cadocomment', array('text' => $instance->cadocomment));
+            }
+            if ($this->biblio) {
+                $mform->setDefault('cadobiblio', array('text' => $instance->cadobiblio));
+            }
+            $mform->setDefault('cadointro', array('text' => $instance->cadointro));
+
+            if ($instance->timeapproved) { // Note check for approved, if approved don't allow editing of these.
                 $mform->freeze('groupingid');
                 $mform->freeze('cadointro');
 
-                if ($this->comment) { $mform->freeze('cadocomment'); }
-                if ($this->biblio) { $mform->freeze('cadobiblio'); }
+                if ($this->comment) {
+                    $mform->freeze('cadocomment');
+                }
+                if ($this->biblio) {
+                    $mform->freeze('cadobiblio');
+                }
             }
         }
     }

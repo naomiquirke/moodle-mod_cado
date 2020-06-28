@@ -25,31 +25,29 @@ defined('MOODLE_INTERNAL') || die();
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
- class backup_cado_activity_structure_step extends backup_activity_structure_step {
+class backup_cado_activity_structure_step extends backup_activity_structure_step {
     protected function define_structure() {
 
-        // To know if we are including userinfo
+        // To know if we are including userinfo.
         $userinfo = $this->get_setting_value('userinfo');
 
-        // Define each element separated
-        $cado = new backup_nested_element('cado', ['id'], [ //core information that can form CADO
-            'name', 'timemodified', 'timegenerated', 'timeproposed', 'generateuser', 
-            'approveuser', 'timeapproved', 'approvecomment', 'generatedpage','cadocomment', 'cadobiblio', 'cadointro']);
-        
-        // Build the tree
+        // Define each element separated.
+        $cado = new backup_nested_element('cado', ['id'], [ // Core information that can form CADO.
+            'name', 'timemodified', 'timegenerated', 'timeproposed', 'generateuser',
+            'approveuser', 'timeapproved', 'approvecomment', 'generatedpage', 'cadocomment', 'cadobiblio', 'cadointro']);
 
-        // Define sources
-        $cado -> set_source_table('cado', array('id' => backup::VAR_ACTIVITYID));
+        // Build the tree.
 
-        // Define id annotations
+        // Define sources.
+        $cado ->set_source_table('cado', array('id' => backup::VAR_ACTIVITYID));
+
+        // Define id annotations.
         $cado->annotate_ids('user', 'generateuser');
         $cado->annotate_ids('user', 'approveuser');
 
+        // Define file annotations.
 
-        // Define file annotations
-//        $cado->annotate_files('mod_cado', 'intro', null); // This file area hasn't itemid
-
-        // Return the root element (resource), wrapped into standard activity structure
+        // Return the root element (resource), wrapped into standard activity structure.
         return  $this->prepare_activity_structure($cado);
     }
- }
+}

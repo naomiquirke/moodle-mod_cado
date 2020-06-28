@@ -30,37 +30,38 @@ $cmid = required_param('id', PARAM_INT);
 list ($course, $cm) = get_course_and_cm_from_cmid($cmid, 'cado');
 $context = context_module::instance($cmid);
 require_login($course, true, $cm);
-require_capability('mod/cado:compare', $context); //if a person has capability compare, then they can compare course cado to any cados on the site
+// If a person has capability compare, then they can compare course cado to any cados on the site.
+require_capability('mod/cado:compare', $context);
 
 $origincado = new mod_cado_cado($context, $cm, $course);
 
-$url = new moodle_url('/mod/cado/compare.php',['id' => $cmid]);
+$url = new moodle_url('/mod/cado/compare.php', ['id' => $cmid]);
 $PAGE->set_url($url);
 
 $title = get_string('modulename', 'cado');
 $PAGE->set_title($title);
 
-$mform_cado = new mod_cado_compare_form($url,$cm->instance);
+$compareform = new mod_cado_compare_form($url, $cm->instance);
 
-if ($mform_cado->is_cancelled()) {
-    redirect(new moodle_url('/mod/cado/view.php', array('id' => $cmid))); 
-    
-} else if (($fromform = $mform_cado->get_data())) {
+if ($compareform->is_cancelled()) {
+    redirect(new moodle_url('/mod/cado/view.php', array('id' => $cmid)));
+
+} else if (($fromform = $compareform->get_data())) {
     if ($fromform->cadoid == "default") {
-        $mform_cado = new mod_cado_compare_form($url, $cm->instance, $fromform->coursename, $fromform->comparestartdate, $fromform->compareenddate);
+        $compareform = new mod_cado_compare_form(
+            $url, $cm->instance, $fromform->coursename, $fromform->comparestartdate, $fromform->compareenddate);
         $formrenderer = $PAGE->get_renderer('mod_cado');
         $formrenderer->render_form_header();
-        $mform_cado->display();
+        $compareform->display();
         $formrenderer->render_form_footer();
+    } else {
+        $comparecmid = $DB->get_record('course_modules', ['instance' => $fromform->cadoid, 'module' => $cm->module]);
+        redirect(new moodle_url('/mod/cado/view.php', ['id' => $cmid, 'compareid' => $comparecmid->id]));
     }
-    else {
-        $comparecmid = $DB->get_record('course_modules',['instance'=>$fromform->cadoid, 'module'=>$cm->module]);
-        redirect(new moodle_url('/mod/cado/view.php', ['id' => $cmid, 'compareid' => $comparecmid->id])); 
-        }
 } else {
     $formrenderer = $PAGE->get_renderer('mod_cado');
     $formrenderer->render_form_header();
-    $mform_cado->display();
+    $compareform->display();
     $formrenderer->render_form_footer();
- 
+
 }

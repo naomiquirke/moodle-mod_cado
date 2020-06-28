@@ -50,9 +50,9 @@ class approve_cado extends \core\event\base {
      * @return string
      */
     public function get_description() {
-        $extra = $this->other['groupmode'] ?  get_string('forgroup','cado') . " {$this->other['groupmode']}" : '';
-        return "The user with id '$this->userid' has approved the cado with id '$this->objectid' 
-            and course module id '$this->contextinstanceid' in course id '{$this->other['courseid']}' $extra.";
+        $extra = $this->other['groupmode'] ? get_string('forgroup', 'cado') . " {$this->other['groupmode']}" : '';
+        return "The user with id '$this->userid' has approved the cado with id" .
+         "'$this->objectid' and course module id '$this->contextinstanceid' in course id '{$this->other['courseid']}' $extra.";
     }
 
     /**

@@ -22,17 +22,14 @@
  * @copyright 2020 Naomi Quirke
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
- 
+
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/mod/cado/backup/moodle2/backup_cado_stepslib.php'); // Because it exists (must)
-require_once($CFG->dirroot . '/mod/cado/backup/moodle2/backup_cado_settingslib.php'); // Because it exists (optional)
+require_once($CFG->dirroot . '/mod/cado/backup/moodle2/backup_cado_stepslib.php'); // Because it exists (must).
 
-
- class backup_cado_activity_task extends backup_activity_task {
+class backup_cado_activity_task extends backup_activity_task {
 
     protected function define_my_settings() {
-// nq consider setting include approve comment or not
     }
 
     /**
@@ -45,11 +42,11 @@ require_once($CFG->dirroot . '/mod/cado/backup/moodle2/backup_cado_settingslib.p
     static public function encode_content_links($content) {
         global $CFG, $DB;
 
-        $base = preg_quote($CFG->wwwroot,"/");
+        $base = preg_quote($CFG->wwwroot, "/");
 
         // Link to the list of cados.
-        $search="/(".$base."\/mod\/cado\/index.php\?id\=)([0-9]+)/";
-        $content= preg_replace($search, '$@CADOINDEX*$2@$', $content);
+        $search = "/(".$base."\/mod\/cado\/index.php\?id\=)([0-9]+)/";
+        $content = preg_replace($search, '$@CADOINDEX*$2@$', $content);
 
         // Link to cado view by moduleid.
         $search = "/(".$base."\/mod\/cado\/view.php\?id\=)([0-9]+)/";

@@ -17,7 +17,7 @@
 /**
  * Version 1.1
  * Set up the form to approve / comment on the CADO, and trigger the appropriate events
-*
+ *
  * @package    mod_CADO
  * @copyright  2020 Naomi Quirke
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -41,30 +41,30 @@ $title = get_string('modulename', 'cado');
 $PAGE->set_title($title);
 
 $approvecado = new mod_cado_cado($context, $cm, $course);
-$mform_cado = new mod_cado_approve_form($url);
+$approveform = new mod_cado_approve_form($url);
 $nexturl = new moodle_url('/mod/cado/view.php', array('id' => $cmid));
 
-if ($mform_cado->is_cancelled()) {
-    redirect($nexturl); 
-    
-} else if (($fromform = $mform_cado->get_data()) && confirm_sesskey()) {
+if ($approveform->is_cancelled()) {
+    redirect($nexturl);
+
+} else if (($fromform = $approveform->get_data()) && confirm_sesskey()) {
     $approvecado->approveupdate($fromform);
     if ($fromform->approved) {
-        $event = \mod_cado\event\approve_cado::create(['context' => $context, 'objectid' => $cm->instance, 
-            'other' =>['courseid' => $course->id , 'groupmode' => $cm->groupingid ] ] );
+        $event = \mod_cado\event\approve_cado::create(['context' => $context, 'objectid' => $cm->instance,
+            'other' => ['courseid' => $course->id , 'groupmode' => $cm->groupingid ] ] );
     } else {
-        $event = \mod_cado\event\notapprove_cado::create(['context' => $context, 'objectid' => $cm->instance, 
-            'other' =>['courseid' => $course->id , 'groupmode' => $cm->groupingid ] ] );
+        $event = \mod_cado\event\notapprove_cado::create(['context' => $context, 'objectid' => $cm->instance,
+            'other' => ['courseid' => $course->id , 'groupmode' => $cm->groupingid ] ] );
     }
     $event->trigger();
-    $approvecado->workflownotify('approve',$nexturl,$fromform->approved);
-        //redirect is included in workflownotify
+    $approvecado->workflownotify('approve', $nexturl, $fromform->approved);
+        // Redirect is included in workflownotify.
 
 } else {
     $formrenderer = $PAGE->get_renderer('mod_cado');
     $formrenderer->render_form_header();
-    $mform_cado->set_last_data($approvecado);
-    $mform_cado->display();
+    $approveform->set_last_data($approvecado);
+    $approveform->display();
     $formrenderer->render_form_footer();
- 
+
 }

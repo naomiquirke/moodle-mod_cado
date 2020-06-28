@@ -50,8 +50,8 @@ class propose_cado extends \core\event\base {
      */
     public function get_description() {
         $extra = $this->other['groupmode'] ? " for grouping {$this->other['groupmode']}" : '';
-        return "The user with id '$this->userid' has requested approval from {$this->other['proposeid']} for the cado with id '$this->objectid' 
-            and course module id '$this->contextinstanceid' in course id '{$this->other['courseid']}' $extra.";
+        return "The user with id '$this->userid' has requested approval from {$this->other['proposeid']} for the cado with id " .
+            "'$this->objectid' and course module id '$this->contextinstanceid' in course id '{$this->other['courseid']}' $extra.";
     }
 
     /**
@@ -77,12 +77,4 @@ class propose_cado extends \core\event\base {
         return array('db' => 'cado', 'restore' => 'cado');
     }
 
-/*    public static function get_other_mapping() {
-        $othermapped = array();
-        $othermapped['forumid'] = array('db' => 'forum', 'restore' => 'forum');
-        $othermapped['discussionid'] = array('db' => 'forum_discussions', 'restore' => 'forum_discussion');
-
-        return $othermapped;
-    }
-    */
 }

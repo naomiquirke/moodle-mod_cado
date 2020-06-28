@@ -26,7 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 $capabilities = array(
     'mod/cado:view' => array(
         'captype' => 'read',
-        'contextlevel' => CONTEXT_MODULE, 
+        'contextlevel' => CONTEXT_MODULE,
         'archetypes' => array(
             'guest' => CAP_ALLOW,
             'student' => CAP_ALLOW,
@@ -37,7 +37,7 @@ $capabilities = array(
     ),
 
     'mod/cado:addinstance' => array(
-        'riskbitmask' => RISK_XSS, //this is because we allow users to add rich content eg to description.  
+        'riskbitmask' => RISK_XSS, // This is because we allow users to add rich content eg to description.
 
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
@@ -49,8 +49,8 @@ $capabilities = array(
     ),
 
     'mod/cado:approve' => array(
-        'riskbitmask' => RISK_XSS, //this is because we allow users to add rich content eg to approve comment.  
- 
+        'riskbitmask' => RISK_XSS, // This is because we allow users to add rich content eg to approve comment.
+
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => array(
@@ -60,7 +60,7 @@ $capabilities = array(
         ),
     ),
     'mod/cado:compare' => array(
- 
+
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => array(
@@ -70,7 +70,7 @@ $capabilities = array(
     ),
 
     'mod/cado:generate' => array(
-        'riskbitmask' => RISK_XSS, //this is because we allow users to add rich content eg to description.  
+        'riskbitmask' => RISK_XSS, // This is because we allow users to add rich content eg to description.
 
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,

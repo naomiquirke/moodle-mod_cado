@@ -30,30 +30,30 @@ $cmid = required_param('id', PARAM_INT);
 list ($course, $cm) = get_course_and_cm_from_cmid($cmid, 'cado');
 $context = context_module::instance($cmid);
 require_login($course, true, $cm);
-require_capability('mod/cado:generate', $context); 
+require_capability('mod/cado:generate', $context);
 
 $viewedcado = new mod_cado_cado($context, $cm, $course);
 
-$url = new moodle_url('/mod/cado/propose.php',['id' => $cmid]);
-$PAGE->set_url($url,['id'=>$cmid]);
+$url = new moodle_url('/mod/cado/propose.php', ['id' => $cmid]);
+$PAGE->set_url($url, ['id' => $cmid]);
 
 $title = get_string('modulename', 'cado');
 $PAGE->set_title($title);
 
 $nexturl = new moodle_url('/mod/cado/view.php', array('id' => $cmid));
-$proposeform = new mod_cado_get_recipients_form($url,['purpose'=>'propose','context' => $context]);
+$proposeform = new mod_cado_get_recipients_form($url, ['purpose' => 'propose', 'context' => $context]);
 
 if ($proposeform->is_cancelled()) {
     redirect($nexturl);
 } else if (($fromform = $proposeform->get_data())) {
     $proposeid = $fromform->possiblelist;
     $viewedcado->proposeupdate($proposeid);
-    $event = \mod_cado\event\propose_cado::create(['context' => $context, 'objectid' => $cm->instance, 
-        'other' =>['courseid' => $course->id , 'groupmode' => $cm->groupingid , 'proposeid' => $proposeid] ] );
+    $event = \mod_cado\event\propose_cado::create(['context' => $context, 'objectid' => $cm->instance,
+        'other' => ['courseid' => $course->id , 'groupmode' => $cm->groupingid , 'proposeid' => $proposeid] ] );
     $event->trigger();
     $viewedcado->workflownotify('propose', $nexturl, null, $proposeid);
-    //redirect is included in workflownotify
-} else { 
+    // Note redirect is included in workflownotify.
+} else {
     $formrenderer = $PAGE->get_renderer('mod_cado');
     $formrenderer->render_form_header();
     $proposeform->display();

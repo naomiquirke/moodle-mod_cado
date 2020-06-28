@@ -24,16 +24,16 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-//doco found in lib/adminlib.php
+// Note doco found in lib/adminlib.php.
 
 if ($ADMIN->fulltree) {
 
     $settings->add(new admin_setting_configcheckbox('cado/showlogo',
         get_string('showlogo', 'cado'), get_string('showlogo_desc', 'cado'), 0));
 
-    $activityoptions = ["assign" => get_string('assign','cado')
-        ,"forum" => get_string('forum','cado')
-        ,"quiz" => get_string('quiz','cado')];
+    $activityoptions = ["assign" => get_string('assign', 'cado')
+        , "forum" => get_string('forum', 'cado')
+        , "quiz" => get_string('quiz', 'cado')];
 
     $settings->add(new admin_setting_configmultiselect('cado/activityoptions',
         get_string('activityoptions', 'cado'), get_string('activityoptions_desc', 'cado'),
@@ -43,19 +43,19 @@ if ($ADMIN->fulltree) {
         get_string('inchidden', 'cado'), get_string('inchidden_desc', 'cado'), 0));
 
     $cadooptions = [
-        "summary" => get_string('summary','cado')
-        ,"cadobiblio" => get_string('cadobiblio','cado')
-        ,"schedule" => get_string('schedule','cado')
-        ,"tags" => get_string('tags','cado')
-        ,"cadocomment" => get_string('cadocomment','cado')
-        ,"sitecomment" => get_string('sitecomment','cado')];
+        "summary" => get_string('summary', 'cado')
+        , "cadobiblio" => get_string('cadobiblio', 'cado')
+        , "schedule" => get_string('schedule', 'cado')
+        , "tags" => get_string('tags', 'cado')
+        , "cadocomment" => get_string('cadocomment', 'cado')
+        , "sitecomment" => get_string('sitecomment', 'cado')];
 
     $settings->add(new admin_setting_configmultiselect('cado/cadooptions',
         get_string('cadooptions', 'cado'), get_string('cadooptions_desc', 'cado', get_string('general', 'cado')),
         array_keys($cadooptions), $cadooptions));
 
-    $settings->add(new admin_setting_configtext('cado/tagslist', 
-        get_string('taginclude', 'cado'), get_string('taginclude_desc', 'cado'),'',PARAM_TEXT,50));
+    $settings->add(new admin_setting_configtext('cado/tagslist',
+        get_string('taginclude', 'cado'), get_string('taginclude_desc', 'cado'), '', PARAM_TEXT, 50));
 
     $settings->add(new admin_setting_configcheckbox('cado/tagschedule',
         get_string('tagschedule', 'cado'), get_string('tagschedule_desc', 'cado'), 0));
@@ -63,8 +63,9 @@ if ($ADMIN->fulltree) {
     $settings->add(new admin_setting_configcheckbox('cado/sumschedule',
         get_string('sumschedule', 'cado'), get_string('sumschedule_desc', 'cado'), 0));
 
-    $settings->add(new admin_setting_confightmleditor('cado/sitecomment', 
-        get_string('sitecomment', 'cado'), get_string('sitecomment_desc', 'cado') , null)); //default param_raw and size textbox fine otherwise add cols, rows
+    $settings->add(new admin_setting_confightmleditor('cado/sitecomment',
+        get_string('sitecomment', 'cado'), get_string('sitecomment_desc', 'cado') , null));
+        // Note default param_raw and size textbox fine otherwise add cols, rows.
 
 
 }

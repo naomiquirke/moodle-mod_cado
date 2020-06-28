@@ -14,7 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Version 1.1
@@ -25,6 +24,7 @@ defined('MOODLE_INTERNAL') || die();
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/formslib.php');
 
 class mod_cado_get_recipients_form extends moodleform {
@@ -32,31 +32,33 @@ class mod_cado_get_recipients_form extends moodleform {
 
 
     public function definition () {
-        
+
         $mform = $this->_form;
-        
+
         if ($this->_customdata['purpose'] = 'propose') {
             $querystring = get_string('chooseapprover', 'cado');
             $possiblelist = $this->getapproveusers($this->_customdata['context']);
-            $multiplerecipient = FALSE;
-        } else {}
+            $multiplerecipient = false;
+        } else {
+            debugging('This is not implemented');
+        }
 
-        $possibleselector = $mform->addElement('select', 'possiblelist', $querystring, $possiblelist);  
+        $possibleselector = $mform->addElement('select', 'possiblelist', $querystring, $possiblelist);
         $possibleselector->setMultiple($multiplerecipient);
 
         $this->add_action_buttons();
 
     }
-/**
- * Create a list of people that can approve a generated CADO
- * 
- * @param  $context
- */
-    function getapproveusers($context) {
-        $approveusers = get_users_by_capability($context, "mod/cado:approve", "u.id, u.username","u.firstname");
+    /**
+     * Create a list of people that can approve a generated CADO
+     *
+     * @param  $context
+     */
+    private function getapproveusers($context) {
+        $approveusers = get_users_by_capability($context, "mod/cado:approve", "u.id, u.username", "u.firstname");
         $approvelist = [];
         foreach ($approveusers as $thisuser) {
-            $approvelist = $approvelist + [$thisuser->id =>  mod_cado_check::getusername($thisuser->id) . " ($thisuser->username)"];
+            $approvelist = $approvelist + [$thisuser->id => mod_cado_check::getusername($thisuser->id) . " ($thisuser->username)"];
         }
         return $approvelist;
 

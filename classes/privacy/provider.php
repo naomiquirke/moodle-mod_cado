@@ -37,7 +37,8 @@ defined('MOODLE_INTERNAL') || die();
 
 
 class provider implements
-    // This plugin stores data entered by user with role generator, and comments made by user with role approver to user with CADO generator 
+    // This plugin stores data entered by user with role generator,
+    // and comments made by user with role approver to user with CADO generator.
     \core_privacy\local\metadata\provider,
     \core_privacy\local\request\plugin\provider,
     \core_privacy\local\request\core_userlist_provider
@@ -84,12 +85,12 @@ class provider implements
             'thisgenuser'  => $userid,
             'thisappruser'  => $userid,
         ];
- 
+
         $contextlist->add_from_sql($sql, $params);
- 
+
         return $contextlist;
 
-    } 
+    }
 
     /**
      * Get the list of users who have data within a context.
@@ -104,7 +105,7 @@ class provider implements
             return;
         }
 
-        $sql = "WITH part1 as ( " . 
+        $sql = "WITH part1 as ( " .
                 "SELECT cm.instance
                 FROM {context} c
                     JOIN {course_modules} cm ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
@@ -148,9 +149,9 @@ class provider implements
      */
 
     public static function export_user_data(approved_contextlist $contextlist) {
-        //approved_contextlist includes both the user record, and a list of contexts, which can be retrieved by either 
-        //processing it as an Iterator, or by calling get_contextids() or get_contexts() as required.
-        //Data is exported using a \core_privacy\local\request\content_writer
+        // Approved_contextlist includes both the user record, and a list of contexts, which can be retrieved by either
+        // processing it as an Iterator, or by calling get_contextids() or get_contexts() as required.
+        // Data is exported using a \core_privacy\local\request\content_writer.
         global $DB;
 
         $user = $contextlist->get_user();
@@ -173,12 +174,12 @@ class provider implements
         $reportsdata = [];
         list($insql, $inparams) = $DB->get_in_or_equal($cadoids, SQL_PARAMS_NAMED);
         $sqlwhere = "(generateuser = :generateuser OR approveuser = :approveuser) AND id $insql";
-        $params = array_merge($inparams, ['generateuser' => $userid, 'approveuser'=> $userid]);
+        $params = array_merge($inparams, ['generateuser' => $userid, 'approveuser' => $userid]);
         $sql = "SELECT *
                 FROM {cado}
                 WHERE $sqlwhere";
         $recordset = $DB->get_records_sql($sql, $params);
-        foreach ($recordset as $record){
+        foreach ($recordset as $record) {
             $reportsdata[] = (object) [
                 'approveuser' => $record->approveuser,
                 'name' => $record->name,
@@ -194,9 +195,9 @@ class provider implements
 
             writer::with_context($contextlist->current())->export_data([
                 get_string('pluginname', 'cado')], $data);
-        }        
-    } 
-    
+        }
+    }
+
     /**
      * Delete all data for all users in the specified context.
      *
@@ -211,7 +212,7 @@ class provider implements
         if (!$cadoid = static::get_cado_id_from_context($context)) {
             return;
         }
-        static::delete_data(0,$cadoid);
+        static::delete_data(0, $cadoid);
     }
 
     /**
@@ -241,7 +242,7 @@ class provider implements
             static::delete_data($userid, $cadoid);
         }
     }
-    
+
     /**
      * Delete multiple users within a single context.
      *
@@ -294,19 +295,20 @@ class provider implements
     }
 
 
-    protected static function delete_data($userid,$cadoid) {
+    protected static function delete_data($userid, $cadoid) {
         global $DB;
         // CADO Reports are considered to be 'owned' by the institution, even if they were originally written by a specific
         // user. They are still exported in the list of a users data, but they are not removed.
         // The relevant user is instead anonymised.
 
-        //if $userid 0, then all records matching the cadoid are affected; $cadoid 0 then all matching useride affected; if both are 0 then all user info anonymised
+        // If $userid 0, then all records matching the cadoid are affected;
+        // if $cadoid 0 then all matching useride affected; if both are 0 then all user info anonymised.
         $approveparam = $userid ? ['approveuser' => $userid] : [];
         $generateparam = $userid ? ['generateuser' => $userid] : [];
         $cadoparam = ['id' => $cadoid];
-        $params = $cadoid ? array_merge($cadoparam,$approveparam) : $approveparam;
+        $params = $cadoid ? array_merge($cadoparam, $approveparam) : $approveparam;
         $DB->set_field('cado', 'approveuser', 0, $params);
-        $params = $cadoid ? array_merge($cadoparam,$generateparam) : $generateparam;
+        $params = $cadoid ? array_merge($cadoparam, $generateparam) : $generateparam;
         $DB->set_field('cado', 'generateuser', 0, $params);
     }
 

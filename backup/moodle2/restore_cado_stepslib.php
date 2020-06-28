@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -37,7 +36,7 @@ class restore_cado_activity_structure_step extends restore_activity_structure_st
 
         $paths = [];
         $paths[] = new restore_path_element('cado', '/activity/cado');
-        // Return the paths wrapped into standard activity structure
+        // Return the paths wrapped into standard activity structure.
         return $this->prepare_activity_structure($paths);
     }
 
@@ -52,8 +51,8 @@ class restore_cado_activity_structure_step extends restore_activity_structure_st
 
         // Any changes to the list of dates that needs to be rolled should be same during course restore and course reset.
         // See MDL-9367.
-        
-        // If not keeping userdata, then we need to force a regeneration on first view.  
+
+        // If not keeping userdata, then we need to force a regeneration on first view.
         if (!$userinfo) {
             $data->timemodified = time();
             $data->timegenerated = 0;
@@ -61,23 +60,21 @@ class restore_cado_activity_structure_step extends restore_activity_structure_st
             $data->generateuser = $USER->id;
             $data->approveuser = null;
             $data->timeapproved = null;
-            //possibly do a reset of generateuser and proposetime etc here manually
         }
-        //Keep approval comments in case they are of use for a new version of course based on old version, but add a note to them.
-        if ($data->approvecomment) { 
-            $data->approvecomment = '<div class="prevapprovecomment">' . $data->approvecomment 
-                . '</div><p class="approvecommentreviewed">' 
+        // Keep approval comments in case they are of use for a new version of course based on old version, but add a note to them.
+        if ($data->approvecomment) {
+            $data->approvecomment = '<div class="prevapprovecomment">' . $data->approvecomment
+                . '</div><p class="approvecommentreviewed">'
                 . get_string('restore', 'cado')
                 . '</p>';
         }
-        // insert the resource record
+        // Insert the resource record.
         $newitemid = $DB->insert_record('cado', $data);
-        // immediately after inserting "activity" record, call this
+        // Immediately after inserting "activity" record, call this.
         $this->apply_activity_instance($newitemid);
     }
 
     protected function after_execute() {
-        // Add related files, no need to match by itemname (just internally handled context)
-//        $this->add_related_files('mod_cado', 'intro', null);
+        // Add related files, no need to match by itemname (just internally handled context).
     }
 }

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
-* Version 1.1
+ * Version 1.1
  * Choose the course that is wanted to compare against origin
  *
  * @package   mod_cado
@@ -28,12 +28,12 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/formslib.php');
 
 class mod_cado_compare_form extends moodleform {
-    protected $instance; //cado id
+    protected $instance; // Cado id.
     protected $coursename;
     protected $chosenstartdate;
     protected $chosenenddate;
 
-    function __construct($actionurl, $origin, $coursename = '', $chosenstartdate = null, $chosenenddate = null) {
+    public function __construct($actionurl, $origin, $coursename = '', $chosenstartdate = null, $chosenenddate = null) {
         $this->instance = $origin;
         $this->coursename = $coursename;
         $this->chosenstartdate = $chosenstartdate;
@@ -42,39 +42,40 @@ class mod_cado_compare_form extends moodleform {
     }
 
     public function definition () {
-        
+
         $mform = $this->_form;
-        
+
         $mform->addElement('header', 'formheader', get_string('titleforlegend', 'cado'));
-        $mform->setExpanded('formheader'); //set to false to make it closed on page load, default is false for optional params, true for required
+        $mform->setExpanded('formheader');
+        // Set to false to make it closed on page load, default is false for optional params, true for required.
         $mform->addElement('html', '<div id="cado_nq" style="height:30pt"> </div>');
 
         $mform->addElement('date_selector', 'comparestartdate', get_string('datestartselector', 'cado'));
-        $chosenstartdate = $this->chosenstartdate ? $this->chosenstartdate : date("U",strtotime('first day of january'));
+        $chosenstartdate = $this->chosenstartdate ? $this->chosenstartdate : date("U", strtotime('first day of january'));
         $mform->setDefault('comparestartdate', $chosenstartdate);
-        
+
         $mform->addElement('date_selector', 'compareenddate', get_string('dateendselector', 'cado'));
-        $chosenenddate = $this->chosenenddate ? $this->chosenenddate : date("U",strtotime('last day of december'));
+        $chosenenddate = $this->chosenenddate ? $this->chosenenddate : date("U", strtotime('last day of december'));
         $mform->setDefault('compareenddate', $chosenenddate);
 
         $mform->addElement('text', 'coursename', get_string('nameinstruction', 'cado'));
         $mform->setType('coursename', PARAM_ALPHANUM);
 
-        $courselist = $this->choose_course(['start'=>$chosenstartdate, 'finish'=>$chosenenddate], $this->coursename);
+        $courselist = $this->choose_course(['start' => $chosenstartdate, 'finish' => $chosenenddate], $this->coursename);
 
-        $courseselector = $mform->addElement('select', 'cadoid', get_string('courseinstruction', 'cado'), $courselist);     
-        $courseselector -> setSelected("default");
- 
+        $courseselector = $mform->addElement('select', 'cadoid', get_string('courseinstruction', 'cado'), $courselist);
+        $courseselector ->setSelected("default");
+
         $this->add_action_buttons();
     }
-  
-/**
- * Select a list of courses that matches the chosen requirements
- * 
- * @param int $chosentime this is just year
- * @param string $chosennamepart default = ''
- */
-function choose_course($chosentime, $chosennamepart='') {
+
+    /**
+     * Select a list of courses that matches the chosen requirements
+     *
+     * @param int $chosentime this is just year
+     * @param string $chosennamepart default = ''
+     */
+    public function choose_course($chosentime, $chosennamepart='') {
 
         global $DB;
         $params["cadotimestart"] = intval($chosentime["start"]);
@@ -82,18 +83,18 @@ function choose_course($chosentime, $chosennamepart='') {
         $params["part1"] = $params["part2"] = '%' . $chosennamepart . '%';
         $params["currentcado"] = $this->instance;
         $sql = "SELECT cado.id, c.shortname, c.fullname, c.startdate, cado.name
-                FROM {cado} as cado
-                JOIN {course} AS c on c.id = cado.course
+                FROM {cado} cado
+                JOIN {course} c on c.id = cado.course
                 WHERE cado.timegenerated > 0 AND cado.id <> :currentcado
                     AND c.startdate >= :cadotimestart AND  c.startdate <= :cadotimeend
-                    AND (" . $DB->sql_like('c.shortname', ':part1') . " OR " . $DB->sql_like('c.fullname', ':part2') . 
-                ")";  //the last line performs a moodle multi database type like query
+                    AND (" . $DB->sql_like('c.shortname', ':part1') . " OR " . $DB->sql_like('c.fullname', ':part2') .
+                ")";  // The last line performs a moodle multi database type like query.
         $courseresult = $DB->get_records_sql($sql, $params); //
         foreach ($courseresult as $thisresult) {
-            $chosencourses[$thisresult -> id] = $thisresult -> shortname . ', ' . $thisresult -> name;
+            $chosencourses[$thisresult ->id] = $thisresult ->shortname . ', ' . $thisresult ->name;
         }
-        $chosencourses["default"] = get_string('coursenotchosen', 'cado'); //add the not chosen option
+        $chosencourses["default"] = get_string('coursenotchosen', 'cado'); // Add the not chosen option.
         return $chosencourses;
-    
+
     }
 }

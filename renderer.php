@@ -24,16 +24,16 @@ defined('MOODLE_INTERNAL') || die();
  * @package    mod_cado
  * @copyright  2020 Naomi Quirke
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
-*/
-
- class mod_cado_renderer extends plugin_renderer_base {
-
-/**
- * Applies cado.mustache.
- *
- * @param stdClass $data
  */
- public function render_course($data) {
+
+class mod_cado_renderer extends plugin_renderer_base {
+
+    /**
+     * Applies cado.mustache.
+     *
+     * @param stdClass $data
+     */
+    public function render_course($data) {
         if ($data) {
             return $this->render_from_template('mod_cado/cado', $data);
         }
@@ -44,7 +44,7 @@ defined('MOODLE_INTERNAL') || die();
     }
     public function render_form_footer() {
         echo $this->output->footer();
-        }
+    }
 
     public function rendered_already($already) {
         echo $already;
@@ -53,15 +53,15 @@ defined('MOODLE_INTERNAL') || die();
         echo $this->render_from_template('mod_cado/cadocompare', $data);
     }
 
-/**
- * Applies cadostate.mustache.
- *
- * @param stdClass $data
- */
-function render_state($data) {
+    /**
+     * Applies cadostate.mustache.
+     *
+     * @param stdClass $data
+     */
+    public function render_state($data) {
         if ($data) {
             echo $this->output->render_from_template('mod_cado/cadostate', $data);
         }
     }
 
- }
+}
