@@ -33,26 +33,25 @@ defined('MOODLE_INTERNAL') || die;
 function cado_supports($feature) {
     switch($feature) {
         case FEATURE_MOD_ARCHETYPE:
-return MOD_ARCHETYPE_RESOURCE;
+                return MOD_ARCHETYPE_RESOURCE;
         case FEATURE_GROUPS:
-return true;
+                return true;
         case FEATURE_GROUPINGS:
-return true;
+                return true;
         case FEATURE_MOD_INTRO:
-return false;
+                return false;
         case FEATURE_COMPLETION_TRACKS_VIEWS:
-return true;
+                return true;
         case FEATURE_GRADE_HAS_GRADE:
-return false;
+                return false;
         case FEATURE_GRADE_OUTCOMES:
-return false;
+                return false;
         case FEATURE_BACKUP_MOODLE2:
-return true;
+                return true;
         case FEATURE_SHOW_DESCRIPTION:
-return false;
-
+                return false;
         default:
-return null;
+                return null;
     }
 };
 /**

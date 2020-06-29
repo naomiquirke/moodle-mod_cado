@@ -111,6 +111,7 @@ if (!$viewedcado->instance->timeapproved) {  // If not approved.
 $completion = new completion_info($course);
 $completion->set_module_viewed($cm);
 $myrenderer->render_form_header();
+
 $myrenderer->render_state($cs);
 if ($showcentral) { // Note now outputting the main report.
     if ($compareid) {
@@ -123,3 +124,4 @@ if ($reportformat == 'print') {
     echo '</div>';
 }
 $myrenderer->render_form_footer();
+

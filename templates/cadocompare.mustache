@@ -14,7 +14,28 @@
     You should have received a copy of the GNU General Public License
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
+{{!
+    @template mod_cado/cadocompare
 
+    Displays comparison between CADO reports
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+    Context variables required for this template:
+    * none
+
+    Example context (json):
+    {
+        "header" : "Result of comparing other: "CADO for Basic Course, grouping First" against origin: "Example CADO""
+        "subheader" : "Comparison: pink highlights changes between origin and other, green highlights when only origin CADO has an activity, yellow highlights when only other CADO has an activity.""
+        "content" : "<div class="cadocentral">***</div>
+    }
+    where *** is the entire enclosure of the rest of template mod_cado/cado
+}}
 {{#header}}<h3 class="cado-compare-header">{{header}}</h2>{{/header}}
 {{#subheader}}<p class="cado-compare-subheader">{{subheader}}</p>{{/subheader}}
 {{#content}}<div class="cado-compare-content">{{{content}}}</div>{{/content}}
