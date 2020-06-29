@@ -17,7 +17,7 @@
 /**
  * Version 1.0
  *
- * @package    mod_CADO
+ * @package    mod_cado
  * @copyright  2020 Naomi Quirke
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

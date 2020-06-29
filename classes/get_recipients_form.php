@@ -16,7 +16,6 @@
 
 
 /**
- * Version 1.1
  * Get recipients and create CADO approval form
  *
  * @package   mod_cado
@@ -27,10 +26,21 @@
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/formslib.php');
 
+/**
+ * Class for form to get recipients for sending request for approval
+ *
+ * @package   mod_cado
+ * @copyright 2020 Naomi Quirke
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class mod_cado_get_recipients_form extends moodleform {
     /* from https://docs.moodle.org/dev/lib/formslib.php_Form_Definition#select */
 
-
+    /**
+     * Define the get recipients for sending approval form
+     *
+     * @return void
+     */
     public function definition () {
 
         $mform = $this->_form;

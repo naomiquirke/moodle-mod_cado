@@ -114,22 +114,9 @@ class mod_cado_check {
         return in_array( $optionname , $chosenset );
     }
 
-    public static function logo() {
-        return get_config('cado')->showlogo;
-    }
-
-    public static function includehidden() {
-        return get_config('cado')->inchidden;
-    }
-
     public static function sitecomment() {
         $com = get_config('cado')->sitecomment;
         return self::options('sitecomment', 'cadooptions') ? ($com ? $com : null) : null;
-    }
-
-    public static function sumschedule() {
-        // This only gets called after check if there is a schedule.
-        return get_config('cado')->sumschedule;
     }
 
 
@@ -147,9 +134,4 @@ class mod_cado_check {
         return fullname($thisuser);
     }
 
-    public static function console( $data ) {
-        echo '<script>';
-        echo 'console.log('. json_encode( $data ) .')';
-        echo '</script>';
-    }
 }

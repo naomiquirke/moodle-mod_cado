@@ -18,7 +18,7 @@
  * Version 1.0
  * Set up the form to enable a user with generation capability to propose the CADO for approval, and trigger the appropriate events
  *
- * @package    mod_CADO
+ * @package    mod_cado
  * @copyright  2020 Naomi Quirke
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

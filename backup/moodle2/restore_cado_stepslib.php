@@ -32,8 +32,6 @@ defined('MOODLE_INTERNAL') || die();
 class restore_cado_activity_structure_step extends restore_activity_structure_step {
 
     protected function define_structure() {
-        $userinfo = $this->get_setting_value('userinfo');
-
         $paths = [];
         $paths[] = new restore_path_element('cado', '/activity/cado');
         // Return the paths wrapped into standard activity structure.
@@ -46,7 +44,6 @@ class restore_cado_activity_structure_step extends restore_activity_structure_st
         $userinfo = $this->get_setting_value('userinfo');
 
         $data = (object)$data;
-        $oldid = $data->id;
         $data->course = $this->get_courseid();
 
         // Any changes to the list of dates that needs to be rolled should be same during course restore and course reset.

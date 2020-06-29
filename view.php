@@ -15,7 +15,6 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version 1.0
  * Basic view page, starting point to every CADO type user interaction
  *
  * @package    mod_cado

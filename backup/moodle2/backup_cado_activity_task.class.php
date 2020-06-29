@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version 1.0
+ * Version 1.1
  * Backup cado module class
  *
  * @package   mod_cado
@@ -40,7 +40,7 @@ class backup_cado_activity_task extends backup_activity_task {
     }
 
     static public function encode_content_links($content) {
-        global $CFG, $DB;
+        global $CFG;
 
         $base = preg_quote($CFG->wwwroot, "/");
 

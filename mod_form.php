@@ -16,7 +16,7 @@
 
 /**
  * Version 1.0
- * CADO mod settings page
+ * CADO module settings page
  *
  * @package   mod_cado
  * @copyright 2020 Naomi Quirke
@@ -27,15 +27,21 @@ defined('MOODLE_INTERNAL') || die;
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
 require_once($CFG->dirroot.'/mod/cado/lib.php');
 
+/**
+ * Version 1.0
+ * Class for CADO module settings form
+ *
+ * @package   mod_cado
+ * @copyright 2020 Naomi Quirke
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class mod_cado_mod_form extends moodleform_mod {
     /**
-     * Called to define this moodle form
+     * Define the form
      *
      * @return void
      */
     public function definition() {
-        global $CFG, $OUTPUT;
-
         $mform =& $this->_form;
 
         $mform->addElement('text', 'name', get_string('cadoname', 'cado'), array('size' => '64'));
@@ -62,9 +68,14 @@ class mod_cado_mod_form extends moodleform_mod {
         $this->add_action_buttons();
     }
 
-    public function definition_after_data() {
-        global $DB;
+    /**
+     * Freeze elements that we don't want touched before the form is used
+     * including groupmode (never to be touched), and the text boxes that may only be edited before approval.
+     *
+     * @return void
+     */
 
+    public function definition_after_data() {
         parent::definition_after_data();
         $mform = $this->_form;
 

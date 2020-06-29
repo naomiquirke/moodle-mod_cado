@@ -15,7 +15,6 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version 1.1
  * Set up the form to select the CADO for the comparison, and return this information to View
  *
  * @package   mod_cado

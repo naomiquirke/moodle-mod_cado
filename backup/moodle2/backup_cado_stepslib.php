@@ -17,7 +17,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Version 1.0
+ * Version 1.1
  * Classes that represent the backup steps added in define_my_steps within backup_cado_activity_task
  *
  * @package   mod_cado
@@ -29,7 +29,9 @@ class backup_cado_activity_structure_step extends backup_activity_structure_step
     protected function define_structure() {
 
         // To know if we are including userinfo.
-        $userinfo = $this->get_setting_value('userinfo');
+        // TODO  $userinfo = $this->get_setting_value('userinfo'); At present we ignore this because
+        // I haven't decided whether we should keep all this information or not.
+        // At present when we restore, if it userinfo is turned on then it keeps the approval turned on, otherwise it turns it off.
 
         // Define each element separated.
         $cado = new backup_nested_element('cado', ['id'], [ // Core information that can form CADO.

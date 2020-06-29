@@ -17,13 +17,14 @@
 /**
  * Version 1.1
  *
- * @package    mod_CADO
+ * @package    mod_cado
  * @copyright  2020 Naomi Quirke
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 $string['activityoptions'] = 'Activities to include';
 $string['activityoptions_desc'] = 'Activities to include in CADO, if present in course';
+$string['approvalcomparisondifferent'] = 'Approval statement is different.';
 $string['approvelink'] = 'Approve?';
 $string['approveagree'] = 'Approve CADO';
 $string['approvecomment'] = 'Approval comment:';
@@ -53,8 +54,8 @@ $string['chooseapprover'] = 'To which approver(s) do you wish to propose your CA
 $string['course'] = 'Enter course code';
 $string['comparelink'] = 'Compare';
 $string['comparing'] = 'Result of comparing other: "{$a->other}" against origin: "{$a->origin}"';
-$string['comparisondifferent'] = 'Comparison: pink highlights changes between origin and other, green highlights when only origin CADO has an activity, yellow highlights when only other CADO has an activity.';
-$string['comparisonidentical'] = 'Comparison: identical';
+$string['comparisondifferent'] = 'CADO Comparison: pink highlights changes between origin and other, green highlights when only origin CADO has an activity, yellow highlights when only other CADO has an activity.';
+$string['comparisonidentical'] = 'CADO Comparison: identical';
 $string['comparemissing'] = 'MISSING: ';
 $string['completion'] = 'Completion information';
 $string['configdisallowstudentview'] = 'Adds a configuration option on course pages to allow students to view the CADO report on the course page';

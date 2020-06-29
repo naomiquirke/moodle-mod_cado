@@ -15,15 +15,21 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version 1.0
+ * This file contains the moodle hooks for the cado module.
  *
- * @package    mod_CADO
+ * @package    mod_cado
  * @copyright  2020 Naomi Quirke
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die;
 
+/**
+ * Return the list if Moodle features this module supports
+ *
+ * @param string $feature FEATURE_xx constant for requested feature
+ * @return mixed True if module supports feature, null if doesn't know
+ */
 function cado_supports($feature) {
     switch($feature) {
         case FEATURE_MOD_ARCHETYPE:
@@ -49,18 +55,37 @@ return false;
 return null;
     }
 };
-
+/**
+ * Adds cado instance
+ *
+ * This is done by calling the add_instance() method of the cado type class
+ * @param stdClass $data
+ * @return int The instance id of the new assignment
+ */
 function cado_add_instance(stdClass $data) {
     // Passed cado edit settings form when created.
     return mod_cado_cado::add_instance($data);
 };
 
+/**
+ * Updates cado instance
+ *
+ * This is done by calling the update_instance() method of the cado type class
+ * @param stdClass $data
+ * @return bool
+ */
 function cado_update_instance(stdClass $data) {
     return mod_cado_cado::update_instance($data);
 };
 
+/**
+ * Deletes cado instance
+ *
+ * This is done by calling the delete_instance() method of the cado type class
+ * @param int $id = cm->instance in course/lib.php.
+ * @return bool
+ */
 function cado_delete_instance($id) {
-    // Note $id = cm->instance in course/lib.php.
     return mod_cado_cado::delete_instance($id);
 };
 
@@ -73,7 +98,7 @@ function cado_delete_instance($id) {
  * @return void
  */
 function cado_extend_settings_navigation(settings_navigation $settingsnav, navigation_node $cadonode) {
-    global $PAGE, $USER, $CFG;
+    global $PAGE, $CFG;
 
     // Approve link.
     if (has_capability('mod/cado:approve', $PAGE->cm->context)) {

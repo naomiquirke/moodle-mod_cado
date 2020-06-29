@@ -114,14 +114,14 @@ class provider implements
                 )
 
                 , part2 as (
-                SELECT cad.approveuser AS userid
+                SELECT cad.approveuser userid
                 FROM  part1
                     JOIN {cado} cad ON cad.id = part1.instance
                 WHERE cad.approveuser is not null
                 )
 
                 , part3 as (
-                SELECT cad.generateuser AS userid
+                SELECT cad.generateuser userid
                 FROM  part1
                     JOIN {cado} cad ON cad.id = part1.instance
                 )
@@ -271,7 +271,7 @@ class provider implements
         global $DB;
         list($insql, $inparams) = $DB->get_in_or_equal($cmids, SQL_PARAMS_NAMED);
         $sql = "
-            SELECT c.id, cm.id AS cmid
+            SELECT c.id, cm.id cmid
               FROM {cado} c
               JOIN {modules} m
                 ON m.name = :cado
