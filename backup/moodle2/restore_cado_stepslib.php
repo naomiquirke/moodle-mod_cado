@@ -25,6 +25,10 @@ defined('MOODLE_INTERNAL') || die();
 
 /**
  * Structure step class to restore cado
+ *
+ * @package    mod_cado
+ * @copyright 2020 Naomi Quirke
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class restore_cado_activity_structure_step extends restore_activity_structure_step {
 
@@ -40,6 +44,8 @@ class restore_cado_activity_structure_step extends restore_activity_structure_st
 
     /**
      * Define structure step to restore cado
+     *
+     * @param object $data describing cado to be restored
      */
     protected function process_cado($data) {
         global $DB;

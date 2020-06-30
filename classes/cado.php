@@ -47,7 +47,7 @@ class mod_cado_cado {
      * Constructs a CADO instance
      *
      * @param stdClass $context context object
-     * @param stdClass $cm course module object
+     * @param stdClass $coursemodule course module object
      * @param stdClass $course course object
      */
     public function __construct($context, $coursemodule, $course) {
@@ -91,7 +91,7 @@ class mod_cado_cado {
     /**
      * Update cado instance in database due to a proposal event.
      *
-     * @param int $update as data
+     * @param int $chosenapprover userid
      */
     public function proposeupdate(int $chosenapprover) {
         global $USER;
@@ -104,7 +104,7 @@ class mod_cado_cado {
     /**
      * Update cado instance in database due to an approval / not-approval event.
      *
-     * @param stdClass $update as data
+     * @param stdClass $data as data from form
      */
     public function approveupdate(stdClass $data) {
         global $USER;
@@ -342,7 +342,7 @@ class mod_cado_cado {
      * @param string $modtype is the module type, either 'quiz', 'forum', or 'assign'
      * @param stdClass $thismod is the module database record
      * @param mod_cado_check $sched which gets updated with tag entries
-     * @param array variable reference $schedule
+     * @param array &$schedule contains all the schedule info
      */
     private function getmoddetails($modtype, $thismod, $sched, &$schedule) {
         $quiz = $modtype == 'quiz';
@@ -627,7 +627,7 @@ class mod_cado_cado {
     /**
      * To find the core text to be compared
      *
-     * @param $oa is the string to label and tidy
+     * @param string $oa is the string to label and tidy
      * Returns array with the broad section the text is in (=modtype), the course module i
      *
      */

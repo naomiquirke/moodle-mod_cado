@@ -56,13 +56,14 @@ class mod_cado_approve_form extends moodleform {
     }
 
     /**
-     * Fill in previous approval information.
+     * Fill in current approval information.
+     *
+     * @param object $thiscadoinstance instance of cado
      */
-    public function set_last_data($thiscado) {
-        $data = $thiscado->instance;
-        $checkboxval = $data->timeapproved == 0 ? 0 : 1;
+    public function set_last_data($thiscadoinstance) {
+        $checkboxval = $thiscadoinstance->timeapproved == 0 ? 0 : 1;
         $this->_form->setDefault('comment', ['text' => '<p>' . get_string('update', 'cado') . '</p><div class="prevapprovecomment">'
-            . $data->approvecomment . '</div>']); // Add update line at beginning to make it easy to add stuff.
+            . $thiscadoinstance->approvecomment . '</div>']); // Add update line at beginning to make it easy to add stuff.
         $this->_form->setDefault('approved', $checkboxval);
     }
 }

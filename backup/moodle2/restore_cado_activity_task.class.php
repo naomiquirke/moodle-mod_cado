@@ -26,8 +26,11 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/mod/cado/backup/moodle2/restore_cado_stepslib.php'); // Because it exists (must).
 
 /**
- * Class resource restore task that provides all the settings and steps to perform one
- * complete restore of the activity
+ * Class that provides all the settings and steps to perform one complete restore of the activity.
+ *
+ * @package    mod_cado
+ * @copyright 2020 Naomi Quirke
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class restore_cado_activity_task extends restore_activity_task {
 

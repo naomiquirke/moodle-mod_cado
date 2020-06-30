@@ -62,7 +62,7 @@ if ($approveform->is_cancelled()) {
 } else {
     $formrenderer = $PAGE->get_renderer('mod_cado');
     $formrenderer->render_form_header();
-    $approveform->set_last_data($approvecado);
+    $approveform->set_last_data($approvecado->instance);
     $approveform->display();
     $formrenderer->render_form_footer();
 
