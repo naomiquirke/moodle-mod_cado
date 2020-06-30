@@ -72,7 +72,6 @@ class mod_cado_mod_form extends moodleform_mod {
      *
      * @return void
      */
-
     public function definition_after_data() {
         parent::definition_after_data();
         $mform = $this->_form;

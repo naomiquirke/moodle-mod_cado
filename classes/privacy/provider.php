@@ -14,6 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Privacy implementation for mod_cado.
+ *
+ * @package   mod_cado
+ * @copyright 2020 Naomi Quirke
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 namespace mod_cado\privacy;
 
@@ -28,14 +35,12 @@ use core_privacy\local\request\writer;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Privacy implementation for mod_cado.
+ * Class for privacy implementation for mod_cado.
  *
  * @package   mod_cado
  * @copyright 2020 Naomi Quirke
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-
 class provider implements
     // This plugin stores data entered by user with role generator,
     // and comments made by user with role approver to user with CADO generator.
@@ -69,7 +74,6 @@ class provider implements
      * @param int $userid The user to search.
      * @return contextlist $contextlist The contextlist containing the list of contexts used in this plugin.
      */
-
     public static function get_contexts_for_userid(int $userid) : contextlist {
         $contextlist = new \core_privacy\local\request\contextlist();
         $sql = "SELECT c.id
@@ -147,7 +151,6 @@ class provider implements
      *
      * @param approved_contextlist $contextlist The approved contexts to export information for.
      */
-
     public static function export_user_data(approved_contextlist $contextlist) {
         // Approved_contextlist includes both the user record, and a list of contexts, which can be retrieved by either
         // processing it as an Iterator, or by calling get_contextids() or get_contexts() as required.
@@ -294,7 +297,12 @@ class provider implements
         return $cm ? (int) $cm->instance : 0;
     }
 
-
+    /**
+     * Delete data related to a userid and cado id
+     *
+     * @param  int $userid The user ID
+     * @param  int $cadoid The cado ID
+     */
     protected static function delete_data($userid, $cadoid) {
         global $DB;
         // CADO Reports are considered to be 'owned' by the institution, even if they were originally written by a specific

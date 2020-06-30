@@ -34,14 +34,23 @@ require_once($CFG->libdir . '/formslib.php');
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_cado_compare_form extends moodleform {
-    protected $instance; // Cado id.
+    /** @var object instance of cado */
+    protected $instance;
+    /** @var string course name */
     protected $coursename;
+    /** @var integer timestamp */
     protected $chosenstartdate;
+    /** @var integer timestamp */
     protected $chosenenddate;
 
     /**
      * Get base info for get recipients for sending approval form
      *
+     * @param moodle_url $actionurl
+     * @param mod_cado_cado $origin
+     * @param string $coursename
+     * @param integer $chosenstartdate
+     * @param integer $chosenenddate
      * @return void
      */
     public function __construct($actionurl, $origin, $coursename = '', $chosenstartdate = null, $chosenenddate = null) {

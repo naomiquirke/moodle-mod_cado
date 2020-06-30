@@ -31,17 +31,24 @@ defined('MOODLE_INTERNAL') || die();
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_cado_cado {
-    public $instance; // Read from db.
+    /** @var object instance of cado */
+    public $instance;
+
+    /** @var object context of cado */
     private $context;
+
+    /** @var object course of cado */
     private $course;
+
+    /** @var object coursemodule info of cado */
     private $coursemodule; // Cm_info.
 
     /**
      * Constructs a CADO instance
      *
-     * @param  $context
-     * @param  $cm
-     * @param  $course
+     * @param stdClass $context context object
+     * @param stdClass $cm course module object
+     * @param stdClass $course course object
      */
     public function __construct($context, $coursemodule, $course) {
             $this->context = $context;
@@ -53,7 +60,7 @@ class mod_cado_cado {
     /**
      * Get cado instance from the database.
      *
-     * @param integer $id as instance
+     * @param integer $recordid as instance
      */
     public static function getcadorecord($recordid) {
         global $DB;
@@ -652,8 +659,13 @@ class mod_cado_cado {
         ];
         return $arraytoreturn;
     }
-    public static function baseclean($oa) {
-        // This gets used for the quick whole document check.
+
+    /**
+     * This gets used for the quick whole document check.
+     *
+     * @param string $oa is the string in which to add a string
+     */
+    private function baseclean($oa) {
         $ok = strip_tags($oa);
         $chars = array("\r\n", "\n", "\r", "\t", "\0", "\x0B", " ");
         $ok = str_replace($chars, "", $ok);
@@ -669,7 +681,7 @@ class mod_cado_cado {
      * @param string $note is the string to be inserted
      *
      */
-    public static function addalert($base, $positioning, $note) {
+    private function addalert($base, $positioning, $note) {
         $lengthid = strlen($positioning);
         $noteplace = strpos($base, $positioning);
         return substr_replace($base, $note, $noteplace + $lengthid, 0);

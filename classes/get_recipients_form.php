@@ -62,7 +62,7 @@ class mod_cado_get_recipients_form extends moodleform {
     /**
      * Create a list of people that can approve a generated CADO
      *
-     * @param  $context
+     * @param stdClass $context context object
      */
     private function getapproveusers($context) {
         $approveusers = get_users_by_capability($context, "mod/cado:approve", "u.id, u.username", "u.firstname");

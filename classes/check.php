@@ -33,17 +33,20 @@ defined('MOODLE_INTERNAL') || die;
  */
 class mod_cado_check {
 
+    /** @var array list of tags */
     public $taglist;
+    /** @var array list of tag keys */
     public $tagset;
+    /** @var int schedtag 0 for tags not in schedule, 1 in schedule */
     public $schedtag;
+    /** @var int schedulesetup 0 for no schedule, 1 for schedule */
     public $schedulesetup;
+    /** @var int tagsinsched = 0 for no tags in schedule, 1 otherwise */
     public $tagsinsched;
 
     /**
-     * If tag information to be included in CADO, whether or not it should be in schedule, then this is put into the var $taglist.
-     * Find out if a schedule is to be generated, and if so, whether it includes various tag information or is null.
-     * $schedulesetup 0 for no schedule, 1 for schedule
-     * $tagsinsched = 0 for no tags in schedule, 1 otherwise
+     * Fills out the options information into the public variables, building the tag set etc.
+     *
      * @param integer $courseid course id of CADO
      */
     public function __construct($courseid) {

@@ -30,8 +30,12 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright 2020 Naomi Quirke
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 class backup_cado_activity_structure_step extends backup_activity_structure_step {
+
+    /**
+     * Definition of structure
+     *
+     */
     protected function define_structure() {
 
         // To know if we are including userinfo.
