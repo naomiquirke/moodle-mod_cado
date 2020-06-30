@@ -15,7 +15,6 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version 1.1
  * Choose the course that is wanted to compare against origin
  *
  * @package   mod_cado
@@ -27,12 +26,24 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/formslib.php');
 
+/**
+ * Class form to allow choice of CADO wanted to compare against origin.
+ *
+ * @package   mod_cado
+ * @copyright 2020 Naomi Quirke
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class mod_cado_compare_form extends moodleform {
     protected $instance; // Cado id.
     protected $coursename;
     protected $chosenstartdate;
     protected $chosenenddate;
 
+    /**
+     * Get base info for get recipients for sending approval form
+     *
+     * @return void
+     */
     public function __construct($actionurl, $origin, $coursename = '', $chosenstartdate = null, $chosenenddate = null) {
         $this->instance = $origin;
         $this->coursename = $coursename;
@@ -41,6 +52,11 @@ class mod_cado_compare_form extends moodleform {
         parent::__construct($actionurl);
     }
 
+    /**
+     * Define the form for get recipients for sending approval form
+     *
+     * @return void
+     */
     public function definition () {
 
         $mform = $this->_form;
@@ -95,6 +111,5 @@ class mod_cado_compare_form extends moodleform {
         }
         $chosencourses["default"] = get_string('coursenotchosen', 'cado'); // Add the not chosen option.
         return $chosencourses;
-
     }
 }

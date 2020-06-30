@@ -15,7 +15,6 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version 1.0
  * CADO module settings page
  *
  * @package   mod_cado
@@ -28,7 +27,6 @@ require_once($CFG->dirroot.'/course/moodleform_mod.php');
 require_once($CFG->dirroot.'/mod/cado/lib.php');
 
 /**
- * Version 1.0
  * Class for CADO module settings form
  *
  * @package   mod_cado

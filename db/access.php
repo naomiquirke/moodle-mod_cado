@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version 1.0
+ * Capability access settings for CADO pages
  *
  * @package    mod_cado
  * @copyright  2020 Naomi Quirke

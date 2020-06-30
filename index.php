@@ -15,7 +15,6 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version 1.0
  * Enable a list view of CADOs in a course
  *
  * @package    mod_cado

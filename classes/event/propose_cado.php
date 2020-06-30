@@ -14,10 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace mod_cado\event;
-defined('MOODLE_INTERNAL') || die();
+
 /**
- * Version 1.0
  * The mod_cado proposal event class.
  *
  * @property-read array $other {
@@ -26,6 +24,17 @@ defined('MOODLE_INTERNAL') || die();
  *      - int courseid: The course id the cado belongs to.
  *      - int proposeid: The user to whom the cado is proposed
  * }
+ *
+ * @package    mod_cado
+ * @copyright  2020 Naomi Quirke
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+ namespace mod_cado\event;
+defined('MOODLE_INTERNAL') || die();
+
+/**
+ * Event triggered after CADO proposed for approval.
  *
  * @package    mod_cado
  * @copyright  2020 Naomi Quirke
@@ -73,6 +82,12 @@ class propose_cado extends \core\event\base {
         return $url;
     }
 
+    /**
+     * This is used when restoring course logs where it is required that we
+     * map the objectid to it's new value in the new course.
+     *
+     * @return array
+     */
     public static function get_objectid_mapping() {
         return array('db' => 'cado', 'restore' => 'cado');
     }

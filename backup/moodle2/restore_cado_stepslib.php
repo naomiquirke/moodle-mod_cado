@@ -15,7 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version 1.0
+ * Define all the restore steps that will be used by the restore_cado_activity_task
+ *
  * @package    mod_cado
  * @copyright 2020 Naomi Quirke
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -23,14 +24,13 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Define all the restore steps that will be used by the restore_cado_activity_task
- */
-
-/**
- * Structure step to restore one resource activity
+ * Structure step class to restore cado
  */
 class restore_cado_activity_structure_step extends restore_activity_structure_step {
 
+    /**
+     * Define structure step to restore cado
+     */
     protected function define_structure() {
         $paths = [];
         $paths[] = new restore_path_element('cado', '/activity/cado');
@@ -38,6 +38,9 @@ class restore_cado_activity_structure_step extends restore_activity_structure_st
         return $this->prepare_activity_structure($paths);
     }
 
+    /**
+     * Define structure step to restore cado
+     */
     protected function process_cado($data) {
         global $DB;
         global $USER;
@@ -71,6 +74,9 @@ class restore_cado_activity_structure_step extends restore_activity_structure_st
         $this->apply_activity_instance($newitemid);
     }
 
+    /**
+     * Define after_execute
+     */
     protected function after_execute() {
         // Add related files, no need to match by itemname (just internally handled context).
     }

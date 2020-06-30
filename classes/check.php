@@ -14,18 +14,23 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die;
 
 /**
- * Version 1.0
- * Misc set of functions used to get a) cado module configuration settings, b) names of users, c) debugging,
- * and d) the constructor used for schedule info.
+ * Misc set of functions used to get a) cado module configuration settings, b) names of users, and c) schedule info.
  *
  * @package   mod_cado
  * @copyright 2020 Naomi Quirke
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+defined('MOODLE_INTERNAL') || die;
 
+/**
+ * Misc class used to get a) cado module configuration settings, b) names of users, and c) schedule info.
+ *
+ * @package   mod_cado
+ * @copyright 2020 Naomi Quirke
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class mod_cado_check {
 
     public $taglist;
@@ -104,7 +109,7 @@ class mod_cado_check {
     }
 
     /**
-     * Check into the multiselect and comma delimited options, to see if an option is present
+     * Check into the multiselect and comma delimited options, to see if an option is present.
      *
      * @param string $optionname is item to be searched for
      * @param string $optionset is the setting to be searched in: one of activityoptions,cadooptions,tagslist
@@ -114,6 +119,10 @@ class mod_cado_check {
         return in_array( $optionname , $chosenset );
     }
 
+    /**
+     * Find out if sitecomment is allowed and if so what it is.
+     *
+     */
     public static function sitecomment() {
         $com = get_config('cado')->sitecomment;
         return self::options('sitecomment', 'cadooptions') ? ($com ? $com : null) : null;

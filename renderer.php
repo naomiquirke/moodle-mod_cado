@@ -14,11 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-
-defined('MOODLE_INTERNAL') || die();
-
 /**
- * Version 1.0
  * Renderer for cado report.
  *
  * @package    mod_cado
@@ -26,11 +22,19 @@ defined('MOODLE_INTERNAL') || die();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
+
+/**
+ * Class renderer for cado report.
+ *
+ * @package    mod_cado
+ * @copyright  2020 Naomi Quirke
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class mod_cado_renderer extends plugin_renderer_base {
 
     /**
      * Applies cado.mustache.
-     *
      * @param stdClass $data
      */
     public function render_course($data) {
@@ -39,16 +43,34 @@ class mod_cado_renderer extends plugin_renderer_base {
         }
     }
 
+    /**
+     * Adds header.
+     *
+     */
     public function render_form_header() {
         echo $this->output->header();
     }
+
+    /**
+     * Adds footer.
+     *
+     */
     public function render_form_footer() {
         echo $this->output->footer();
     }
 
+    /**
+     * Outputs already rendered material.
+     * @param string $already
+     */
     public function rendered_already($already) {
         echo $already;
     }
+
+    /**
+     * Applies cadocompare.mustache.
+     * @param stdClass $data
+     */
     public function render_compare($data) {
         echo $this->render_from_template('mod_cado/cadocompare', $data);
     }

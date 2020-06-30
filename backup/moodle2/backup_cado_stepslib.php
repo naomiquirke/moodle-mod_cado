@@ -14,11 +14,17 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Classes that represent the backup steps added in define_my_steps within backup_cado_activity_task
+ *
+ * @package   mod_cado
+ * @copyright 2020 Naomi Quirke
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Version 1.1
- * Classes that represent the backup steps added in define_my_steps within backup_cado_activity_task
+ * Class that represents the backup steps added in define_my_steps within backup_cado_activity_task
  *
  * @package   mod_cado
  * @copyright 2020 Naomi Quirke

@@ -15,18 +15,18 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version 1.0
+ * Resource restore task that provides all the settings and steps.
+ *
  * @package    mod_cado
  * @copyright 2020 Naomi Quirke
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
-
 require_once($CFG->dirroot . '/mod/cado/backup/moodle2/restore_cado_stepslib.php'); // Because it exists (must).
 
 /**
- * resource restore task that provides all the settings and steps to perform one
+ * Class resource restore task that provides all the settings and steps to perform one
  * complete restore of the activity
  */
 class restore_cado_activity_task extends restore_activity_task {

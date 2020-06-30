@@ -15,8 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version 1.1
- * Backup cado module class
+ * Backup cado module
  *
  * @package   mod_cado
  * @copyright 2020 Naomi Quirke
@@ -27,8 +26,19 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/mod/cado/backup/moodle2/backup_cado_stepslib.php'); // Because it exists (must).
 
+/**
+ * Backup cado module class
+ *
+ * @package   mod_cado
+ * @copyright 2020 Naomi Quirke
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class backup_cado_activity_task extends backup_activity_task {
 
+    /**
+     * Define class settings
+     *
+     */
     protected function define_my_settings() {
     }
 
@@ -39,6 +49,10 @@ class backup_cado_activity_task extends backup_activity_task {
         $this->add_step(new backup_cado_activity_structure_step('cado_structure', 'cado.xml'));
     }
 
+    /**
+     * Encode content links
+     *
+     */
     static public function encode_content_links($content) {
         global $CFG;
 

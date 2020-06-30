@@ -18,7 +18,6 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/formslib.php');
 
 /**
- * Version 1.0
  * CADO approval form
  *
  * @package   mod_cado
@@ -45,6 +44,9 @@ class mod_cado_approve_form extends moodleform {
 
     }
 
+    /**
+     * Fill in previous approval information.
+     */
     public function set_last_data($thiscado) {
         $data = $thiscado->instance;
         $checkboxval = $data->timeapproved == 0 ? 0 : 1;
