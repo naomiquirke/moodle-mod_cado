@@ -1,113 +1,140 @@
-
-
-.path-mod-cado div#cado-schedule .table, .path-mod-cado div#cado-schedule .table * {
-    margin: 0 0 0 0;
-    padding: 0 0 0 0;
-    vertical-align:top;
-    font-size: small;
-  }
-.path-mod-cado div#cado-schedule table.table table *[class^=cado-tc] {
-    border: none;
-    padding: 0 0 4px 0;
-    font-size: small;
-  }
-.path-mod-cado div#cado-schedule *.cado-tc3 {
-  width:20%;
+.path-mod-cado .table,
+.path-mod-cado .table * {
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  vertical-align: top;
   font-size: small;
 }
-.path-mod-cado div#cado-schedule *.cado-tc2, .path-mod-cado div#cado-schedule *.cado-tc1 {
-  width:10%;
+
+.path-mod-cado table.table *[class^=cado-tc] {
+  border: none;
+  padding: 0 0 4px 0;
   font-size: small;
 }
+
+.path-mod-cado *.cado-tc3 {
+  width: 20%;
+  font-size: small;
+}
+
+.path-mod-cado *.cado-tc2,
+.path-mod-cado *.cado-tc1 {
+  width: 10%;
+  font-size: small;
+}
+
 .path-mod-cado [id^="cadoi-assign-rubric_"] td {
-   font-size: small;
- }
+  font-size: small;
+}
+
 .path-mod-cado td.cado-sched-total {
-   font-weight: bolder;
- }
+  font-weight: bolder;
+}
+
 .path-mod-cado a.cad-link {
-   color:blue;
- }
-.path-mod-cado  a.cad-link:hover {
-  text-shadow:1px 1px 2px red, 0 0 1em blue, 0 0 0.2em blue;
-  text-decoration:none;
+  color: blue;
+}
+
+.path-mod-cado a.cad-link:hover {
+  text-shadow: 1px 1px 2px red, 0 0 1em blue, 0 0 0.2em blue;
+  text-decoration: none;
 }
 
 .path-mod-cado td.cado-rubric-row-head {
-    font-weight: bolder;
- }
+  font-weight: bolder;
+}
 
- .path-mod-cado div.cado-title {
-  margin-bottom:0;
- }
+.path-mod-cado div.cado-title {
+  margin-bottom: 0;
+}
 
-.path-mod-cado [id^="cado"].cado-different, .path-mod-cado p.cado-different {
-  background-color:pink;
+.path-mod-cado [id^="cado"].cado-different,
+.path-mod-cado p.cado-different {
+  background-color: pink;
   text-decoration: dotted lightgrey;
 }
-.path-mod-cado [id^="cado"].cado-othermissing, .path-mod-cado p.cado-othermissing, .path-mod-cado div.othermissing {
-  background-color:lightgreen;
+
+.path-mod-cado [id^="cado"].cado-othermissing,
+.path-mod-cado p.cado-othermissing,
+.path-mod-cado div.othermissing {
+  background-color: lightgreen;
 }
-.path-mod-cado [id^="cado"].cado-originmissing, .path-mod-cado div.cado-originmissing , .path-mod-cado p.cado-originmissing{
-  background-color:yellow;
+
+.path-mod-cado [id^="cado"].cado-originmissing,
+.path-mod-cado div.cado-originmissing,
+.path-mod-cado p.cado-originmissing {
+  background-color: yellow;
 }
+
 .path-mod-cado tbody tr th[class^="cado-tc"] {
-  border:none;
+  border: none;
 }
+
 .path-mod-cado div#cad-title {
   min-height: 100px;
-  float:left;
+  float: left;
 }
+
 .path-mod-cado div#cad-logo {
   min-height: 100px;
   width: 30%;
   float: right;
-  clear:right;
+  clear: right;
 }
+
 .path-mod-cado h2 {
-  margin-top:30px;
-  margin-bottom:15px;
+  margin-top: 30px;
+  margin-bottom: 15px;
   font-weight: bolder;
 }
+
 .path-mod-cado h3 {
-  margin-top:20px;
+  margin-top: 20px;
 }
+
 .path-mod-cado h2.cad-header {
   background-color: lightgray;
-  padding:15px;
+  padding: 15px;
 }
+
 .path-mod-cado h4 {
-  margin-top:15px;
+  margin-top: 15px;
 }
+
 @media print {
   .path-mod-cado a.cad-link {
-    color:transparent;
+    color: transparent;
   }
-  .path-mod-cado section#region-main {
-    border:none;
-    padding: 0;
+  .path-mod-cado div[id^="cado-"] {
+    widows: 2;
+    orphans: 3;
   }
-  .path-mod-cado div[id^="cado-"]{
-      widows: 2;
-      orphans: 3;
-  }
-  .path-mod-cado h2 , .path-mod-cado h3 , .path-mod-cado h4 {
+  .path-mod-cado h2,
+  .path-mod-cado h3,
+  .path-mod-cado h4 {
     break-after: avoid;
   }
-  .path-mod-cado table, .path-mod-cado div[id*="-dates_"], .path-mod-cado div[id*="-completion_"], .path-mod-cado div[id*="-extra_"], .path-mod-cado div[id*="-intro_"] {
+  .path-mod-cado table,
+  .path-mod-cado div[id*="-dates_"],
+  .path-mod-cado div[id*="-completion_"],
+  .path-mod-cado div[id*="-extra_"],
+  .path-mod-cado div[id*="-intro_"] {
     break-inside: avoid;
     widows: 2;
     orphans: 3;
   }
 }
-.path-mod-cado  p#cad-statecomment {
+
+.path-mod-cado p#cad-statecomment {
   margin-bottom: 0;
 }
-.path-mod-cado  p.approvecommentreviewed {
+
+.path-mod-cado p.approvecommentreviewed {
   font-size: x-small;
   font-style: italic;
   margin-bottom: 0;
 }
-.path-mod-cado  div.prevapprovecomment {
+
+.path-mod-cado div.prevapprovecomment {
   margin-left: 30px;
 }
