@@ -7,20 +7,32 @@
 }
 
 .path-mod-cado table.table *[class^=cado-tc] {
-    border: none;
     padding: 0 0 4px 0;
     font-size: small;
+    border-width: 0.5pt;
+}
+
+.path-mod-cado tbody tr th[class^="cado-tc"] {
+    border-width: 0.5pt;
 }
 
 .path-mod-cado *.cado-tc3 {
     width: 20%;
     font-size: small;
+    border-width: 0.5pt;
 }
 
 .path-mod-cado *.cado-tc2,
 .path-mod-cado *.cado-tc1 {
     width: 10%;
     font-size: small;
+    border-width: 0.5pt;
+}
+
+.path-mod-cado table.cado-inner-table,
+.path-mod-cado table.cado-inner-table td[class^=cado-tc],
+.path-mod-cado table.cado-inner-table th[class^=cado-tc] {
+    border-width: 0;
 }
 
 .path-mod-cado [id^="cadoi-assign-rubric_"] td {
@@ -29,6 +41,7 @@
 
 .path-mod-cado td.cado-sched-total {
     font-weight: bolder;
+    border-width: 0.5pt;
 }
 
 .path-mod-cado a.cad-link {
@@ -64,10 +77,6 @@
 .path-mod-cado div.cado-originmissing,
 .path-mod-cado p.cado-originmissing {
     background-color: yellow;
-}
-
-.path-mod-cado tbody tr th[class^="cado-tc"] {
-    border: none;
 }
 
 .path-mod-cado div#cad-title {
