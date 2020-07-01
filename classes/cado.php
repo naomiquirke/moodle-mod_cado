@@ -342,7 +342,7 @@ class mod_cado_cado {
      * @param string $modtype is the module type, either 'quiz', 'forum', or 'assign'
      * @param stdClass $thismod is the module database record
      * @param mod_cado_check $sched which gets updated with tag entries
-     * @param array &$schedule contains all the schedule info
+     * @param array & $schedule contains all the schedule info
      */
     private function getmoddetails($modtype, $thismod, $sched, &$schedule) {
         $quiz = $modtype == 'quiz';

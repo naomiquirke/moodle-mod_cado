@@ -9,24 +9,24 @@
 .path-mod-cado table.table *[class^=cado-tc] {
     padding: 0 0 4px 0;
     font-size: small;
-    border-width: 0.5pt;
+    border-width: thin;
 }
 
 .path-mod-cado tbody tr th[class^="cado-tc"] {
-    border-width: 0.5pt;
+    border-width: thin;
 }
 
 .path-mod-cado *.cado-tc3 {
     width: 20%;
     font-size: small;
-    border-width: 0.5pt;
+    border-width: thin;
 }
 
 .path-mod-cado *.cado-tc2,
 .path-mod-cado *.cado-tc1 {
     width: 10%;
     font-size: small;
-    border-width: 0.5pt;
+    border-width: thin;
 }
 
 .path-mod-cado table.cado-inner-table,
@@ -41,7 +41,7 @@
 
 .path-mod-cado td.cado-sched-total {
     font-weight: bolder;
-    border-width: 0.5pt;
+    border-width: thin;
 }
 
 .path-mod-cado a.cad-link {
