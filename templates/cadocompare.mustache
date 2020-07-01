@@ -33,15 +33,14 @@
         "compareheaderorigin" : "Origin CADO: \"Example CADO\"",
         "compareheaderother" : "Other CADO: \"CADO for Basic Course, grouping First\"",
         "subheader" : "Comparison key: pink highlights changes between origin and other, green highlights when only origin CADO has an activity, yellow highlights when only other CADO has an activity.",
-        "content" : "<div class=\"cadocentral\">***</div>",
+        "content" : "Encloses the rest of template mod_cado/cado.",
         "commentdiff" : true
     }
-    
-    where *** is the entire enclosure of the rest of template mod_cado/cado
 }}
-<h2 class="cado-compare-header"> {{# str }} compareheader, mod_cado {{/ str }} </h2>
+
+<h2 class="cado-compare-header"> {{#str}} compareheader, mod_cado {{/str}} </h2>
 <p class="cado-compare-subheader">{{compareheaderorigin}}</p>
 <p class="cado-compare-subheader">{{compareheaderother}}</p>
-{{#commentdiff}}<p class="cado-compare-subheader"> {{# str }} approvalcomparisondifferent, mod_cado {{/ str }} </p>{{/commentdiff}}
+{{#commentdiff}}<p class="cado-compare-subheader"> {{#str}} approvalcomparisondifferent, mod_cado {{/str}} </p>{{/commentdiff}}
 {{#subheader}}<p class="cado-compare-subheader">{{subheader}}</p>{{/subheader}}
 {{#content}}<div class="cado-compare-content">{{{content}}}</div>{{/content}}

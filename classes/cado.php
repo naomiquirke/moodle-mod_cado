@@ -293,7 +293,7 @@ class mod_cado_cado {
         // ALL.
         if ($sched->schedulesetup) {
             $courseext ->schedule = $this->cadosort($schedule, 'section');
-            $courseext ->scheduleexists = 1;
+            $courseext ->scheduleexists = true;
             if ((is_object($sched->tagset) || is_array($sched->tagset)) and $sched->tagsinsched) {
                 // Checks to see if there actually are any relevant tags, when tags are turned on in the schedule.
                 foreach ($sched->tagset as $tagkey => $tag) {
