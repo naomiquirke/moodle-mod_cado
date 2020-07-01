@@ -37,6 +37,7 @@ $viewedcado = new mod_cado_cado($context, $cm, $course);
 if ($compareid && has_capability('mod/cado:compare', $context)) {
     $compared = new mod_cado_comparecado();
     $getcompared = $compared->compare($viewedcado->instance, $compareid);
+
 } else {
     $compareid = null;
 }

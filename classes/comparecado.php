@@ -35,7 +35,7 @@ class mod_cado_comparecado {
     /**
      * Compares two CADO instances
      *
-     * @param object $origininstance is the origin cado instance
+     * @param object $origincado is the origin cado instance
      * @param integer $otherid is cmid for other cado
      * @return object for rendering using cadocompare.mustache.
      */
