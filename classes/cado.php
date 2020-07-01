@@ -310,34 +310,6 @@ class mod_cado_cado {
         return $courseext;
     }
     /**
-     * Generate the start of the schedule table, topic headings and weeks.
-     *
-     */
-    private function startschedule() {
-        global $DB;
-        $weekly = $this->course->format == "weeks";
-        $weeks = [];
-        $returned = $DB->get_records('course_sections', ['course' => $this->course->id]);
-        foreach ($returned as $topic) {
-            $descriptor = $topic->name ? $topic->name : strip_tags($topic->summary);
-            // Use the topic name in the schedule, if empty use the summary.
-            $descriptor = strtr($descriptor, array_flip(get_html_translation_table(HTML_ENTITIES, ENT_QUOTES)));
-            $week = [
-                'section' => (int)$topic->section,
-                'name' => $descriptor,
-                'startdate' => $weekly && ($topic->section != "0") ?
-                    strtotime( '+' . ($topic->section - 1) . ' weeks', $this->course->startdate) : null,
-                'tasks' => null,
-                'sum' => false
-            ];
-            $weeks[$topic->id] = $week;
-        }
-        if (get_config('cado')->sumschedule) {
-            $weeks[1000] = ['section' => 1000, 'name' => get_string('schedulesum', 'cado'), 'tasks' => [], 'sum' => true];
-        }
-        return $weeks;
-    }
-    /**
      * Generate the module sections of the report.
      *
      * @param string $modtype is the module type, either 'quiz', 'forum', or 'assign'
@@ -462,6 +434,34 @@ class mod_cado_cado {
             }
         }
         return $this->cadosort($criterion, 'totalpoints'); // Now sort the criteria by the most negative.
+    }
+    /**
+     * Generate the start of the schedule table, topic headings and weeks.
+     *
+     */
+    private function startschedule() {
+        global $DB;
+        $weekly = $this->course->format == "weeks";
+        $weeks = [];
+        $returned = $DB->get_records('course_sections', ['course' => $this->course->id]);
+        foreach ($returned as $topic) {
+            $descriptor = $topic->name ? $topic->name : strip_tags($topic->summary);
+            // Use the topic name in the schedule, if empty use the summary.
+            $descriptor = strtr($descriptor, array_flip(get_html_translation_table(HTML_ENTITIES, ENT_QUOTES)));
+            $week = [
+                'section' => (int)$topic->section,
+                'name' => $descriptor,
+                'startdate' => $weekly && ($topic->section != "0") ?
+                    strtotime( '+' . ($topic->section - 1) . ' weeks', $this->course->startdate) : null,
+                'tasks' => null,
+                'sum' => false
+            ];
+            $weeks[$topic->id] = $week;
+        }
+        if (get_config('cado')->sumschedule) {
+            $weeks[1000] = ['section' => 1000, 'name' => get_string('schedulesum', 'cado'), 'tasks' => [], 'sum' => true];
+        }
+        return $weeks;
     }
 
     /**
