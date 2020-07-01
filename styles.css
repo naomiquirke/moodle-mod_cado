@@ -102,27 +102,27 @@
 }
 
 @media print {
-  .path-mod-cado a.cad-link {
-      color: transparent;
-  }
-  .path-mod-cado div[id^="cado-"] {
-      widows: 2;
-      orphans: 3;
-  }
-  .path-mod-cado h2,
-  .path-mod-cado h3,
-  .path-mod-cado h4 {
-      break-after: avoid;
-  }
-  .path-mod-cado table,
-  .path-mod-cado div[id*="-dates_"],
-  .path-mod-cado div[id*="-completion_"],
-  .path-mod-cado div[id*="-extra_"],
-  .path-mod-cado div[id*="-intro_"] {
-      break-inside: avoid;
-      widows: 2;
-      orphans: 3;
-  }
+    .path-mod-cado a.cad-link {
+        color: transparent;
+    }
+    .path-mod-cado div[id^="cado-"] {
+        widows: 2;
+        orphans: 3;
+    }
+    .path-mod-cado h2,
+    .path-mod-cado h3,
+    .path-mod-cado h4 {
+        break-after: avoid;
+    }
+    .path-mod-cado table,
+    .path-mod-cado div[id*="-dates_"],
+    .path-mod-cado div[id*="-completion_"],
+    .path-mod-cado div[id*="-extra_"],
+    .path-mod-cado div[id*="-intro_"] {
+        break-inside: avoid;
+        widows: 2;
+        orphans: 3;
+    }
 }
 
 .path-mod-cado p#cad-statecomment {

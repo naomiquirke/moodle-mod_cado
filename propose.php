@@ -31,7 +31,7 @@ $context = context_module::instance($cmid);
 require_login($course, true, $cm);
 require_capability('mod/cado:generate', $context);
 
-$viewedcado = new mod_cado_cado($context, $cm, $course);
+$viewedcado = new mod_cado_cadonotify($context, $cm, $course);
 
 $url = new moodle_url('/mod/cado/propose.php', ['id' => $cmid]);
 $PAGE->set_url($url, ['id' => $cmid]);
@@ -51,7 +51,7 @@ if ($proposeform->is_cancelled()) {
         'other' => ['courseid' => $course->id , 'groupmode' => $cm->groupingid , 'proposeid' => $proposeid] ] );
     $event->trigger();
     $viewedcado->workflownotify('propose', $nexturl, null, $proposeid);
-    // Note redirect is included in workflownotify.
+    // Redirect is included in workflownotify.
 } else {
     $formrenderer = $PAGE->get_renderer('mod_cado');
     $formrenderer->render_form_header();

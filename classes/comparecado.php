@@ -43,17 +43,17 @@ class mod_cado_comparecado {
         global $DB;
         $result = new stdClass;
         $othercmod = $DB->get_record('course_modules', ['id' => $otherid])->instance;
-        $otherinstance = mod_cado_cado::getcadorecord($othercmod);
-        $othergenerated = $otherinstance->generatedpage;
+        $othercado = mod_cado_cado::getcadorecord($othercmod);
+        $othergenerated = $othercado->generatedpage;
         $origingenerated = $origincado->generatedpage;
         $result->compareheaderorigin = get_string('compareheaderorigin', 'cado', $origincado->name);
-        $result->compareheaderother = get_string('compareheaderother', 'cado', $origincado->name);
-        $result->commentdiff = (strcasecmp($otherinstance->approvecomment, $origincado->approvecomment) != 0);
+        $result->compareheaderother = get_string('compareheaderother', 'cado', $othercado->name);
+        $result->commentdiff = (strcasecmp($othercado->approvecomment, $origincado->approvecomment) != 0);
 
         // Check to see if not all identical.  Complete identicality will only occur in the same course,
         // otherwise the cmids will be different. Note we don't care about case, otherwise use strcmp.
         if (strcasecmp($origingenerated, $othergenerated) != 0) {
-            list($allmatched, $updated) = self::finddiff($origingenerated, $othergenerated);
+            list($allmatched, $updated) = $this->finddiff($origingenerated, $othergenerated);
         } else { // Matched and in the same course.
             $allmatched = true;
         }
@@ -90,15 +90,15 @@ class mod_cado_comparecado {
 
             $otherstart = strpos($otherarray[$splitcount], ">", 0);
             $othercontent = substr($otherarray[$splitcount], $otherstart + 1);
-            $a1 = self::baseclean($origincontent);
-            $a2 = self::baseclean($othercontent);
+            $a1 = $this->baseclean($origincontent);
+            $a2 = $this->baseclean($othercontent);
             $result = strcasecmp( $a1 , $a2 );
             if ($result != 0) {
                 if ( in_array($value, ['forum', 'quiz', 'assign'])) {
                     $origininnerarray = explode('id="cadoi-', $origincontent);
-                    $ori1 = array_map('mod_cado_cado::cleanline', $origininnerarray);
+                    $ori1 = array_map('self::cleanline', $origininnerarray);
                     $otherinnerarray = explode('id="cadoi-', $othercontent);
-                    $oth1 = array_map('mod_cado_cado::cleanline', $otherinnerarray);
+                    $oth1 = array_map('self::cleanline', $otherinnerarray);
 
                     // Make new arrays with key as cmid.
                     $origininner = [];
@@ -129,13 +129,13 @@ class mod_cado_comparecado {
                                     if (!isset($othval1[$orikey2])) {// A component of an activity is missing.
                                         $class = ' class="cado-othermissing"';
                                         $idname = $value . '-' . $orikey2 . '_' . $orikey1 . '"';
-                                        $originarray[$splitcount] = self::addalert($originarray[$splitcount], $idname, $class);
+                                        $originarray[$splitcount] = $this->addalert($originarray[$splitcount], $idname, $class);
                                         $allmatched = false;
                                     } else if (strcmp($orival2 , $othval1[$orikey2]) != 0) {
                                         // Mark the descriptor as different.
                                         $class = ' class="cado-different"';
                                         $idname = $value . '-' . $orikey2 . '_' . $orikey1 . '"';
-                                        $originarray[$splitcount] = self::addalert($originarray[$splitcount], $idname, $class);
+                                        $originarray[$splitcount] = $this->addalert($originarray[$splitcount], $idname, $class);
                                         $allmatched = false;
                                     }
                                 }
@@ -148,7 +148,7 @@ class mod_cado_comparecado {
                         // If arrived here then missing entire activities from other.
                         $class = ' class="cado-othermissing"';
                         $idname = $value . '-name_' . $orikey1 . '"';
-                        $originarray[$splitcount] = self::addalert($originarray[$splitcount], $idname, $class);
+                        $originarray[$splitcount] = $this->addalert($originarray[$splitcount], $idname, $class);
                         $allmatched = false;
                     }
                     // Now check for missing matches from other to origin.

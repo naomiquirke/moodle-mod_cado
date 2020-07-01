@@ -39,7 +39,7 @@ $PAGE->set_url($url);
 $title = get_string('modulename', 'cado');
 $PAGE->set_title($title);
 
-$approvecado = new mod_cado_cado($context, $cm, $course);
+$approvecado = new mod_cado_cadonotify($context, $cm, $course);
 $approveform = new mod_cado_approve_form($url);
 $nexturl = new moodle_url('/mod/cado/view.php', array('id' => $cmid));
 
