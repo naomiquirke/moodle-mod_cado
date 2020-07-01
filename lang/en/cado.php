@@ -53,9 +53,11 @@ If course schedule is included, and the course uses a weekly format, dates will 
 $string['chooseapprover'] = 'To which approver(s) do you wish to propose your CADO?';
 $string['course'] = 'Enter course code';
 $string['comparelink'] = 'Compare';
-$string['comparing'] = 'Result of comparing other: "{$a->other}" against origin: "{$a->origin}"';
-$string['comparisondifferent'] = 'CADO Comparison: pink highlights changes between origin and other, green highlights when only origin CADO has an activity, yellow highlights when only other CADO has an activity.';
-$string['comparisonidentical'] = 'CADO Comparison: identical';
+$string['compareheader'] = 'Comparison result';
+$string['compareheaderorigin'] = 'Origin CADO: "{$a}"';
+$string['compareheaderother'] = 'Other CADO: "{$a}"';
+$string['comparisondifferent'] = 'Comparison key: pink highlights changes between origin and other, green highlights when only origin CADO has an activity, yellow highlights when only other CADO has an activity.';
+$string['comparisonidentical'] = 'Identical CADOs.';
 $string['comparemissing'] = 'MISSING: ';
 $string['completion'] = 'Completion information';
 $string['configdisallowstudentview'] = 'Adds a configuration option on course pages to allow students to view the CADO report on the course page';
