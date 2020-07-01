@@ -31,7 +31,89 @@
 
     Example context (json):
     {
-      "assignexists": false
+      "assign": [
+          { "attempts": false
+          , "cmodid": "154"
+          , "completiondiscussions": false
+          , "completionposts": false
+          , "completionreplies": false
+          , "cutoffdate": "1616455260"
+          , "date": "1616473260"
+          , "duedate": "1614700800"
+          , "extra": [
+              { "tagheading": "Word count", "tagcontent": "1000", "tagcode": "tag1" }
+              , { "tagheading": "Final grade %", "tagcontent": "80", "tagcode": "tag2" }
+              , { "tagheading": "Hours", "tagcontent": "30", "tagcode": "tag0" }
+          ]
+          , "intro": "<p>Choose from one of the required readings from this week.&nbsp; Analyse the reading by author culture. Analyse its effect on yourself by your own culture.</p>"
+          , "link": {}
+          , "name": "a1 with rubric"
+          , "rubric": [
+              { "critdesc": "and the rest"
+              , "levels": [
+                  {"leveldesc": "ultimate", "points": "5"}
+                  , {"leveldesc": "lovely", "points": "4"}
+                  , {"leveldesc": "ok", "points": "3"}
+                  , {"leveldesc": "acceptable", "points": "2"}
+                  , {"leveldesc": "unacceptable", "points": "1"}
+                  , {"leveldesc": "dreadful", "points": "0"}
+              ] 
+              , "total points": "-5"
+              },
+              {"critdesc": "the other"
+              , "levels": [
+                  {"leveldesc": "this awesome", "points": "3"}
+                  , {"leveldesc": "this nice", "points": "1"}
+                  , {"leveldesc": "this bad", "points": "0"}
+              ] 
+              , "total points": "-3"
+              },
+              {"critdesc": "this"
+              , "levels": [
+                  {"leveldesc": "this great", "points": "2"}
+                  , {"leveldesc": "this ok", "points": "1"}
+                  , {"leveldesc": "this what?", "points": "0"}
+              ]
+              , "total points": "-2"
+              },
+          {"critdesc": "that"
+              , "levels": [
+                  {"leveldesc": "that great", "points": "2"}
+                  , {"leveldesc": "that ok", "points": "1"}
+                  , {"leveldesc": "that what?", "points": "0"}
+              ]
+              , "total points": "-2"
+              }
+          ]
+          , "rubricexists": true
+          , "timeclose": false
+          , "timelimit": false
+          , "timeopen": false
+          }
+        , { "attempts": false
+          , "cmodid": "156"
+          , "completiondiscussions": false
+          , "completionposts": false
+          , "completionreplies": false
+          , "cutoffdate": "1616455260"
+          , "date": "1616473260"
+          , "duedate": "1614700800"
+          , "extra": [
+              {"tagheading": "Hours", "tagcontent": "20", "tagcode": "tag0"}
+              , {"tagheading": "Final grade %", "tagcontent": "5", "tagcode": "tag2"}
+              , {"tagheading": "Word count", "tagcontent": "700", "tagcode": "tag1"}
+              ]
+          , "intro": "<p>Write an annotated bibliography (100 words per entry, 5 entries) and a reflection (200 words).</p>"
+          , "link": {}
+          , "name": "a2 no rubric"
+          , "rubric": []
+          , "rubricexists": false
+          , "timeclose": false
+          , "timelimit": false
+          , "timeopen": false
+          }
+        ]
+      , "assignexists": true
       , "cadobiblio": "<p>Additional comments displayed after assessments and after site-wide comment<br /></p>"
       , "cadocomment": "<p>Additional comments before assessments<br /></p>"
       , "cadointro": "<p>Initial comments immediately after heading</p>"
@@ -58,7 +140,7 @@
           , "timelimit": "30"
           , "timeopen": false
           }
-        ]
+      ]
       , "quizexists": true
       , "fullname": "Basic course"
       , "groupingname": "First"
