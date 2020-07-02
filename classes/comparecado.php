@@ -75,7 +75,7 @@ class mod_cado_comparecado {
      * @return array [boolean $allmatched, string $updated the compared central part of cado with format updates]
      */
     private function finddiff($origingenerated, $othergenerated) {
-        $allmatched = true; //Assume all matching until proven not.
+        $allmatched = true; // Assume all matching until proven not.
         // Now to setup the id labels arrays.
         $outerlabels = ['grouping', 'intro', 'coursesummary', 'schedule', 'comment', 'forum', 'quiz'
             , 'assign', 'sitecomment', 'biblio'];
