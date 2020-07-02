@@ -14,24 +14,33 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
- * Version 1.1
+ * CADO plugin upgrade code.
  *
  * @package    mod_cado
  * @copyright  2020 Naomi Quirke
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+/**
+ * Code run to upgrade the cado database tables.
+ *
+ * @param int $oldversion
+ * @return bool always true
+ */
+function xmldb_cado_upgrade($oldversion = 0) {
 
-$plugin->version  = 2020070205;
-$plugin->requires = 2017111300; // Requires 3.4.
-$plugin->supported = [35, 39]; // range from 3.5 to 3.9.
-$plugin->component = 'mod_cado';
-$plugin->release = '1.1';
-$plugin->maturity  = MATURITY_RC;
-$plugin->dependencies = [
-    'mod_forum' => ANY_VERSION,
-    'mod_quiz' => ANY_VERSION,
-    'mod_assign' => ANY_VERSION,
-];
+    global $DB;
+
+    $dbman = $DB->get_manager(); // Loads ddl manager and xmldb classes.
+
+    $result = true;
+
+    if ($oldversion < 2020070205) {
+        upgrade_mod_savepoint(true, 2020070205, 'cado');
+    }
+
+    return $result;
+}
