@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version 1.2
+ * Version 1.2 release see below
  *
  * @package    mod_cado
  * @copyright  2020 Naomi Quirke
@@ -28,7 +28,7 @@ $plugin->version  = 2020070205;
 $plugin->requires = 2018051700; // Requires 3.5.
 $plugin->supported = [35, 39]; // range from 3.5 to 3.9.
 $plugin->component = 'mod_cado';
-$plugin->release = '1.1';
+$plugin->release = '1.2';
 $plugin->maturity  = MATURITY_RC;
 $plugin->dependencies = [
     'mod_forum' => ANY_VERSION,
