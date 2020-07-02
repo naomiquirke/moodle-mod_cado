@@ -49,11 +49,11 @@ class mod_cado_cadonotify extends mod_cado_cado {
             } else {
                 $subjectline = get_string('notapprovesubjectline', 'cado');
                 $fullmessage = '<p><strong>' . get_string('notapprovesubjectline', 'cado') . '</strong></p><br>' .
-                    $instance->approvecomment;
+                    $this->instance->approvecomment;
             }
-            $subjectline = $subjectline . $instance->name;
-            $userfrom = $instance->approveuser;
-            $userto = $instance->generateuser;
+            $subjectline = $subjectline . $this->instance->name;
+            $userfrom = $this->instance->approveuser;
+            $userto = $this->instance->generateuser;
             $fullmessage = '<p><strong>' . get_string('course') . ": " . '</strong>'. $this->course->shortname . "</p><br>" .
             '<p><strong>' . get_string('cado', 'cado') . ": " . '</strong>'. $this->instance->name . "</p><br>" .
                 $fullmessage;
