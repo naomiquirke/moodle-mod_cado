@@ -78,7 +78,7 @@ class restore_cado_activity_task extends restore_activity_task {
 
     /**
      * Define the restore log rules that will be applied
-     * 
+     *
      */
     static public function define_cado_log_rules() {
         $rules = array();
