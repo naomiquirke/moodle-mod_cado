@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version 1.1
+ * Version 1.2
  *
  * @package    mod_cado
  * @copyright  2020 Naomi Quirke
