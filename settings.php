@@ -64,7 +64,7 @@ if ($ADMIN->fulltree) {
         get_string('sumschedule', 'cado'), get_string('sumschedule_desc', 'cado'), 0));
 
     $settings->add(new admin_setting_confightmleditor('cado/sitecomment',
-        get_string('sitecomment', 'cado'), get_string('sitecomment_desc', 'cado') , null));
+        get_string('sitecomment', 'cado'), get_string('sitecomment_desc', 'cado') , ''));
         // Note default param_raw and size textbox fine otherwise add cols, rows.
 
 
