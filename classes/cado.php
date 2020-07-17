@@ -222,7 +222,8 @@ class mod_cado_cado {
                     LEFT JOIN {groupings} ggm on ggm.id =  cm.groupingid
                     LEFT JOIN {groupings_groups} gggm on gggm.groupingid = ggm.id
                     LEFT JOIN {groups} gm on gggm.groupid = gm.id
-                WHERE c.id=:course and cm.completion<>0 and cm.visible >= :visible and mo.name in ( 'assign' , 'forum' , 'quiz')
+                WHERE c.id=:course and cm.visible >= :visible and mo.name in ( 'assign' , 'forum' , 'quiz')
+                    and ((cm.completion <> 0 and c.enablecompletion = 1) or c.enablecompletion = 0)
             )
 
             , course_grouping AS ( ". // Get all the groups that are in our target grouping.
