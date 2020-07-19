@@ -9,21 +9,21 @@ Feature: Students can only access approved CADOs
       | fullname | shortname | summary                  | category |
       | Course 1 | C1        | Course with working CADO | 0        |
     And the following "users" exist:
-      | username | firstname | lastname  | email                |
-      | manager1 | Manager   | M1        | manager1@example.com |
-      | student1 | Sam       | S1        | student1@example.com |
+      | username | firstname | lastname | email                |
+      | manager1 | Manager   | M1       | manager1@example.com |
+      | student1 | Sam       | S1       | student1@example.com |
     And the following "course enrolments" exist:
       | course | user     | role    |
       | C1     | manager1 | manager |
       | C1     | student1 | student |
     And the following "activities" exist:
-      | activity | course | idnumber | name      | intro                |
-      | assign   | C1     | assign1  | Assign 1  | Assign 1 description |
+      | activity | course | idnumber | name     | intro                |
+      | assign   | C1     | assign1  | Assign 1 | Assign 1 description |
     And I log in as "manager1"
     And I am on "Course 1" course homepage with editing mode on
     And I add a "CADO report" to section "1" and I fill the form with:
-      | Name for this CADO report        | CADO test       |
-      | Grouping                         | None            |
+      | Name for this CADO report | CADO test |
+      | Grouping                  | None      |
     And I log out
 
   Scenario: See not approved message as as a student
@@ -46,4 +46,3 @@ Feature: Students can only access approved CADOs
     And I follow "CADO test"
     Then I should see "Course Assessment and Delivery Outline"
     And I should see "Assign 1"
-

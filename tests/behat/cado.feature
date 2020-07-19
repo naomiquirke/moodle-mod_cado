@@ -67,4 +67,3 @@ Feature: Teachers can create cado activity reports containing correctly grouped,
     And I should see "Groupings G1 forum"
     And I should not see "Groupings G2 forum"
     And I should see "Groupings G3 forum"
-
