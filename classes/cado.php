@@ -213,41 +213,40 @@ class mod_cado_cado {
         $courseext ->weekly = $this->course->format == "weeks";
         // So that schedule can have week information removed if not relevant.
 
-        // COMBINED
-        $sql = "WITH mod_groups AS ( " .  // Get all the groups that may access each activity module.
-                "SELECT cm.id cmod, cm.instance, gm.id modgroup, mo.name modtype, cm.groupingid, cm.completionexpected, cm.section
-                FROM {course} c
-                    JOIN {course_modules} cm on cm.course = c.id
-                    JOIN {modules} mo on mo.id = cm.module
-                    LEFT JOIN {groupings} ggm on ggm.id =  cm.groupingid
-                    LEFT JOIN {groupings_groups} gggm on gggm.groupingid = ggm.id
-                    LEFT JOIN {groups} gm on gggm.groupid = gm.id
-                WHERE c.id=:course and cm.visible >= :visible and mo.name in ( 'assign' , 'forum' , 'quiz')
-                    and ((cm.completion <> 0 and c.enablecompletion = 1) or c.enablecompletion = 0)
-            )
+        // MySQL prior to v8 can't handle 'with' constructs. So break into three strings.
 
-            , course_grouping AS ( ". // Get all the groups that are in our target grouping.
-                "SELECT g.id coursegroup
-                FROM {groupings} gg
-                    JOIN {groupings_groups} ggg on ggg.groupingid = gg.id
-                    JOIN {groups} g on  ggg.groupid = g.id
-                WHERE gg.id = :grouping
-            )
+        // Get all the groups that may access each activity module.
+        $modgroups = "SELECT cm.id cmod, cm.instance, gm.id modgroup, mo.name modtype, cm.groupingid,
+            cm.completionexpected, cm.section
+            FROM {course} c
+                JOIN {course_modules} cm on cm.course = c.id
+                JOIN {modules} mo on mo.id = cm.module
+                LEFT JOIN {groupings} ggm on ggm.id =  cm.groupingid
+                LEFT JOIN {groupings_groups} gggm on gggm.groupingid = ggm.id
+                LEFT JOIN {groups} gm on gggm.groupid = gm.id
+            WHERE c.id=:course and cm.visible >= :visible and mo.name in ( 'assign' , 'forum' , 'quiz')
+                and ((cm.completion <> 0 and c.enablecompletion = 1) or c.enablecompletion = 0)";
 
-            , chosen_mods AS ( ".
-            // Find all the activities that have groups accessing that activity that are in our target grouping,
-            // or activities that do not have grouping restrictions.
-                "SELECT distinct mg.cmod id, mg.instance, mg.modtype, mg.completionexpected, mg.section
-                FROM mod_groups mg
-                    LEFT JOIN course_grouping cg on cg.coursegroup = mg.modgroup
-                WHERE mg.groupingid= 0 or cg.coursegroup = mg.modgroup
-            )
-            " . // Access all the mod info now given that we have already gathered half the information.
-            "SELECT cm.*
+        // Get all the groups that are in our target grouping.
+        $coursegrouping = "SELECT g.id coursegroup
+            FROM {groupings} gg
+                JOIN {groupings_groups} ggg on ggg.groupingid = gg.id
+                JOIN {groups} g on  ggg.groupid = g.id
+            WHERE gg.id = :grouping";
+
+        // Find all the activities that have groups accessing that activity that are in our target grouping,
+        // or activities that do not have grouping restrictions.
+        $chosenmods = "SELECT distinct mg.cmod id, mg.instance, mg.modtype, mg.completionexpected, mg.section
+            FROM (" . $modgroups . ") mg
+                LEFT JOIN (" . $coursegrouping . ") cg on cg.coursegroup = mg.modgroup
+            WHERE mg.groupingid= 0 or cg.coursegroup = mg.modgroup";
+
+        // Access all the mod info now given that we have already gathered half the information.
+        $sql = "SELECT cm.*
                 , f.name fname, f.intro fintro, f.duedate fduedate, f.cutoffdate fcutoffdate, completiondiscussions
                 , completionreplies, completionposts, q.name qname, q.intro qintro, timeclose, timeopen, timelimit, attempts
                 , a.name aname, a.intro aintro, a.duedate aduedate, a.cutoffdate acutoffdate
-            FROM chosen_mods cm
+            FROM (" .$chosenmods .") cm
             LEFT JOIN {forum} f on f.id = cm.instance and cm.modtype = 'forum'
             LEFT JOIN {quiz} q on q.id = cm.instance and cm.modtype = 'quiz'
             LEFT JOIN {assign} a on a.id = cm.instance and cm.modtype = 'assign'
