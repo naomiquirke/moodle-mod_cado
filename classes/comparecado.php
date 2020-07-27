@@ -104,14 +104,14 @@ class mod_cado_comparecado {
                     // Make new arrays with key as cmid.
                     $origininner = [];
                     foreach ($ori1 as $value1) {
-                        if (!(isarray($value1) || is_numeric($value1['cmid']))) {
+                        if (!(is_array($value1) || is_numeric($value1['cmid']))) {
                             continue;
                         } // Skip the blurb at the beginning of the section; there will be no cmid found for this section.
                         $origininner[$value1['cmid']][$value1['modtype']] = $value1['content'];
                     }
                     $otherinner = [];
                     foreach ($oth1 as $value2) {
-                        if (!(isarray($value2) || is_numeric($value2['cmid']))) {
+                        if (!(is_array($value2) || is_numeric($value2['cmid']))) {
                             continue;
                         } //Skip the blurb at the beginning of the section; there will be no cmid found for this section.
                         $otherinner[$value2['cmid']][$value2['modtype']] = $value2['content'];
