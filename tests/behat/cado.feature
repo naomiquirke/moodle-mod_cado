@@ -6,8 +6,8 @@ Feature: Teachers can create cado activity reports containing correctly grouped,
 
   Scenario: Create CADO activity.
     Given the following "courses" exist:
-      | fullname | shortname | summary                       | category |
-      | Course 1 | C1        | Prove the CADO activity works | 0        |
+      | fullname | shortname | summary                       | category | enablecompletion |
+      | Course 1 | C1        | Prove the CADO activity works | 0        | 1                |
     And the following "users" exist:
       | username | firstname | lastname  | email                |
       | teacher1 | Teacher   | T1        | teacher1@example.com |
@@ -37,10 +37,6 @@ Feature: Teachers can create cado activity reports containing correctly grouped,
       | GG3      | G2    |
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
-    And I navigate to "Edit settings" in current page administration
-    And I set the following fields to these values:
-      | Enable completion tracking | Yes |
-    And I press "Save and display"
     And the following "activities" exist:
       | activity | course | idnumber | name     | intro                | completion |
       | assign   | C1     | assign1  | Assign 1 | Assign 1 description | 1          |
