@@ -83,4 +83,3 @@ Feature: Data obtain and delete due to the privacy API
     And I should see "Download ready" in the "Export all of my personal data" "table_row"
     And I open the action menu in "Sad Teacher" "table_row"
     And following "Download" should download between "1" and "144000" bytes
-    
