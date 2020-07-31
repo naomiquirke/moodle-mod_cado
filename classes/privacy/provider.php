@@ -24,6 +24,7 @@
 
 namespace mod_cado\privacy;
 
+use context_module;
 use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
 use core_privacy\local\request\approved_userlist;
@@ -169,7 +170,7 @@ class provider implements
             return;
         }
 
-        // Find the lesson IDs.
+        // Find the cado IDs.
         $cadoidstocmids = static::get_cado_ids_to_cmids_from_cmids($cmids);
         $cadoids = array_keys($cadoidstocmids);
 
@@ -182,22 +183,21 @@ class provider implements
                 FROM {cado}
                 WHERE $sqlwhere";
         $recordset = $DB->get_records_sql($sql, $params);
+        // Export the data.
         foreach ($recordset as $record) {
-            $reportsdata[] = (object) [
-                'approveuser' => $record->approveuser,
-                'name' => $record->name,
-                'approvecomment' => $record->approvecomment,
-                'generateuser' => $record->generateuser,
-                'timeapproved'  => transform::datetime($record->timeapproved),
-                ];
-        }
-        if (!empty($reportsdata)) {
             $data = (object) [
-                'reports' => $reportsdata,
-            ];
-
-            writer::with_context($contextlist->current())->export_data([
-                get_string('pluginname', 'cado')], $data);
+                'name' => $record->name,
+                'generate_user' => $record->generateuser == $userid ? get_string('privacy:you', 'cado') : $record->generateuser,
+                'approve_user' => isset($record->approveuser) ?
+                    $record->approveuser == $userid ? get_string('privacy:you', 'cado') : $record->approveuser
+                    : get_string('privacy:nothing', 'cado'),
+                'approve_comment' => isset($record->approvecomment) ?
+                    get_string('privacy:nothing', 'cado') : $record->approvecomment,
+                'time_approved'  =>
+                    $record->timeapproved == 0 ? get_string('privacy:nothing', 'cado') : transform::datetime($record->timeapproved),
+                ];
+            $context = context_module::instance($cadoidstocmids[$record->id]);
+            writer::with_context($context)->export_data([], $data);
         }
     }
 
