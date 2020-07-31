@@ -62,7 +62,8 @@ class provider implements
             'name' => 'privacy:metadata:cadoname',
             'approvecomment' => 'privacy:metadata:commentpurpose',
             'generateuser' => 'privacy:metadata:generatorpurpose',
-            'timeapproved'  => 'privacy:metadata:timepurpose',
+            'timeapproved'  => 'privacy:metadata:approvetimepurpose',
+            'timemodified'  => 'privacy:metadata:modifiedtimepurpose',
         ];
         $collection->add_database_table('cado', $data, 'privacy:metadata:tablesummary');
 
@@ -187,15 +188,14 @@ class provider implements
         foreach ($recordset as $record) {
             $data = (object) [
                 'name' => $record->name,
-                'generate_user' => $record->generateuser == $userid ? get_string('privacy:you', 'cado') : $record->generateuser,
-                'approve_user' => isset($record->approveuser) ?
-                    $record->approveuser == $userid ? get_string('privacy:you', 'cado') : $record->approveuser
-                    : get_string('privacy:nothing', 'cado'),
-                'approve_comment' => isset($record->approvecomment) ?
+                'generateuser' => $record->generateuser,
+                'approveuser' => isset($record->approveuser) ? $record->approveuser : get_string('privacy:nothing', 'cado'),
+                'approvecomment' => isset($record->approvecomment) ?
                     get_string('privacy:nothing', 'cado') : $record->approvecomment,
-                'time_approved'  =>
+                'timeapproved' =>
                     $record->timeapproved == 0 ? get_string('privacy:nothing', 'cado') : transform::datetime($record->timeapproved),
-                ];
+                'timemodified' => transform::datetime($record->timemodified)
+            ];
             $context = context_module::instance($cadoidstocmids[$record->id]);
             writer::with_context($context)->export_data([], $data);
         }
