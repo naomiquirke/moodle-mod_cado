@@ -86,10 +86,10 @@ class provider implements
                 WHERE (cad.generateuser = :thisgenuser) OR (cad.approveuser = :thisappruser)
                 ";
         $params = [
-            'modname'           => 'cado',
-            'contextlevel'      => CONTEXT_MODULE,
+            'modname'      => 'cado',
+            'contextlevel' => CONTEXT_MODULE,
             'thisgenuser'  => $userid,
-            'thisappruser'  => $userid,
+            'thisappruser' => $userid,
         ];
 
         $contextlist->add_from_sql($sql, $params);
@@ -176,7 +176,6 @@ class provider implements
         $cadoids = array_keys($cadoidstocmids);
 
         // Get the data.
-        $reportsdata = [];
         list($insql, $inparams) = $DB->get_in_or_equal($cadoids, SQL_PARAMS_NAMED);
         $sqlwhere = "(generateuser = :generateuser OR approveuser = :approveuser) AND id $insql";
         $params = array_merge($inparams, ['generateuser' => $userid, 'approveuser' => $userid]);
@@ -211,8 +210,8 @@ class provider implements
         if ($context->contextlevel != CONTEXT_MODULE) {
             return;
         }
-
-        if (!$cadoid = static::get_cado_id_from_context($context)) {
+        $cadoid = static::get_cado_id_from_context($context);
+        if (!$cadoid) {
             return;
         }
         static::delete_data(0, $cadoid);
@@ -290,7 +289,7 @@ class provider implements
      * Get a cado ID from its context.
      *
      * @param context_module $context The module context.
-     * @return int
+     * @return int either the cado ID or 0 if not found.
      */
     protected static function get_cado_id_from_context(context_module $context) {
         $cm = get_coursemodule_from_id('cado', $context->instanceid);
@@ -307,18 +306,27 @@ class provider implements
         global $DB;
         // CADO Reports are considered to be 'owned' by the institution, even if they were originally written by a specific
         // user. They are still exported in the list of a users data, but they are not removed.
-        // The relevant user is instead anonymised.
+        // The relevant user is instead anonymised, and any name removed from the autoinclusion in the approve-comment.
 
         // If $userid 0, then all records matching the cadoid are affected;
-        // if $cadoid 0 then all matching useride affected; if both are 0 then all user info anonymised.
+        // If $cadoid 0 then all matching useride affected.
+        // There is no call where both are 0.
+        $cadoparam = ['id' => $cadoid];  // If cadoid is zero then this is disregarded.
         $approveparam = $userid ? ['approveuser' => $userid] : [];
         $generateparam = $userid ? ['generateuser' => $userid] : [];
-        $cadoparam = ['id' => $cadoid];
         $params = $cadoid ? array_merge($cadoparam, $approveparam) : $approveparam;
-        $DB->set_field('cado', 'approveuser', 0, $params);
+        $recordset = $DB->get_records('cado', $params, '', 'id, approveuser, approvecomment');
+        foreach ($recordset as $record) {
+            // String calc is done inside loop because may only have cadoid outside loop.
+            $thisuser = fullname($DB->get_record('user', ['id' => $record->approveuser]));
+            $record->approvecomment = str_replace($thisuser,
+                get_string('useranonymous', 'cado'), $record->approvecomment);
+            $record->approveuser = 0;
+            $DB->update_record('cado', $record, true);
+        }
+
         $params = $cadoid ? array_merge($cadoparam, $generateparam) : $generateparam;
         $DB->set_field('cado', 'generateuser', 0, $params);
     }
-
 
 }
