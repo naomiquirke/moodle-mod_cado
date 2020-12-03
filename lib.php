@@ -119,5 +119,18 @@ function cado_extend_settings_navigation(settings_navigation $settingsnav, navig
           $cadonode ->add(get_string('propose', 'cado'),
                 new moodle_url($CFG->wwwroot . '/mod/cado/propose.php', array('id' => $PAGE->cm->id)));
     }
-
+}
+/**
+ * Check if the module has any update that affects the current user since a given time.
+ *
+ * @param  cm_info $cm course module data
+ * @param  int $from the time to check updates from
+ * @param  array $filter  if we need to check only specific updates
+ * @return stdClass an object with the different type of areas indicating if they were updated or not
+ * @since Moodle 3.2
+ */
+function cado_check_updates_since(cm_info $cm, $from, $filter = array()) {
+    $updates = course_check_module_updates_since($cm, $from, array(), $filter);
+    // We only need be concerned if there is a change of modified time.
+    return $updates;
 }
