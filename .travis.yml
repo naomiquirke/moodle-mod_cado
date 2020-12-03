@@ -1,7 +1,7 @@
 language: php
 
 addons:
-  postgresql: "9.5"
+  postgresql: "9.6"
 
 services:
   - mysql
@@ -15,11 +15,11 @@ cache:
 
 php:
  - 7.2
- - 7.4
+ - 8.0
 
 env:
  global:
-  - MOODLE_BRANCH=MOODLE_39_STABLE
+  - MOODLE_BRANCH=MOODLE_310_STABLE
  matrix:
   - DB=pgsql
   - DB=mysqli

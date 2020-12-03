@@ -82,7 +82,7 @@ class notapprove_cado extends \core\event\base {
 
     /**
      * This is used when restoring course logs where it is required that we
-     * map the objectid to it's new value in the new course.
+     * map the objectid to its new value in the new course.
      *
      * @return array
      */

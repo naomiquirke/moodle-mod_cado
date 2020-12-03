@@ -43,6 +43,12 @@ class approved_cado_viewed extends \core\event\base {
         $this->data['objecttable'] = 'cado';
     }
 
+    /**
+     * This is used when restoring course logs where it is required that we
+     * map the objectid to its new value in the new course.
+     *
+     * @return array
+     */
     public static function get_objectid_mapping() {
         return array('db' => 'cado', 'restore' => 'cado');
     }
