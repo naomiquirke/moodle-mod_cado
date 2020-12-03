@@ -121,6 +121,21 @@ function cado_extend_settings_navigation(settings_navigation $settingsnav, navig
     }
 }
 /**
+ * List the actions that correspond to a view of this module.
+ * This is used by the participation report.
+ *
+ * Note: This is not used by new logging system. Event with
+ *       crud = 'r' and edulevel = LEVEL_PARTICIPATING will
+ *       be considered as view action.
+ *
+ * @return array
+ */
+function cado_get_view_actions() {
+    return array('view', 'view all');
+}
+
+
+/**
  * Check if the module has any update that affects the current user since a given time.
  *
  * @param  cm_info $cm course module data

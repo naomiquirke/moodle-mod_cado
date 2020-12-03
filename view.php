@@ -104,9 +104,13 @@ if (!$viewedcado->instance->timeapproved) {  // If not approved.
         $cs->approvecomment = $viewedcado->instance->approvecomment;
         $cs->showtime = $viewedcado->instance->timeapproved;
         // Note add time separately so that it can be formatted by user specification.
-    } else {
+    } else { // Note else only has view rights, no approval information.
         $cs = null;
-    } // Note else only has view rights, no need to give approval information.
+    }
+    // Make event for viewing approved CADO.
+    $eventdata = array('objectid' => $cmid, 'context' => $context, 'courseid' => $course->id);
+    $event = \mod_cado\event\approved_cado_viewed::create($eventdata);
+    $event->trigger();
 }
 
 // Now set view completion and then output.

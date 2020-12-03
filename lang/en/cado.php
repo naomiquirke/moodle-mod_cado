@@ -70,6 +70,7 @@ $string['datestartselector'] = 'Filter course by start date, date range start';
 $string['dateendselector'] = 'Filter course by start date, date range end';
 $string['description'] = 'Course overview';
 $string['eventapprovecado'] = 'CADO approved';
+$string['eventreportviewed'] = 'Approved CADO viewed';
 $string['eventnotapprovecado'] = 'CADO not approved';
 $string['eventproposecado'] = 'CADO proposed';
 $string['filtercourses'] = 'Get courses';
