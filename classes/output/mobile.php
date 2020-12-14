@@ -38,7 +38,7 @@ use context_module;
 class mobile {
 
     /**
-     * Returns the cado course view for the mobile app.
+     * Returns the cado view for the mobile app, currently no different than browser view.
      * @param  array $args Arguments from tool_mobile_get_content WS
      *
      * @return array       HTML, javascript and otherdata
@@ -56,32 +56,17 @@ class mobile {
 
         require_capability ('mod/cado:view', $context);
         $cadoinstance = $DB->get_record('cado', array('id' => $cm->instance));
-        $showcentral = 1;
-        $cs = new stdClass();
-        $cs->statecomment = null;
-        $cs->showtime = null;
-        $cs->approvecomment = null;
+
         if (!$cadoinstance->timeapproved) {  // If not approved.
-            $cs->statecomment = get_string('notavailable', 'cado');
+            $data = "<p>" . get_string('notavailable', 'cado') . "</p>";
         } else {
-            if (has_capability('mod/cado:generate', $context) || has_capability('mod/cado:approve', $context)) {
-                // Note can show workflow status.
-                $cs->statecomment = get_string('approvedon', 'cado',
-                    ['approver' => mod_cado_check::getusername($viewedcado->instance->approveuser)]);
-                $cs->approvecomment = $viewedcado->instance->approvecomment;
-                $cs->showtime = $viewedcado->instance->timeapproved;
-                // Note add time separately so that it can be formatted by user specification.
-            } else { // Note else only has view rights, no approval information.
-                $cs = null;
-            }
-
+            $data = $cadoinstance->generatedpage;
         }
-
         return array(
             'templates' => array(
                 array(
                     'id' => 'main',
-                    'html' => $OUTPUT->render_from_template('mod_cado/cadostate', $cs) . $cadoinstance->generatedpage,
+                    'html' => $data,
                 ),
             ),
             'javascript' => '',

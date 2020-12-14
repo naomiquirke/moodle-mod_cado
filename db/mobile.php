@@ -38,6 +38,9 @@ $addons = array(
                 'offlinefunctions' => array(
                     'mobile_course_view' => array(),
                 ), // Function needs caching for offline.
+                'displayrefresh' => true, // Show default refresh button.
+                'displayopeninbrowser' => true, // Display the "Open in browser" option in the top-right menu.
+                'isresource' => true, // CADO is a resource.
             )
         ),
         'lang' => array(
