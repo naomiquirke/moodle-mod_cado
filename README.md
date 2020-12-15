@@ -6,3 +6,12 @@ In addition, the mod provides an approval workflow system.  Different roles can 
 Course variants, such as those created by different user groupings, or caused by changes in assessments, are able to be compared using different CADOs, with section differences highlighted visually.
 
 All the terminology within the report, including "CADO", is able to be customized using Moodle's language settings.
+
+Updates
+=======
+
+Version 2.0
+-----------
+* The Moodle Mobile app will now display an approved CADO, or if CADO is not approved, display a message to say that it is unavailable.
+* Viewing of the approved CADO is now logged, so access may be evaluated in the standard course participation report, and students who have not viewed the CADO may be messaged through that standard process.
+* CADO format: missing colon added in forum due date.
