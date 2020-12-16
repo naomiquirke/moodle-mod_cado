@@ -15,23 +15,24 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version 2.0 release with Moodle 3.10
+ * Choice group external functions and service definitions.
  *
  * @package    mod_cado
+ * @category   external
  * @copyright  2020 Naomi Quirke
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+defined('MOODLE_INTERNAL') || die;
 
-$plugin->version  = 2020121603;
-$plugin->requires = 2018051700; // Requires 3.5.
-$plugin->supported = [35, 310]; // range from 3.5 to 3.10.
-$plugin->component = 'mod_cado';
-$plugin->release = '2.0';
-$plugin->maturity  = MATURITY_BETA;
-$plugin->dependencies = [
-    'mod_forum' => ANY_VERSION,
-    'mod_quiz' => ANY_VERSION,
-    'mod_assign' => ANY_VERSION,
-];
+$functions = array(
+
+    'mod_cado_view_cado' => array(
+        'classname'     => 'mod_cado_external',
+        'methodname'    => 'view_cado',
+        'description'   => 'Trigger the course module viewed event.',
+        'type'          => 'write',
+        'capabilities'  => '',
+        'services'      => array(MOODLE_OFFICIAL_MOBILE_SERVICE, 'local_mobile')
+    ),
+);

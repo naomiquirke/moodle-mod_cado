@@ -56,17 +56,19 @@ class mobile {
 
         require_capability ('mod/cado:view', $context);
         $cadoinstance = $DB->get_record('cado', array('id' => $cm->instance));
-
+        $args->cadoid = $cadoinstance->id;
         if (!$cadoinstance->timeapproved) {  // If not approved.
-            $data = "<p>" . get_string('notavailable', 'cado') . "</p>";
+            $args->approved = false;
+            $args->data = get_string('notavailable', 'cado');
         } else {
-            $data = $cadoinstance->generatedpage;
+            $args->approved = true;
+            $args->data = $cadoinstance->generatedpage;
         }
         return array(
             'templates' => array(
                 array(
                     'id' => 'main',
-                    'html' => $data,
+                    'html' => $OUTPUT->render_from_template('mod_cado/mobile_cadoview', $args),
                 ),
             ),
             'javascript' => '',
