@@ -1,25 +1,27 @@
 .path-mod-cado .table,
 .path-mod-cado .table * {
     margin: 0 0 0 0;
-    padding: 0 0 0 0;
+    padding: 0 4px 4px 0;
     vertical-align: top;
     font-size: small;
 }
 
 .path-mod-cado table.table *[class^=cado-tc] {
-    padding: 0 0 4px 0;
-    font-size: small;
     border-width: thin;
+    border-style: solid;
 }
 
 .path-mod-cado tbody tr th[class^="cado-tc"] {
     border-width: thin;
+    border-style: solid;
 }
 
 .path-mod-cado *.cado-tc3 {
     width: 20%;
     font-size: small;
     border-width: thin;
+    text-align: left;
+    border-style: solid;
 }
 
 .path-mod-cado *.cado-tc2,
@@ -27,6 +29,12 @@
     width: 10%;
     font-size: small;
     border-width: thin;
+    text-align: left;
+    border-style: solid;
+}
+
+div.cadocentral table.cado-inner-table {
+    width: 100%;
 }
 
 .path-mod-cado table.cado-inner-table,
@@ -42,10 +50,12 @@
 .path-mod-cado td.cado-sched-total {
     font-weight: bolder;
     border-width: thin;
+    text-align: left;
 }
 
 .path-mod-cado a.cad-link {
     color: blue;
+    text-decoration: none;
 }
 
 .path-mod-cado a.cad-link:hover {

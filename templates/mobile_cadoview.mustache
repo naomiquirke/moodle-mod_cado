@@ -45,9 +45,7 @@
             </ion-item>
         <%/approved%>
         <%#approved%>
-            <ion-item>
-                <%{ data }%>
-            </ion-item>
+            <%{ data }%>
             <!-- Call log WS when the template is loaded. -->
             <span core-site-plugins-call-ws-on-load name="mod_cado_view_cado" [params]="{cadoid: <% cadoid %>}" [preSets]="{getFromCache: 0, saveToCache: 0}"></span>
         <%/approved%>

@@ -35,6 +35,10 @@ $addons = array(
                 ),
                 'delegate' => 'CoreCourseModuleDelegate', // Delegate (where to display the link to the add-on).
                 'method' => 'mobile_course_view', // Main function in \mod_cado\output\mobile.
+                'styles' => [
+                    'url' => '/mod/cado/mobile/styles.css',
+                    'version' => 9
+                ],
                 'offlinefunctions' => array(
                     'mobile_course_view' => array(),
                 ), // Function needs caching for offline.

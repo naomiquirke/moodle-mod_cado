@@ -267,14 +267,14 @@
       <h2>{{# str }} schedule, mod_cado {{/ str }}</h2>
       <table class="table table-hover table-bordered">
         <thead>
-          <tr class="cado-t0">
+          <tr class="cado-t01">
             {{#weekly}}<th class="cado-tc1">{{# str }} week, mod_cado {{/ str }}</th>{{/weekly}}
             {{^weekly}}<th class="cado-tc1">{{# str }} section, mod_cado {{/ str }}</th>{{/weekly}}
             {{#weekly}}<th class="cado-tc2">{{# str }} weekdate, mod_cado {{/ str }}</th>{{/weekly}}
             <th class="cado-tc3">{{# str }} topic, mod_cado {{/ str }}</th>
-            <th class="cado-t0">
+            <th class="cado-t02">
               <table class="table table-hover cado-inner-table">
-                <tr class="cado-t0">
+                <tr class="cado-t03">
                   <th class="cado-tc3">{{# str }} task, mod_cado {{/ str }}</th>
                   <th class="cado-tc2">{{# str }} datedue, mod_cado {{/ str }}</th>
                   {{#tagsinsched}}
@@ -289,15 +289,15 @@
         </thead>
         <tbody>
           {{#schedule}}
-            <tr class="cado-t0">
+            <tr class="cado-t01">
               <td class="cado-tc1">{{^sum}}{{section}}{{/sum}}</td>
               {{#weekly}}<td class="cado-tc2">{{#startdate}}{{#userdate}} {{startdate}}, {{#str}} strftimedate {{/str}} {{/userdate}}{{/startdate}}</td>{{/weekly}}
               <td class="cado-tc3{{#sum}} cado-sched-total{{/sum}}">{{name}} </td> 
-              <td class="cado-t0">
+              <td class="cado-t02">
                 <table class="table table-hover cado-inner-table">
                   {{#tasks}}
                     {{#.}}
-                      <tr class="cado-t0">
+                      <tr class="cado-t03">
                         <td class="cado-tc3">{{^sum}}{{name}}{{/sum}}</td>
                         <td class="cado-tc2">{{#date}}{{#userdate}} {{date}}, {{#str}} strftimedatetimeshort {{/str}} {{/userdate}}{{/date}}</td>
                         {{#tagsinsched}}                        
@@ -330,15 +330,15 @@
           <div id="cadoi-forum-dates_{{cmodid}}">
               <h4>{{# str }} duedates, mod_cado {{/ str }}</h4>
               {{#duedate}} <div class="row">
-                <div class = "col-sm-3">{{# str }} duedate, forum {{/ str }}:</div>
+                <div class = "col-sm-3">{{# str }} duedate, forum {{/ str }}: </div>
                 <div class = "col-sm-3">{{#userdate}} {{duedate}} , {{#str}} strftimedatetime {{/str}} {{/userdate}}</div>
               </div>{{/duedate}}
               {{#date}}<div class="row">
-                <div class = "col-sm-3">{{# str }} forumexpectcompleted, mod_cado {{/ str }}:</div>
+                <div class = "col-sm-3">{{# str }} forumexpectcompleted, mod_cado {{/ str }}: </div>
                 <div class = "col-sm-3">{{#userdate}} {{date}} , {{#str}} strftimedatetime {{/str}} {{/userdate}}</div>
               </div>{{/date}}
               {{#cutoffdate}}<div class="row">
-                  <div class = "col-sm-3">{{# str }} cutoffdate, forum {{/ str }}:</div>
+                  <div class = "col-sm-3">{{# str }} cutoffdate, forum {{/ str }}: </div>
                   <div class = "col-sm-3">{{#userdate}} {{cutoffdate}}, {{#str}} strftimedatetime {{/str}} {{/userdate}}</div>
               </div>{{/cutoffdate}}
           </div>
@@ -361,7 +361,7 @@
             {{#extra}}           
               {{#.}}
                 <div class="row">
-                  <div class = "col-sm-3 cad-tag-head"><h4>{{tagheading}}:</h4></div>
+                  <div class = "col-sm-3 cad-tag-head"><h4>{{tagheading}}: </h4></div>
                   <div class = "col-sm-3"><h4>{{tagcontent}}</h4></div>
                 </div>
               {{/.}}
@@ -426,7 +426,7 @@
             {{#extra}}
               {{#.}}
                 <div class = "row">
-                  <div class = "col-sm-3 cad-tag-head"><h4>{{tagheading}}:</h4></div>
+                  <div class = "col-sm-3 cad-tag-head"><h4>{{tagheading}}: </h4></div>
                   <div class = "col-sm-3"><h4>{{tagcontent}}</h4></div>
                 </div>
               {{/.}}
@@ -447,7 +447,7 @@
             <h4>{{# str }} duedates, mod_cado {{/ str }} </h4>
             {{#date}}
               <div class = "row">
-                <div class = "col-sm-3">{{# str }} assignexpectcompleted, mod_cado {{/ str }}:  </div>
+                <div class = "col-sm-3">{{# str }} assignexpectcompleted, mod_cado {{/ str }}: </div>
                 <div class = "col-sm-3">{{#userdate}} {{date}}, {{#str}} strftimedatetime {{/str}} {{/userdate}}</div>
               </div>
             {{/date}}
@@ -459,7 +459,7 @@
             {{/duedate}}
             {{#cutoffdate}}
               <div class = "row">
-                <div class = "col-sm-3">{{# str }} cutoffdate, assign {{/ str }}:  </div>
+                <div class = "col-sm-3">{{# str }} cutoffdate, assign {{/ str }}: </div>
                 <div class = "col-sm-3">{{#userdate}} {{cutoffdate}}, {{#str}} strftimedatetime {{/str}} {{/userdate}}</div>
               </div>
             {{/cutoffdate}}
@@ -468,7 +468,7 @@
             {{#extra}}
               {{#.}}
                 <div class = "row">
-                  <div class = "col-sm-3 cad-tag-head"><h4>{{tagheading}}:</h4></div>
+                  <div class = "col-sm-3 cad-tag-head"><h4>{{tagheading}}: </h4></div>
                   <div class = "col-sm-3"><h4>{{tagcontent}}</h4></div>
                 </div>
               {{/.}}

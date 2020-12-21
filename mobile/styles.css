@@ -1,0 +1,49 @@
+div.cadocentral .table,
+div.cadocentral .table * {
+    margin: 0 0 0 0;
+    padding: 0 4px 4px 0;
+    vertical-align: top;
+    font-size: small;
+    text-align: left;
+}
+div.cadocentral tr.cado-t01 {
+    border-style: solid;
+    border-width: thin;
+}
+
+div.cadocentral *.cado-tc3 {
+    width: 20%;
+    border-style: none;
+}
+
+div.cadocentral *.cado-tc2,
+div.cadocentral *.cado-tc1 {
+    width: 10%;
+    border-style: none;
+}
+
+div.cadocentral table.cado-inner-table {
+    width: 100%;
+}
+
+div.cadocentral td.cado-sched-total {
+    font-weight: bolder;
+}
+
+div.cadocentral [id^="cadoi-assign-rubric_"] td {
+    font-size: small;
+}
+
+div.cadocentral td.cado-rubric-row-head {
+    font-weight: bolder;
+}
+
+div.cadocentral a.cad-link {
+    color: blue;
+    text-decoration: none;
+}
+
+div.cadocentral a.cad-link:hover {
+    text-shadow: 1px 1px 2px red, 0 0 1em blue, 0 0 0.2em blue;
+    text-decoration: none;
+}

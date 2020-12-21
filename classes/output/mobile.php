@@ -62,7 +62,8 @@ class mobile {
             $args->data = get_string('notavailable', 'cado');
         } else {
             $args->approved = true;
-            $args->data = $cadoinstance->generatedpage;
+            $mobcado = str_replace('>&#9741;', ' core-link capture="true" >&#9741;', $cadoinstance->generatedpage);
+            $args->data = $mobcado;
         }
         return array(
             'templates' => array(
