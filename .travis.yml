@@ -21,7 +21,7 @@ env:
  global:
   - MOODLE_BRANCH=MOODLE_310_STABLE
   - IGNORE_NAMES=mobile_*.mustache # Mobile mustache has specific syntax, ignore their templates
-matrix:
+ matrix:
   - DB=pgsql
   - DB=mysqli
 
