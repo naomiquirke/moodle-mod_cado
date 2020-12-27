@@ -12,6 +12,6 @@ Updates
 
 Version 2.0
 -----------
-* The Moodle Mobile app will now display an approved CADO, or if CADO is not approved, display a message to say that it is unavailable.
-* Viewing of the approved CADO is now logged, so access may be evaluated in the standard course participation report, and students who have not viewed the CADO may be messaged through that standard process.
-* CADO format: missing colon added in forum due date.
+* The Moodle Mobile app will now display an approved CADO, or if CADO is not approved, display a message to say that it is unavailable. (Currently, the app view is not device-neutral; mobile alternatives to the schedule and rubric tables need to be developed. If a reader has a view on this please contact the developer!)
+* Viewing of an approved CADO is now logged. This means that access to the CADO may be reported on / evaluated from the standard course participation report, and students who have not viewed the approved CADO may be messaged through that standard process.
+* CADO format: missing colon added in forum due date, and consistent spacing after colons. More classes used in schedule for more detailed styling.
