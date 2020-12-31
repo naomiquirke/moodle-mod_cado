@@ -89,7 +89,7 @@ class mod_cado_compare_form extends moodleform {
         $courselist = $this->choose_course(['start' => $chosenstartdate, 'finish' => $chosenenddate], $this->coursename);
 
         $courseselector = $mform->addElement('select', 'cadoid', get_string('courseinstruction', 'cado'), $courselist);
-        $courseselector ->setSelected("default");
+        $courseselector->setSelected("default");
 
         $this->add_action_buttons();
     }
@@ -114,9 +114,9 @@ class mod_cado_compare_form extends moodleform {
                     AND c.startdate >= :cadotimestart AND  c.startdate <= :cadotimeend
                     AND (" . $DB->sql_like('c.shortname', ':part1') . " OR " . $DB->sql_like('c.fullname', ':part2') .
                 ")";  // The last line performs a moodle multi database type like query.
-        $courseresult = $DB->get_records_sql($sql, $params); //
+        $courseresult = $DB->get_records_sql($sql, $params);
         foreach ($courseresult as $thisresult) {
-            $chosencourses[$thisresult ->id] = $thisresult ->shortname . ', ' . $thisresult ->name;
+            $chosencourses[$thisresult->id] = $thisresult->shortname . ', ' . $thisresult->name;
         }
         $chosencourses["default"] = get_string('coursenotchosen', 'cado'); // Add the not chosen option.
         return $chosencourses;

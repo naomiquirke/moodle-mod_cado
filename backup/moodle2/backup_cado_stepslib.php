@@ -51,7 +51,7 @@ class backup_cado_activity_structure_step extends backup_activity_structure_step
         // Build the tree.
 
         // Define sources.
-        $cado ->set_source_table('cado', array('id' => backup::VAR_ACTIVITYID));
+        $cado->set_source_table('cado', array('id' => backup::VAR_ACTIVITYID));
 
         // Define id annotations.
         $cado->annotate_ids('user', 'generateuser');

@@ -210,7 +210,7 @@ class mod_cado_cado {
         // SCHEDULE and TAGS SETUP.
         $sched = new mod_cado_check($courseid);
         $schedule = $sched->schedulesetup ? $this->startschedule($sched) : null;
-        $courseext ->weekly = $this->course->format == "weeks";
+        $courseext->weekly = $this->course->format == "weeks";
         // So that schedule can have week information removed if not relevant.
 
         // MySQL prior to v8 can't handle 'with' constructs. So break into three strings.
@@ -263,8 +263,8 @@ class mod_cado_cado {
                 }
             }
 
-            $courseext ->forumexists = ($temparray == true); // Include for mustache header.
-            $courseext ->forum = $temparray;
+            $courseext->forumexists = ($temparray == true); // Include for mustache header.
+            $courseext->forum = $temparray;
         }
         // QUIZ.
         if (mod_cado_check::options('quiz', 'activityoptions')) {
@@ -275,8 +275,8 @@ class mod_cado_cado {
                     $temparray[] = self::getmoddetails('quiz', $thismod, $sched, $schedule); // Sched is updated directly.
                 }
             }
-            $courseext ->quizexists = ($temparray == true);
-            $courseext ->quiz = $temparray;
+            $courseext->quizexists = ($temparray == true);
+            $courseext->quiz = $temparray;
         }
         // ASSIGN.
         if (mod_cado_check::options('assign', 'activityoptions')) {
@@ -287,20 +287,20 @@ class mod_cado_cado {
                     $temparray[] = self::getmoddetails('assign', $thismod, $sched, $schedule); // Sched is updated directly.
                 }
             }
-            $courseext ->assignexists = ($temparray == true);
-            $courseext ->assign = $temparray;
+            $courseext->assignexists = ($temparray == true);
+            $courseext->assign = $temparray;
         }
         // ALL.
         if ($sched->schedulesetup) {
-            $courseext ->schedule = $this->cadosort($schedule, 'section');
-            $courseext ->scheduleexists = true;
+            $courseext->schedule = $this->cadosort($schedule, 'section');
+            $courseext->scheduleexists = true;
             if ((is_object($sched->tagset) || is_array($sched->tagset)) and $sched->tagsinsched) {
                 // Checks to see if there actually are any relevant tags, when tags are turned on in the schedule.
                 foreach ($sched->tagset as $tagkey => $tag) {
                     if (isset($sched->schedtag[$tagkey]) && $sched->schedtag[$tagkey]) {
                         $heading = 'head' . $tagkey;
-                        $courseext ->$heading = $tag;
-                        $courseext ->tagsinsched = true;
+                        $courseext->$heading = $tag;
+                        $courseext->tagsinsched = true;
                     }
                 }
             }

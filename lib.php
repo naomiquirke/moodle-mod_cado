@@ -101,22 +101,22 @@ function cado_extend_settings_navigation(settings_navigation $settingsnav, navig
 
     // Approve link.
     if (has_capability('mod/cado:approve', $PAGE->cm->context)) {
-        $cadonode ->add(get_string('approvelink', 'cado'),
+        $cadonode->add(get_string('approvelink', 'cado'),
                 new moodle_url($CFG->wwwroot . '/mod/cado/approve.php', array('id' => $PAGE->cm->id)));
     }
 
     // Printview link.
-    $cadonode ->add(get_string('printview', 'cado'),
+    $cadonode->add(get_string('printview', 'cado'),
         new moodle_url($CFG->wwwroot . '/mod/cado/view.php', array('id' => $PAGE->cm->id, 'reportformat' => 'print')));
 
     // Compare link.
     if (has_capability('mod/cado:compare', $PAGE->cm->context)) {
-          $cadonode ->add(get_string('comparelink', 'cado'),
+          $cadonode->add(get_string('comparelink', 'cado'),
                 new moodle_url($CFG->wwwroot . '/mod/cado/compare.php', array('id' => $PAGE->cm->id)));
     }
     // Send message to approvers.
     if (has_capability('mod/cado:generate', $PAGE->cm->context)) {
-          $cadonode ->add(get_string('propose', 'cado'),
+          $cadonode->add(get_string('propose', 'cado'),
                 new moodle_url($CFG->wwwroot . '/mod/cado/propose.php', array('id' => $PAGE->cm->id)));
     }
 }

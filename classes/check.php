@@ -51,7 +51,7 @@ class mod_cado_check {
      */
     public function __construct($courseid) {
         global $DB;
-        $this->schedulesetup = $this->options('schedule', 'cadooptions') ? 1 : 0; // Schedule wanted
+        $this->schedulesetup = $this->options('schedule', 'cadooptions') ? 1 : 0; // Schedule wanted.
         $this->tagsinsched = $this->schedulesetup and get_config('cado')->tagschedule ? 1 : 0; // Tags in schedule or not.
         $gettags = $this->options('tags', 'cadooptions');
         if ($gettags && get_config('cado')->tagslist) { // Check to see if tags wanted at all and tags are present.
