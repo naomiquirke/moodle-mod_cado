@@ -102,24 +102,45 @@ class mod_cado_cado {
         self::updatecadorecord($this->instance);
     }
     /**
-     * Update cado instance in database due to an approval / not-approval event.
+     * Update cado instance in database due to an approval / not-approval event, or an update to comments.
      *
      * @param stdClass $data as data from form
      */
     public function approveupdate(stdClass $data) {
         global $USER;
-        if ($data->approved) {
-            $this->instance->timeapproved = time();
-        } else {
-            $this->instance->timeapproved = 0; // Should be 0 already.
-            $this->instance->timeproposed = 0;
+        $prev = $this->instance;
+        $commenttag = '<p class="approvecommentreviewed">'
+        . get_string('approvecommentreviewed', 'cado', ['user' => fullname($USER), 'date' => userdate(time())])
+        . '</p>';
+        $thehistory = $prev->approvecomment;
+        $thisapprovecomment = format_text($data->comment['text'], $data->comment['format']);
+        if ($data->allowedit == 1) {
+            $thehistory = format_text($data->history['text'], $data->history['format']);
+            if ($prev->approvecomment <> $thehistory) { // Then the approval history has been edited.
+                $thehistory = $thehistory
+                    . '<p class="approvecommentreviewed">'
+                    . get_string('approvehistoryedited', 'cado', ['user' => fullname($USER), 'date' => userdate(time())])
+                    . '</p>';
+            }
         }
-            $this->instance->approveuser = $USER->id;
-            $this->instance->approvecomment = format_text($data->comment['text'], $data->comment['format'])
-            . '<p class="approvecommentreviewed">'
-            . get_string('approvecommentreviewed', 'cado', ['user' => fullname($USER), 'date' => userdate(time())])
-            . '</p>';
-            self::updatecadorecord($this->instance);
+        if ($data->approved) {
+            if ($prev->timeapproved == 0) {
+                // Was not approved and changed to approved.
+                $this->instance->timeapproved = time();
+                // If it hasn't been proposed before, Approver === Proposer.
+                if ($prev->timeproposed == 0) {
+                    $this->instance->timeproposed = time();
+                }
+            }
+        } else {
+            // Set to 0 to indicate need for edit.
+            $this->instance->timeproposed = 0;
+            // Reset to 0 if change from approved back to not approved.
+            $this->instance->timeapproved = 0;
+        }
+        $this->instance->approvecomment = $thisapprovecomment . $commenttag . $thehistory;
+        $this->instance->approveuser = $USER->id;
+        self::updatecadorecord($this->instance);
     }
 
     /**

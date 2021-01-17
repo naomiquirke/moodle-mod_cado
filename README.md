@@ -10,6 +10,10 @@ All the terminology within the report, including "CADO", is able to be customize
 Updates
 =======
 
+Version 2.1
+-----------
+* To enable approval comments to be dated accurately, past approval comments are now separated from approval updates and are not editable within the approval form, unless a site-wide setting allows this.
+
 Version 2.0
 -----------
 * The Moodle Mobile app will now display an approved CADO, or if CADO is not approved, display a message to say that it is unavailable. (Currently, the app view is not device-neutral; mobile alternatives to the schedule and rubric tables need to be developed. If a reader has a view on this please contact the developer!)

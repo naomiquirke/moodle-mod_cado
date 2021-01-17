@@ -48,7 +48,10 @@ class mod_cado_approve_form extends moodleform {
 
         $mform->addElement('editor', 'comment', get_string('approvecomment', 'cado'));
         $mform->setType('comment', PARAM_RAW);
+        $mform->addElement('editor', 'history', get_string('prevapprovecomment', 'cado'));
+        $mform->setType('history', PARAM_RAW);
 
+        $mform->addElement('advcheckbox', 'allowedit', get_string('alloweditcomment', 'cado'));
         $mform->addElement('advcheckbox', 'approved', get_string('approveagree', 'cado'));
 
         $this->add_action_buttons(true);
@@ -61,9 +64,15 @@ class mod_cado_approve_form extends moodleform {
      * @param object $thiscadoinstance instance of cado
      */
     public function set_last_data($thiscadoinstance) {
+        $mform = $this->_form;
+
         $checkboxval = $thiscadoinstance->timeapproved == 0 ? 0 : 1;
-        $this->_form->setDefault('comment', ['text' => '<p>' . get_string('update', 'cado') . '</p><div class="prevapprovecomment">'
-            . $thiscadoinstance->approvecomment . '</div>']); // Add update line at beginning to make it easy to add stuff.
-        $this->_form->setDefault('approved', $checkboxval);
+        $mform->setDefault('history', ['text' => $thiscadoinstance->approvecomment]);
+        $mform->setDefault('approved', $checkboxval);
+        $mform->disabledIf('history', 'allowedit', 'notchecked');
+        $mform->disabledIf('allowedit', 'allowedit', 'checked'); // Once it has been checked, it can't be unchecked.
+        if ($checkboxval == 1) {
+            $mform->freeze('allowedit');
+        }
     }
 }

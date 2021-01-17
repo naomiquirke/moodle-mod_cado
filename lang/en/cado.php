@@ -24,11 +24,13 @@
 
 $string['activityoptions'] = 'Activities to include';
 $string['activityoptions_desc'] = 'Activities to include in CADO, if present in course';
+$string['alloweditcomment'] = 'Edit approval history';
 $string['approvalcomparisondifferent'] = 'Approval statement is different.';
 $string['approvelink'] = 'Approve?';
 $string['approveagree'] = 'Approve CADO';
 $string['approvecomment'] = 'Approval comment:';
 $string['approvecommentreviewed'] = 'Approval comment reviewed by {$a->user} on {$a->date}.';
+$string['approvehistoryedited'] = 'Approval history edited by {$a->user} on {$a->date}.';
 $string['approvedon'] = 'This CADO was approved by {$a->approver} on ';
 $string['approvereport'] = 'Approve this CADO';
 $string['approvesubjectline'] = 'CADO approved: ';
@@ -107,6 +109,7 @@ $string['notgenerated'] = 'CADO is not yet generated.';
 $string['nouserfiles'] = 'No user files listed.';
 $string['pluginadministration'] = 'Plugin administration'; // Required by Moodle.
 $string['pluginname'] = 'CADO: Course outline and approval';
+$string['prevapprovecomment'] = 'Previous approval comment(s):';
 $string['printview'] = 'Print layout view';
 $string['privacy:metadata:approverpurpose'] = 'ID of user who approved or did not approve the CADO report most recently.';
 $string['privacy:metadata:cadoname'] = 'CADO name.';
