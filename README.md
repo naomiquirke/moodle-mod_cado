@@ -12,7 +12,7 @@ Updates
 
 Version 2.1
 -----------
-* To enable approval comments to be dated accurately, past approval comments are now separated from approval updates and are not editable within the approval form, unless a site-wide setting allows this.
+* To enable approval comments to be dated accurately, past approval comments are now separated from current approval comments.
 
 Version 2.0
 -----------
