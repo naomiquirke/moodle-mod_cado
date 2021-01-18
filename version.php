@@ -24,12 +24,12 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version  = 2021011810;
+$plugin->version  = 2021011811;
 $plugin->requires = 2018051700; // Requires 3.5.
 $plugin->supported = [35, 310]; // Range from 3.5 to 3.10.
 $plugin->component = 'mod_cado';
 $plugin->release = '2.1';
-$plugin->maturity  = MATURITY_BETA;
+$plugin->maturity  = MATURITY_STABLE;
 $plugin->dependencies = [
     'mod_forum' => ANY_VERSION,
     'mod_quiz' => ANY_VERSION,
