@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version 2.1 release - separate the approve history from updates
+ * Version 2.1 release - separate the approve history from updates in edit window.
  *
  * @package    mod_cado
  * @copyright  2020 Naomi Quirke
@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version  = 2021011811;
+$plugin->version  = 2021011812;
 $plugin->requires = 2018051700; // Requires 3.5.
 $plugin->supported = [35, 310]; // Range from 3.5 to 3.10.
 $plugin->component = 'mod_cado';
