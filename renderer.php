@@ -34,12 +34,22 @@ defined('MOODLE_INTERNAL') || die();
 class mod_cado_renderer extends plugin_renderer_base {
 
     /**
-     * Applies cado.mustache.
+     * Applies cado.mustache and returns.
      * @param stdClass $data
      */
     public function render_course($data) {
         if ($data) {
             return $this->render_from_template('mod_cado/cado', $data);
+        }
+    }
+
+    /**
+     * Applies cado.mustache and outputs.
+     * @param stdClass $data
+     */
+    public function render_cado($data) {
+        if ($data) {
+            echo $this->render_from_template('mod_cado/cado', $data);
         }
     }
 

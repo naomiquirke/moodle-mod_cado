@@ -199,17 +199,18 @@ class mod_cado_cado {
     public function cadogenerate($reportrenderer) {
         global $USER;
         $genwhat = $this->report_course();
+        $genwhat->summary = mod_cado_check::options('summary', 'cadooptions') ? $this->course->summary : null;
+        $genwhat->fullname = $this->course->fullname;
+        $this->instance->generatedjson = json_encode($genwhat,
+            JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
 
         $genwhat->logourl = get_config('cado')->showlogo ? $reportrenderer->get_logo_url() : null;
         $genwhat->sitecomment = mod_cado_check::sitecomment();
-        $genwhat->fullname = $this->course->fullname;
         $genwhat->cadointro = $this->instance->cadointro;
-        $genwhat->summary = mod_cado_check::options('summary', 'cadooptions') ? $this->course->summary : null;
         $genwhat->cadocomment = mod_cado_check::options('cadocomment', 'cadooptions') ? $this->instance->cadocomment : null;
         $genwhat->cadobiblio = mod_cado_check::options('cadobiblio', 'cadooptions') ? $this->instance->cadobiblio : null;
-
-        $this->instance->generatedjson = json_encode($genwhat);
         $this->instance->generatedpage = $reportrenderer->render_course($genwhat);
+
         $this->instance->timegenerated = time();
         $this->instance->timeproposed = 0; // Set to 0 to reset the proposal time back to the 'not proposed' value of 0.
         $this->instance->generateuser = $USER->id;
@@ -382,6 +383,8 @@ class mod_cado_cado {
             'attempts' => $quiz ? ($thismod->attempts == "0" ? get_string('notapplicable', 'cado') : $thismod->attempts) : false
 
         ];
+        // Store the link as a string.
+        $contents['link'] = $contents['link']->out();
         if ($sched->schedulesetup) {
             $orderdate = $quiz ? ($thismod->timeclose ? $thismod->timeclose :
                 ($thismod->completionexpected ? $thismod->completionexpected :

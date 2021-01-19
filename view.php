@@ -123,11 +123,21 @@ if ($showcentral) { // Note now outputting the main report.
     if ($compareid) {
         $myrenderer->render_compare($getcompared);
     } else {
-        $myrenderer->rendered_already($viewedcado->instance->generatedpage);
+        $coursegenerated = (object) json_decode($viewedcado->instance->generatedjson, true);
+        // Now add the bits that are in the table or are independent to the individual course details.
+        $coursegenerated->logourl = get_config('cado')->showlogo ? $myrenderer->get_logo_url() : null;
+        $coursegenerated->sitecomment = mod_cado_check::sitecomment();
+        $coursegenerated->cadointro = $viewedcado->instance->cadointro;
+        $coursegenerated->cadocomment = mod_cado_check::options('cadocomment', 'cadooptions') ?
+            $viewedcado->instance->cadocomment : null;
+        $coursegenerated->cadobiblio = mod_cado_check::options('cadobiblio', 'cadooptions') ?
+            $viewedcado->instance->cadobiblio : null;
+        // Finally output.
+        $myrenderer->render_cado($coursegenerated);
     }
 }
 if ($reportformat == 'print') {
     echo '</div>';
 }
 $myrenderer->render_form_footer();
-
+//        error_log("\r\n" . time() . "******genwhat*****" . "\r\n" . print_r($genwhat, true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
