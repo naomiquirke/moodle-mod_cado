@@ -9,6 +9,11 @@ All the terminology within the report, including "CADO", is able to be customize
 
 Updates
 =======
+Version 3.0
+-----------
+* Turnitin assignments are now included.
+* The mobile version has its own CADO template.
+Mechanism: To enable future activity mods to be more flexibly included and to allow multiple CADO templates, a new database field containing the JSON formatted data for each template is used to store a CADO rather than using an HTML format. The HTML field will continue to be loaded and stored for users wishing to access the HTML view in external reports (determined in plugin admin settings).
 
 Version 2.1
 -----------

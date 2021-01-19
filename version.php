@@ -15,7 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version 2.1 release - separate the approve history from updates in edit window.
+ * Version 3.0 release - new database field containing CADO data as JSON;
+ * capability for Turnitin assignment mod; new mobile template.
  *
  * @package    mod_cado
  * @copyright  2020 Naomi Quirke
@@ -24,12 +25,12 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version  = 2021011812;
+$plugin->version  = 2021012000;
 $plugin->requires = 2018051700; // Requires 3.5.
 $plugin->supported = [35, 310]; // Range from 3.5 to 3.10.
 $plugin->component = 'mod_cado';
-$plugin->release = '2.1';
-$plugin->maturity  = MATURITY_STABLE;
+$plugin->release = '3.0';
+$plugin->maturity  = MATURITY_ALPHA;
 $plugin->dependencies = [
     'mod_forum' => ANY_VERSION,
     'mod_quiz' => ANY_VERSION,

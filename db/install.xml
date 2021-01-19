@@ -20,6 +20,7 @@
         <FIELD NAME="cadocomment" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="One of the free text fields available"/>
         <FIELD NAME="cadobiblio" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="One of the free text fields available"/>
         <FIELD NAME="cadointro" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="One of the free text fields available"/>
+        <FIELD NAME="generatedjson" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="The generated cado report JSON"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

@@ -57,7 +57,7 @@ class restore_cado_activity_task extends restore_activity_task {
         $contents = [];
 
         $contents[] = new restore_decode_content('cado',
-            ['approvecomment', 'generatedpage', 'cadocomment', 'cadobiblio', 'cadointro'], 'cado');
+            ['approvecomment', 'generatedpage', 'generatedjson', 'cadocomment', 'cadobiblio', 'cadointro'], 'cado');
 
         return $contents;
     }

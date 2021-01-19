@@ -208,6 +208,7 @@ class mod_cado_cado {
         $genwhat->cadocomment = mod_cado_check::options('cadocomment', 'cadooptions') ? $this->instance->cadocomment : null;
         $genwhat->cadobiblio = mod_cado_check::options('cadobiblio', 'cadooptions') ? $this->instance->cadobiblio : null;
 
+        $this->instance->generatedjson = json_encode($genwhat);
         $this->instance->generatedpage = $reportrenderer->render_course($genwhat);
         $this->instance->timegenerated = time();
         $this->instance->timeproposed = 0; // Set to 0 to reset the proposal time back to the 'not proposed' value of 0.

@@ -38,8 +38,20 @@ function xmldb_cado_upgrade($oldversion = 0) {
 
     $result = true;
 
-    if ($oldversion < 2020070205) {
-        upgrade_mod_savepoint(true, 2020070205, 'cado');
+    if ($oldversion < 2021012000) {
+        $table = new xmldb_table('cado');
+
+        // Adding field to table cado.
+        $newfield = $table->add_field('generatedjson', XMLDB_TYPE_TEXT);
+
+        // NQ Set default value here as conversion back from HTML, and drop generated page field.  Then we know it exists properly.
+        // public function add_field($name, $type, $precision=null, $unsigned=null, $notnull=null, $sequence=null, $default=null, $previous=null)
+
+        if (!$dbman->field_exists($table, $newfield)) {
+            $dbman->add_field($table, $newfield);
+        }
+
+        upgrade_mod_savepoint(true, 2021012000, 'cado');
     }
 
     return $result;

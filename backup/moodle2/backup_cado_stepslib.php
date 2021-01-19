@@ -46,7 +46,7 @@ class backup_cado_activity_structure_step extends backup_activity_structure_step
         // Define each element separated.
         $cado = new backup_nested_element('cado', ['id'], [ // Core information that can form CADO.
             'name', 'timemodified', 'timegenerated', 'timeproposed', 'generateuser',
-            'approveuser', 'timeapproved', 'approvecomment', 'generatedpage', 'cadocomment', 'cadobiblio', 'cadointro']);
+            'approveuser', 'timeapproved', 'approvecomment', 'generatedpage', 'generatedjson', 'cadocomment', 'cadobiblio', 'cadointro']);
 
         // Build the tree.
 
