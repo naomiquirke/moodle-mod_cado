@@ -61,11 +61,136 @@ class mod_cado_translatecado extends mod_cado_cado{
         if ($result->scheduleexists) {
             $this->get_schedule_head($header, $result);
             $this->get_schedule_body($dom->getElementsByTagName("tbody")->item(0)->childNodes, $result);
-
         }
-        error_log("\r\n" . time() . "****** result->schedule*****" . "\r\n" . print_r($result->schedule, true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
+        // QUIZ **********************************************************************************************.
+        $this->get_modtype($result, $dom, 'quiz');
+        /*
+        $quizouter = $dom->getElementById("cado-quiz");
+        $rows = $quizouter->childNodes;
+        $result->quizexists = $rows->length - 1; // This is zero if no thead.
+        if ($result->quizexists) {
+            // Number useful nodes is 5 per module, with whitespace, first is title.
+            $result->quiz = [];
+            for ($i = 3; $i <= $result->quizexists;) { // $i increments in the function.
+                list($i, $result->quiz[]) = $this->get_items($rows, 0, $i);
+            }
+        }
+*/
+        // ASSIGN **********************************************************************************************.
+        $this->get_modtype($result, $dom, 'assign');
+
+        //error_log("\r\n" . time() . "****** result *****" . "\r\n" . print_r($result, true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
         return json_encode($result,
             JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
+    }
+
+    /**
+     * Gets module items.
+     *
+     * @param stdClass $result
+     * @param DOMDocument $doc
+     * @param String $type is the mod type
+     *
+     */
+    private function get_modtype(&$result, $doc, $type) {
+        $modsouter = $doc->getElementById("cado-" . $type);
+        $rows = $modsouter->childNodes;
+        $existsname = $type . "exists";
+        $result->$existsname = $rows->length - 1; // This is zero if no thead.
+        if ($result->$existsname) {
+            $result->$type = [];
+            for ($i = 3; $i <= $result->$existsname;) { // $i increments in the function.
+                error_log("\r\n" . time() . "****** i *****" . "\r\n" . print_r($i, true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
+                if (is_object($rows->item($i)) && is_object($rows->item($i)->attributes->item(0))) {
+                    list($i, $returned) = $this->get_items($rows, 0, $i);
+                    $result->{$type}[] = $returned;
+                } else {
+                    $i += 2;
+                }
+            }
+        }
+    }
+
+    /**
+     * Gets module items.
+     *
+     * @param DOMNodeList $item
+     * @param Boolean $rubric
+     * @param Int $num
+     *
+     */
+    private function get_items($items, $rubric, $num) {
+        $thismod = new stdClass;
+        $nameid = $items->item($num)->attributes->item(0)->nodeValue;
+        $thismod->cmodid = substr($nameid, strpos($nameid, '_') + 1);
+        $thismod->name = $items->item($num)->childNodes->item(0)->nodeValue;
+        $thismod->link = $items->item($num)->childNodes->item(1)->attributes->item(1)->nodeValue;
+        $num += 2;
+        // Dates.
+        $thismod->dates = [];
+        $rows = $items->item($num)->childNodes;
+        for ($i = 3; $i <= ($rows->length - 1); $i += 2) {
+            $thismod->dates[] = (object) [
+                'label' => $rows->item($i)->childNodes->item(1)->nodeValue,
+                'value' => $rows->item($i)->childNodes->item(3)->nodeValue,
+            ];
+        }
+        $num += 2;
+//        error_log("\r\n" . time() . "****** date *****" . "\r\n" . print_r($thismod->dates, true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
+        // Completion.
+        if (is_object($items->item($num)) &&
+            (strpos($items->item($num)->attributes->item(0)->nodeValue, 'completion') !== false)) {
+            $thismod->completion = [];
+            $rows = $items->item($num)->childNodes;
+            for ($i = 2; $i <= ($rows->length - 1); $i += 2) { // $i starts at 2, not 3 because no whitespace before heading node.
+                $thismod->completion[] = (object) [
+                    'label' => $rows->item($i)->childNodes->item(1)->nodeValue,
+                    'value' => $rows->item($i)->childNodes->item(3)->nodeValue,
+                ];
+            }
+            $num += 2;
+//            error_log("\r\n" . time() . "****** comp *****" . "\r\n" . print_r($thismod->completion, true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
+        }
+        // Extra: Tags.
+        $thismod->extra = [];
+        $rows = $items->item($num)->childNodes;
+        for ($i = 1; $i <= ($rows->length - 1); $i += 2) { // $i starts at 1, there is no heading.
+            $thismod->extra[] = (object) [
+                'tagheading' => $rows->item($i)->childNodes->item(1)->childNodes->item(0)->nodeValue,
+                'tagcontent' => $rows->item($i)->childNodes->item(3)->childNodes->item(0)->nodeValue,
+            ];
+        }
+//        error_log("\r\n" . time() . "****** extra *****" . "\r\n" . print_r($thismod->extra, true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
+        // Intro.
+        $num += 2;
+        $thismod->intro = $this->innerxml($items->item($num)->childNodes->item(1));
+//        error_log("\r\n" . time() . "****** intro *****" . "\r\n" . print_r($thismod->intro, true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
+
+        // Rubric.
+        $num += 2;
+        if (is_object($items->item($num)) && ($items->item($num)->tagName == 'h4')) {
+            $num += 2;
+            $thismod->rubric = [];
+            $rows = $items->item($num)->childNodes->item(1)->childNodes->item(1)->childNodes;
+//            error_log("\r\n" . time() . "****** rubric rows *****" . "\r\n" . print_r($rows, true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
+            $currentlevel = new stdClass;
+            for ($i = 1; $i <= ($rows->length - 1); $i += 2) {
+                $currentlevel = new stdClass;
+                $currentlevel->levels = [];
+                $cols = $rows->item($i)->childNodes;
+                $currentlevel->critdesc = $cols->item(1)->textContent;
+                for ($j = 3; $j <= ($cols->length - 1); $j += 2) {
+                    $points = $cols->item($j)->childNodes->item(2)->textContent;
+                    $currentlevel->levels[] = (object) [
+                        'levelsdesc' => $cols->item($j)->childNodes->item(0)->textContent,
+                        'points' => substr($points, 1, strlen($points) - 2)
+                    ];
+                }
+                $thismod->rubric[] = $currentlevel;
+            }
+            $num += 2;
+        }
+        return [$num, $thismod];
     }
 
     /**
