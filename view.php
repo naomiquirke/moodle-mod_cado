@@ -140,4 +140,3 @@ if ($reportformat == 'print') {
     echo '</div>';
 }
 $myrenderer->render_form_footer();
-//        error_log("\r\n" . time() . "******genwhat*****" . "\r\n" . print_r($genwhat, true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");

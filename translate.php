@@ -15,24 +15,34 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version 3.0 release - new database field containing CADO data as JSON;
- * capability for Turnitin assignment mod; new mobile template.
+ * Set up details re translation of CADO from HTML to JSON.
  *
  * @package    mod_cado
  * @copyright  2020 Naomi Quirke
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+require_once('../../config.php');
 
-$plugin->version  = 2021020418;
-$plugin->requires = 2018051700; // Requires 3.5.
-$plugin->supported = [35, 310]; // Range from 3.5 to 3.10.
-$plugin->component = 'mod_cado';
-$plugin->release = '3.0';
-$plugin->maturity  = MATURITY_ALPHA;
-$plugin->dependencies = [
-    'mod_forum' => ANY_VERSION,
-    'mod_quiz' => ANY_VERSION,
-    'mod_assign' => ANY_VERSION,
-];
+$cmid = required_param('id', PARAM_INT);
+
+list ($course, $cm) = get_course_and_cm_from_cmid($cmid, 'cado');
+$context = context_module::instance($cmid);
+require_login($course, true, $cm);
+require_capability('mod/cado:generate', $context);
+$urlparams = ['id' => $cmid];
+$url = new moodle_url('/mod/cado/translate.php', $urlparams);
+$PAGE->set_url($url);
+$title = get_string('modulename', 'cado');
+$PAGE->set_title($title);
+$translatedcado = new mod_cado_translatecado($context, $cm, $course);
+
+$PAGE->set_heading($translatedcado->instance->name);
+
+$myrenderer = $PAGE->get_renderer('mod_cado');
+$myrenderer->render_form_header();
+
+echo $translatedcado->translate();
+
+$myrenderer->render_form_footer();
+

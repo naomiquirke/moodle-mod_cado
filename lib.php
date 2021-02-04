@@ -119,6 +119,10 @@ function cado_extend_settings_navigation(settings_navigation $settingsnav, navig
           $cadonode->add(get_string('propose', 'cado'),
                 new moodle_url($CFG->wwwroot . '/mod/cado/propose.php', array('id' => $PAGE->cm->id)));
     }
+    // Temp testing action.
+              $cadonode->add("Translate",
+                new moodle_url($CFG->wwwroot . '/mod/cado/translate.php', array('id' => $PAGE->cm->id)));
+
 }
 /**
  * List the actions that correspond to a view of this module.

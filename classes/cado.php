@@ -40,8 +40,8 @@ class mod_cado_cado {
     /** @var object course of cado */
     public $course;
 
-    /** @var object coursemodule info of cado */
-    private $coursemodule; // Cm_info.
+    /** @var int groupingid of cado */
+    public $groupingid;
 
     /**
      * Constructs a CADO instance
@@ -52,9 +52,9 @@ class mod_cado_cado {
      */
     public function __construct($context, $coursemodule, $course) {
             $this->context = $context;
-            $this->coursemodule = $coursemodule;
             $this->course = $course;
-            $this->instance = $this->coursemodule ? self::getcadorecord($this->coursemodule->instance) : null;
+            $this->instance = $coursemodule ? self::getcadorecord($coursemodule->instance) : null;
+            $this->groupingid = $coursemodule->groupingid;
     }
 
     /**
@@ -225,7 +225,7 @@ class mod_cado_cado {
     private function report_course() {
         global $DB;
         $courseid = $this->course->id;
-        $grouping = $this->coursemodule->groupingid;
+        $grouping = $this->groupingid;
         $visible = get_config('cado')->inchidden == 1 ? 0 : 1;
 
         $courseext = new stdClass;
