@@ -62,24 +62,11 @@ class mod_cado_translatecado extends mod_cado_cado{
             $this->get_schedule_head($header, $result);
             $this->get_schedule_body($dom->getElementsByTagName("tbody")->item(0)->childNodes, $result);
         }
-        // QUIZ **********************************************************************************************.
         $this->get_modtype($result, $dom, 'quiz');
-        /*
-        $quizouter = $dom->getElementById("cado-quiz");
-        $rows = $quizouter->childNodes;
-        $result->quizexists = $rows->length - 1; // This is zero if no thead.
-        if ($result->quizexists) {
-            // Number useful nodes is 5 per module, with whitespace, first is title.
-            $result->quiz = [];
-            for ($i = 3; $i <= $result->quizexists;) { // $i increments in the function.
-                list($i, $result->quiz[]) = $this->get_items($rows, 0, $i);
-            }
-        }
-*/
-        // ASSIGN **********************************************************************************************.
         $this->get_modtype($result, $dom, 'assign');
+        $this->get_modtype($result, $dom, 'forum');
 
-        //error_log("\r\n" . time() . "****** result *****" . "\r\n" . print_r($result, true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
+        error_log("\r\n" . time() . "****** result *****" . "\r\n" . print_r($result, true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
         return json_encode($result,
             JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
     }
@@ -100,7 +87,6 @@ class mod_cado_translatecado extends mod_cado_cado{
         if ($result->$existsname) {
             $result->$type = [];
             for ($i = 3; $i <= $result->$existsname;) { // $i increments in the function.
-                error_log("\r\n" . time() . "****** i *****" . "\r\n" . print_r($i, true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
                 if (is_object($rows->item($i)) && is_object($rows->item($i)->attributes->item(0))) {
                     list($i, $returned) = $this->get_items($rows, 0, $i);
                     $result->{$type}[] = $returned;
@@ -136,20 +122,22 @@ class mod_cado_translatecado extends mod_cado_cado{
             ];
         }
         $num += 2;
-//        error_log("\r\n" . time() . "****** date *****" . "\r\n" . print_r($thismod->dates, true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
         // Completion.
         if (is_object($items->item($num)) &&
             (strpos($items->item($num)->attributes->item(0)->nodeValue, 'completion') !== false)) {
             $thismod->completion = [];
             $rows = $items->item($num)->childNodes;
-            for ($i = 2; $i <= ($rows->length - 1); $i += 2) { // $i starts at 2, not 3 because no whitespace before heading node.
+            for ($i = 2; $i <= ($rows->length - 1); $i += 2) {
+                // For quiz, $i starts at 2, not 3 because no whitespace before heading node. Vice versa for forum.
+                if ($rows->item($i)->childNodes === null) {
+                    $i++;
+                }
                 $thismod->completion[] = (object) [
                     'label' => $rows->item($i)->childNodes->item(1)->nodeValue,
                     'value' => $rows->item($i)->childNodes->item(3)->nodeValue,
                 ];
             }
             $num += 2;
-//            error_log("\r\n" . time() . "****** comp *****" . "\r\n" . print_r($thismod->completion, true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
         }
         // Extra: Tags.
         $thismod->extra = [];
@@ -160,11 +148,13 @@ class mod_cado_translatecado extends mod_cado_cado{
                 'tagcontent' => $rows->item($i)->childNodes->item(3)->childNodes->item(0)->nodeValue,
             ];
         }
-//        error_log("\r\n" . time() . "****** extra *****" . "\r\n" . print_r($thismod->extra, true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
         // Intro.
         $num += 2;
-        $thismod->intro = $this->innerxml($items->item($num)->childNodes->item(1));
-//        error_log("\r\n" . time() . "****** intro *****" . "\r\n" . print_r($thismod->intro, true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
+        // Intro is encased by two text nodes, but may be many text nodes.
+        $thismod->intro = '';
+        for ($i = 1; $i < $items->item($num)->childNodes->length; $i++) {
+            $thismod->intro .= $this->innerxml($items->item($num)->childNodes->item($i));
+        }
 
         // Rubric.
         $num += 2;
@@ -172,7 +162,6 @@ class mod_cado_translatecado extends mod_cado_cado{
             $num += 2;
             $thismod->rubric = [];
             $rows = $items->item($num)->childNodes->item(1)->childNodes->item(1)->childNodes;
-//            error_log("\r\n" . time() . "****** rubric rows *****" . "\r\n" . print_r($rows, true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
             $currentlevel = new stdClass;
             for ($i = 1; $i <= ($rows->length - 1); $i += 2) {
                 $currentlevel = new stdClass;
@@ -265,7 +254,7 @@ class mod_cado_translatecado extends mod_cado_cado{
         $subtablerow = $row->childNodes->item(5 + $itemadd)->childNodes->item(1)->childNodes->item(1);
         $result->schedheads['task'] = $subtablerow->childNodes->item(1)->nodeValue; // Task.
         $result->schedheads['date'] = $subtablerow->childNodes->item(3)->nodeValue; // Datedue.
-        $result->tagsinsched = ($subtablerow->childNodes->length - 3) / 2;
+        $result->tagsinsched = ($subtablerow->childNodes->length - 5) / 2;
         $result->headtag0 = $result->tagsinsched > 0 ? $subtablerow->childNodes->item(5)->nodeValue : null; // Tag 0.
         $result->headtag1 = $result->tagsinsched > 1 ? $subtablerow->childNodes->item(7)->nodeValue : null; // Tag 1.
         $result->headtag2 = $result->tagsinsched > 2 ? $subtablerow->childNodes->item(9)->nodeValue : null; // Tag 2.
@@ -278,11 +267,15 @@ class mod_cado_translatecado extends mod_cado_cado{
      *
      */
     private function innerxml($node) {
-        $doc  = $node->ownerDocument;
-        $frag = $doc->createDocumentFragment();
-        foreach ($node->childNodes as $child) {
-             $frag->appendChild($child->cloneNode(true));
+        if ($node->hasChildNodes()) {
+            $doc  = $node->ownerDocument;
+            $frag = $doc->createDocumentFragment();
+            foreach ($node->childNodes as $child) {
+                $frag->appendChild($child->cloneNode(true));
+            }
+            return $doc->saveXML($frag);
+        } else {
+            return $node->nodeValue;
         }
-        return $doc->saveXML($frag);
     }
 }
