@@ -36,10 +36,11 @@ class mod_cado_translatecado extends mod_cado_cado{
      * Translates a CADO instance.
      */
     public function translate() {
-        global $DB;
+        global $DB, $PAGE;
         $result = new stdClass;
 
         // These can eventually just be put in the data just before output.
+
         $result->cadobiblio = $this->instance->cadobiblio;
         $result->cadocomment = $this->instance->cadocomment;
         $result->cadointro = $this->instance->cadointro;
@@ -65,10 +66,11 @@ class mod_cado_translatecado extends mod_cado_cado{
         $this->get_modtype($result, $dom, 'quiz');
         $this->get_modtype($result, $dom, 'assign');
         $this->get_modtype($result, $dom, 'forum');
-
-        error_log("\r\n" . time() . "****** result *****" . "\r\n" . print_r($result, true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
-        return json_encode($result,
+        $dataout = json_encode($result,
             JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
+
+        error_log("\r\n" . time() . "****** result *****" . "\r\n" . print_r($dataout, true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
+        return $result;
     }
 
     /**
@@ -89,6 +91,7 @@ class mod_cado_translatecado extends mod_cado_cado{
             for ($i = 3; $i <= $result->$existsname;) { // $i increments in the function.
                 if (is_object($rows->item($i)) && is_object($rows->item($i)->attributes->item(0))) {
                     list($i, $returned) = $this->get_items($rows, 0, $i);
+                    $returned->module = $type;
                     $result->{$type}[] = $returned;
                 } else {
                     $i += 2;
@@ -111,6 +114,12 @@ class mod_cado_translatecado extends mod_cado_cado{
         $thismod->cmodid = substr($nameid, strpos($nameid, '_') + 1);
         $thismod->name = $items->item($num)->childNodes->item(0)->nodeValue;
         $thismod->link = $items->item($num)->childNodes->item(1)->attributes->item(1)->nodeValue;
+        $thismod->dateexists = false;
+        $thismod->completionexists = false;
+        $thismod->extraexists = false;
+        $thismod->introexists = false;
+        $thismod->rubricexists = false;
+
         $num += 2;
         // Dates.
         $thismod->dates = [];
@@ -120,11 +129,13 @@ class mod_cado_translatecado extends mod_cado_cado{
                 'label' => $rows->item($i)->childNodes->item(1)->nodeValue,
                 'value' => $rows->item($i)->childNodes->item(3)->nodeValue,
             ];
+            $thismod->dateexists = true;
         }
         $num += 2;
         // Completion.
         if (is_object($items->item($num)) &&
             (strpos($items->item($num)->attributes->item(0)->nodeValue, 'completion') !== false)) {
+            $thismod->completionexists = true;
             $thismod->completion = [];
             $rows = $items->item($num)->childNodes;
             for ($i = 2; $i <= ($rows->length - 1); $i += 2) {
@@ -147,6 +158,7 @@ class mod_cado_translatecado extends mod_cado_cado{
                 'tagheading' => $rows->item($i)->childNodes->item(1)->childNodes->item(0)->nodeValue,
                 'tagcontent' => $rows->item($i)->childNodes->item(3)->childNodes->item(0)->nodeValue,
             ];
+            $thismod->extraexists = true;
         }
         // Intro.
         $num += 2;
@@ -154,6 +166,7 @@ class mod_cado_translatecado extends mod_cado_cado{
         $thismod->intro = '';
         for ($i = 1; $i < $items->item($num)->childNodes->length; $i++) {
             $thismod->intro .= $this->innerxml($items->item($num)->childNodes->item($i));
+            $thismod->introexists = true;
         }
 
         // Rubric.
@@ -161,6 +174,7 @@ class mod_cado_translatecado extends mod_cado_cado{
         if (is_object($items->item($num)) && ($items->item($num)->tagName == 'h4')) {
             $num += 2;
             $thismod->rubric = [];
+            $thismod->rubricexists = true;
             $rows = $items->item($num)->childNodes->item(1)->childNodes->item(1)->childNodes;
             $currentlevel = new stdClass;
             for ($i = 1; $i <= ($rows->length - 1); $i += 2) {
@@ -171,7 +185,7 @@ class mod_cado_translatecado extends mod_cado_cado{
                 for ($j = 3; $j <= ($cols->length - 1); $j += 2) {
                     $points = $cols->item($j)->childNodes->item(2)->textContent;
                     $currentlevel->levels[] = (object) [
-                        'levelsdesc' => $cols->item($j)->childNodes->item(0)->textContent,
+                        'leveldesc' => $cols->item($j)->childNodes->item(0)->textContent,
                         'points' => substr($points, 1, strlen($points) - 2)
                     ];
                 }
@@ -255,9 +269,15 @@ class mod_cado_translatecado extends mod_cado_cado{
         $result->schedheads['task'] = $subtablerow->childNodes->item(1)->nodeValue; // Task.
         $result->schedheads['date'] = $subtablerow->childNodes->item(3)->nodeValue; // Datedue.
         $result->tagsinsched = ($subtablerow->childNodes->length - 5) / 2;
-        $result->headtag0 = $result->tagsinsched > 0 ? $subtablerow->childNodes->item(5)->nodeValue : null; // Tag 0.
-        $result->headtag1 = $result->tagsinsched > 1 ? $subtablerow->childNodes->item(7)->nodeValue : null; // Tag 1.
-        $result->headtag2 = $result->tagsinsched > 2 ? $subtablerow->childNodes->item(9)->nodeValue : null; // Tag 2.
+        if ($result->tagsinsched > 0) {
+            $result->headtag0 = $subtablerow->childNodes->item(5)->nodeValue;
+            if ($result->tagsinsched > 1) {
+                $result->headtag1 = $subtablerow->childNodes->item(7)->nodeValue;
+                if ($result->tagsinsched > 2) {
+                    $result->headtag2 = $subtablerow->childNodes->item(9)->nodeValue;
+                }
+            }
+        }
     }
 
     /**

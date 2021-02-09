@@ -42,7 +42,9 @@ $PAGE->set_heading($translatedcado->instance->name);
 $myrenderer = $PAGE->get_renderer('mod_cado');
 $myrenderer->render_form_header();
 
-echo $translatedcado->translate();
+$reportback = $translatedcado->translate();
+$reportback->logourl = get_config('cado')->showlogo ? $myrenderer->get_logo_url() : null;
+echo $myrenderer->render_from_template('mod_cado/cadocore', $reportback);
 
 $myrenderer->render_form_footer();
 

@@ -15,7 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version 3.0 release - new database field containing CADO data as JSON;
+ * Version 3.0 release - new database field containing CADO data as JSON,
+ * new templates utilising JSON, new comparisons utilising JSON,
  * capability for Turnitin assignment mod; new mobile template.
  *
  * @package    mod_cado
@@ -25,7 +26,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version  = 2021020929;
+$plugin->version  = 2021021011;
 $plugin->requires = 2018051700; // Requires 3.5.
 $plugin->supported = [35, 310]; // Range from 3.5 to 3.10.
 $plugin->component = 'mod_cado';
