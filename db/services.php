@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Choice group external functions and service definitions.
+ * CADO external functions and service definitions.
  *
  * @package    mod_cado
  * @category   external
