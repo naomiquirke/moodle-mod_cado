@@ -133,7 +133,9 @@ if ($showcentral) { // Note now outputting the main report.
         $coursegenerated->cadobiblio = mod_cado_check::options('cadobiblio', 'cadooptions') ?
             $viewedcado->instance->cadobiblio : null;
         // Finally output.
-        $myrenderer->render_cado($coursegenerated);
+echo $myrenderer->render_from_template('mod_cado/cadocore', $coursegenerated);
+
+//        $myrenderer->render_cado($coursegenerated);
     }
 }
 if ($reportformat == 'print') {

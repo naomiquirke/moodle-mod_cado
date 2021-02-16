@@ -198,18 +198,20 @@ class mod_cado_cado {
      */
     public function cadogenerate($reportrenderer) {
         global $USER;
-        $genwhat = $this->report_course();
-        $genwhat->summary = mod_cado_check::options('summary', 'cadooptions') ? $this->course->summary : null;
-        $genwhat->fullname = $this->course->fullname;
-        $this->instance->generatedjson = json_encode($genwhat,
+        $genwhat2 = $this->report_course2();
+        $genwhat2->summary = mod_cado_check::options('summary', 'cadooptions') ? $this->course->summary : null;
+        $genwhat2->fullname = $this->course->fullname;
+        $this->instance->generatedjson = json_encode($genwhat2,
             JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
 
-        $genwhat->logourl = get_config('cado')->showlogo ? $reportrenderer->get_logo_url() : null;
-        $genwhat->sitecomment = mod_cado_check::sitecomment();
-        $genwhat->cadointro = $this->instance->cadointro;
-        $genwhat->cadocomment = mod_cado_check::options('cadocomment', 'cadooptions') ? $this->instance->cadocomment : null;
-        $genwhat->cadobiblio = mod_cado_check::options('cadobiblio', 'cadooptions') ? $this->instance->cadobiblio : null;
-        $this->instance->generatedpage = $reportrenderer->render_course($genwhat);
+        if (get_config('cado')->storegenerated) {
+            $genwhat->logourl = get_config('cado')->showlogo ? $reportrenderer->get_logo_url() : null;
+            $genwhat->sitecomment = mod_cado_check::sitecomment();
+            $genwhat->cadointro = $this->instance->cadointro;
+            $genwhat->cadocomment = mod_cado_check::options('cadocomment', 'cadooptions') ? $this->instance->cadocomment : null;
+            $genwhat->cadobiblio = mod_cado_check::options('cadobiblio', 'cadooptions') ? $this->instance->cadobiblio : null;
+            $this->instance->generatedpage = $reportrenderer->render_course($genwhat);
+        }
 
         $this->instance->timegenerated = time();
         $this->instance->timeproposed = 0; // Set to 0 to reset the proposal time back to the 'not proposed' value of 0.
@@ -218,202 +220,6 @@ class mod_cado_cado {
         return $success;
     }
 
-    /**
-     * Generate the module specific elements for the CADO report and deal with grouping.
-     *
-     */
-    private function report_course() {
-        global $DB;
-        $courseid = $this->course->id;
-        $grouping = $this->groupingid;
-        $visible = get_config('cado')->inchidden == 1 ? 0 : 1;
-
-        $courseext = new stdClass;
-        $courseext->groupingname = $grouping ? $DB->get_record('groupings', array('id' => $grouping), 'name')->name : null;
-        // SCHEDULE and TAGS SETUP.
-        $sched = new mod_cado_check($courseid);
-        $schedule = $sched->schedulesetup ? $this->startschedule($sched) : null;
-        $courseext->weekly = $this->course->format == "weeks";
-        // So that schedule can have week information removed if not relevant.
-
-        // MySQL prior to v8 can't handle 'with' constructs. So break into three strings.
-
-        // Get all the groups that may access each activity module.
-        $modgroups = "SELECT cm.id cmod, cm.instance, gm.id modgroup, mo.name modtype, cm.groupingid,
-            cm.completionexpected, cm.section
-            FROM {course} c
-                JOIN {course_modules} cm on cm.course = c.id
-                JOIN {modules} mo on mo.id = cm.module
-                LEFT JOIN {groupings} ggm on ggm.id =  cm.groupingid
-                LEFT JOIN {groupings_groups} gggm on gggm.groupingid = ggm.id
-                LEFT JOIN {groups} gm on gggm.groupid = gm.id
-            WHERE c.id=:course and cm.visible >= :visible and mo.name in ( 'assign' , 'forum' , 'quiz')
-                and ((cm.completion <> 0 and c.enablecompletion = 1) or c.enablecompletion = 0)";
-
-        // Get all the groups that are in our target grouping.
-        $coursegrouping = "SELECT g.id coursegroup
-            FROM {groupings} gg
-                JOIN {groupings_groups} ggg on ggg.groupingid = gg.id
-                JOIN {groups} g on  ggg.groupid = g.id
-            WHERE gg.id = :grouping";
-
-        // Find all the activities that have groups accessing that activity that are in our target grouping,
-        // or activities that do not have grouping restrictions.
-        $chosenmods = "SELECT distinct mg.cmod id, mg.instance, mg.modtype, mg.completionexpected, mg.section
-            FROM (" . $modgroups . ") mg
-                LEFT JOIN (" . $coursegrouping . ") cg on cg.coursegroup = mg.modgroup
-            WHERE mg.groupingid= 0 or cg.coursegroup = mg.modgroup";
-
-        // Access all the mod info now given that we have already gathered half the information.
-        $sql = "SELECT cm.*
-                , f.name fname, f.intro fintro, f.duedate fduedate, f.cutoffdate fcutoffdate, completiondiscussions
-                , completionreplies, completionposts, q.name qname, q.intro qintro, timeclose, timeopen, timelimit, attempts
-                , a.name aname, a.intro aintro, a.duedate aduedate, a.cutoffdate acutoffdate
-            FROM (" .$chosenmods .") cm
-            LEFT JOIN {forum} f on f.id = cm.instance and cm.modtype = 'forum'
-            LEFT JOIN {quiz} q on q.id = cm.instance and cm.modtype = 'quiz'
-            LEFT JOIN {assign} a on a.id = cm.instance and cm.modtype = 'assign'
-            ORDER BY cm.modtype, timeclose, f.duedate, a.duedate, cm.completionexpected, fcutoffdate, acutoffdate";
-
-        $allmodinfo = $DB->get_records_sql($sql, ['course' => $courseid, 'grouping' => $grouping, 'visible' => $visible]);
-
-        // FORUM.
-        $temparray = [];
-        if (mod_cado_check::options('forum', 'activityoptions')) {
-            foreach ($allmodinfo as $thismod) {
-                if ($thismod->modtype == 'forum') {
-                    $temparray[] = self::getmoddetails('forum', $thismod, $sched, $schedule); // Sched is updated directly.
-                }
-            }
-
-            $courseext->forumexists = ($temparray == true); // Include for mustache header.
-            $courseext->forum = $temparray;
-        }
-        // QUIZ.
-        if (mod_cado_check::options('quiz', 'activityoptions')) {
-
-            $temparray = [];
-            foreach ($allmodinfo as $thismod) {
-                if ($thismod->modtype == 'quiz') {
-                    $temparray[] = self::getmoddetails('quiz', $thismod, $sched, $schedule); // Sched is updated directly.
-                }
-            }
-            $courseext->quizexists = ($temparray == true);
-            $courseext->quiz = $temparray;
-        }
-        // ASSIGN.
-        if (mod_cado_check::options('assign', 'activityoptions')) {
-
-            $temparray = [];
-            foreach ($allmodinfo as $thismod) {
-                if ($thismod->modtype == 'assign') {
-                    $temparray[] = self::getmoddetails('assign', $thismod, $sched, $schedule); // Sched is updated directly.
-                }
-            }
-            $courseext->assignexists = ($temparray == true);
-            $courseext->assign = $temparray;
-        }
-        // ALL.
-        if ($sched->schedulesetup) {
-            $courseext->schedule = $this->cadosort($schedule, 'section');
-            $courseext->scheduleexists = true;
-            if ((is_object($sched->tagset) || is_array($sched->tagset)) and $sched->tagsinsched) {
-                // Checks to see if there actually are any relevant tags, when tags are turned on in the schedule.
-                foreach ($sched->tagset as $tagkey => $tag) {
-                    if (isset($sched->schedtag[$tagkey]) && $sched->schedtag[$tagkey]) {
-                        $heading = 'head' . $tagkey;
-                        $courseext->$heading = $tag;
-                        $courseext->tagsinsched = true;
-                    }
-                }
-            }
-
-        }
-
-        return $courseext;
-    }
-    /**
-     * Generate the module sections of the report.
-     *
-     * @param string $modtype is the module type, either 'quiz', 'forum', or 'assign'
-     * @param stdClass $thismod is the module database record
-     * @param mod_cado_check $sched which gets updated with tag entries
-     * @param array $schedule contains all the schedule info
-     */
-    private function getmoddetails($modtype, $thismod, $sched, &$schedule) {
-        $quiz = $modtype == 'quiz';
-        $forum = $modtype == 'forum';
-        $contents = array(); // Returned.
-        // For forum and assign take as !$quiz; no options have assign alone in below.
-
-        $thisrubric = $quiz ? false : $this->get_rubric($thismod->id);
-
-        // From the sql we get either null or the matching details so we can use max.
-        $thismod->intro = max($thismod->fintro, $thismod->qintro, $thismod->aintro);
-        $thismod->duedate = max($thismod->fduedate, $thismod->aduedate);
-        $thismod->cutoffdate = max($thismod->fcutoffdate, $thismod->acutoffdate);
-        $thismod->name = max($thismod->fname, $thismod->qname, $thismod->aname);
-
-        $contents = [ // Seems to need automatically defined keys for mustache.
-            'cmodid' => $thismod->id,
-            'name' => htmlspecialchars_decode($thismod->name),
-            'intro' => $thismod->intro,
-            'date' => ($thismod->completionexpected == "0" ? false : $thismod->completionexpected),
-            'extra' => $sched->get_tags($thismod->id),
-            'link' => $quiz ? new moodle_url('/mod/quiz/view.php', ['id' => $thismod->id]) :
-                ($forum ? new moodle_url('/mod/forum/view.php',  ['id' => $thismod->id]) :
-                    new moodle_url('/mod/assign/view.php',  ['id' => $thismod->id]) ),
-
-            // Forum and assign.
-            'duedate' => $quiz ? false : ($thismod->duedate == "0" ? false : $thismod->duedate),
-            'cutoffdate' => $quiz ? false : ($thismod->cutoffdate == "0" ? false : $thismod->cutoffdate),
-            'rubric' => $quiz ? false : $thisrubric,
-            'rubricexists' => $quiz ? false : $thisrubric == true,
-
-            // Forum.
-            'completiondiscussions' => $forum ? $thismod->completiondiscussions : false,
-            'completionreplies' => $forum ? $thismod->completionreplies : false,
-            'completionposts' => $forum ? $thismod->completionposts : false,
-
-            // Quiz.
-            'timeclose' => $quiz ? ($thismod->timeclose == "0" ? false : $thismod->timeclose) : false,
-            'timeopen' => $quiz ? ($thismod->timeopen == "0" ? false : $thismod->timeopen) : false,
-            'timelimit' => $quiz ? ($thismod->timelimit == "0" ? get_string('notapplicable', 'cado') :
-                intval($thismod->timelimit / 60)) : false,
-            'attempts' => $quiz ? ($thismod->attempts == "0" ? get_string('notapplicable', 'cado') : $thismod->attempts) : false
-
-        ];
-        // Store the link as a string.
-        $contents['link'] = $contents['link']->out();
-        if ($sched->schedulesetup) {
-            $orderdate = $quiz ? ($thismod->timeclose ? $thismod->timeclose :
-                ($thismod->completionexpected ? $thismod->completionexpected :
-                0) ) :
-                    ($thismod->duedate ? $thismod->duedate :
-                        ($thismod->completionexpected ? $thismod->completionexpected :
-                            ($thismod->cutoffdate ? $thismod->cutoffdate :
-                                 0)));
-
-            $scheduleentry = [
-                'name' => $contents['name'],
-                'date' => $orderdate == 0 ? null : $orderdate
-            ];
-
-            if ($contents['extra']) {
-                foreach ($contents['extra'] as $tagdetails) {
-                    $scheduleentry = array_merge($scheduleentry , [$tagdetails['tagcode'] => $tagdetails['tagcontent']]);
-                    if ( is_numeric($tagdetails['tagcontent']) && get_config('cado')->sumschedule) { // Then add up tag values.
-                        if (!isset($schedule[1000]['tasks'][$tagdetails['tagcode']])) {
-                            $schedule[1000]['tasks'][$tagdetails['tagcode']] = 0;
-                        }
-                        $schedule[1000]['tasks'][$tagdetails['tagcode']] += $tagdetails['tagcontent'];
-                    }
-                }
-            }
-            $schedule[(int)$thismod->section]["tasks"][] = $scheduleentry;
-        }
-        return $contents;
-    }
     /**
      * Generate the rubric report for an assignment or forum.
      *
@@ -460,39 +266,9 @@ class mod_cado_cado {
         }
         return $this->cadosort($criterion, 'totalpoints'); // Now sort the criteria by the most negative.
     }
-    /**
-     * Generate the start of the schedule table, topic headings and weeks.
-     *
-     */
-    private function startschedule() {
-        global $DB;
-        $weekly = $this->course->format == "weeks";
-        $weeks = [];
-        $returned = $DB->get_records('course_sections', ['course' => $this->course->id]);
-        foreach ($returned as $topic) {
-            $descriptor = $topic->name ? $topic->name : strip_tags($topic->summary);
-            // Use the topic name in the schedule, if empty use the summary.
-            $descriptor = strtr($descriptor, array_flip(get_html_translation_table(HTML_ENTITIES, ENT_QUOTES)));
-            $week = [
-                'section' => (int)$topic->section,
-                'name' => $descriptor,
-                'startdate' => $weekly && ($topic->section != "0") ?
-                    strtotime( '+' . ($topic->section - 1) . ' weeks', $this->course->startdate) : null,
-                'tasks' => null,
-                'sum' => false
-            ];
-            $weeks[$topic->id] = $week;
-        }
-        if (get_config('cado')->sumschedule) {
-            $weeks[1000] = ['section' => 1000, 'name' => get_string('schedulesum', 'cado'), 'tasks' => [], 'sum' => true];
-        }
-        return $weeks;
-    }
 
     /**
      * Sorts a multidimensional array by the given key
-     *
-     * Why can't I find this built into PHP?  Am I blind?
      *
      * @param array $sortarray is the array we want to sort
      * @param string $sortkey is the key we want the array to be sorted by
@@ -510,5 +286,291 @@ class mod_cado_cado {
 
         usort($sortarray, $callback);
         return $sortarray;
+    }
+
+    /**
+     * Generate the module specific elements for the CADO report and deal with grouping.
+     *
+     */
+    private function report_course2() {
+        global $DB;
+
+        $courseid = $this->course->id;
+        $grouping = $this->groupingid;
+        $visible = get_config('cado')->inchidden == 1 ? 0 : 1;
+
+        $courseext = new stdClass;
+        $courseext->groupingname = $grouping ? $DB->get_record('groupings', array('id' => $grouping), 'name')->name : null;
+
+        // SCHEDULE and TAGS SETUP.
+        $sched = new mod_cado_check($courseid);
+        list($schedule, $sections) = $sched->schedulesetup ? $this->startschedule2() : null;
+        $courseext->weekly = $this->course->format == "weeks";
+        // So that schedule can have week information removed if not relevant.
+        $modlist = get_config('cado')->activityoptions;
+        $modarray = explode(',', $modlist);
+        $allmodinfo = $this->getcadodata($modarray, ['course' => $courseid, 'groupingid' => $grouping, 'visible' => $visible]);
+        foreach ($modarray as $thistype) {
+            $temparray = [];
+            foreach ($allmodinfo as $thismod) {
+                if ($thismod->modtype == $thistype) {
+                    $temparray[] = self::getmoddetails2($thistype, $thismod, $sched, $schedule, $sections);
+                }
+            }
+            $exists = $thistype . 'exists';
+            $courseext->$exists = !empty($temparray);
+            $courseext->$thistype = $temparray;
+        }
+
+        // ALL.
+        if ($sched->schedulesetup) {
+            ksort($schedule, SORT_NUMERIC);
+            $courseext->schedule = $schedule;
+            $courseext->scheduleexists = true;
+            if ((is_object($sched->tagset) || is_array($sched->tagset)) and $sched->tagsinsched) {
+                // Checks to see if there actually are any relevant tags, when tags are turned on in the schedule.
+                foreach ($sched->tagset as $tagkey => $tag) {
+                    if (isset($sched->schedtag[$tagkey]) && $sched->schedtag[$tagkey]) {
+                        $heading = 'head' . $tagkey;
+                        $courseext->$heading = $tag;
+                        $courseext->tagsinsched = true;
+                    }
+                }
+            }
+            $courseext->schedheads = [
+                "section" => $courseext->weekly ? get_string('week', 'cado') : get_string('section', 'cado'),
+                "startdate" => get_string('weekdate', 'cado'),
+                "name" => get_string('topic', 'cado'),
+                "task" => get_string('task', 'cado'),
+                "date" => get_string('datedue', 'cado'),
+            ];
+        }
+
+        return $courseext;
+    }
+    /**
+     * Generate the start of the schedule table, topic headings and weeks.
+     *
+     */
+    private function startschedule2() {
+        global $DB;
+        $weekly = $this->course->format == "weeks";
+        $weeks = [];
+        $returned = $DB->get_records('course_sections', ['course' => $this->course->id]);
+        foreach ($returned as $topic) {
+            $descriptor = $topic->name ? $topic->name : strip_tags($topic->summary);
+            // Use the topic name in the schedule, if empty use the summary.
+            $descriptor = strtr($descriptor, array_flip(get_html_translation_table(HTML_ENTITIES, ENT_QUOTES)));
+            $week = [
+                'section' => $topic->section,
+                'name' => $descriptor,
+                'startdate' => $weekly && ($topic->section != "0") ?
+                    $this->usetime(strtotime( '+' . ($topic->section - 1) . ' weeks', $this->course->startdate), -1) : null,
+                'tasks' => [],
+                'sum' => 0
+            ];
+            $weeks[(int)$topic->section] = $week;
+        }
+        $numweeks = 0;
+        if (get_config('cado')->sumschedule) {
+            $numweeks = count($weeks);
+            $weeks[$numweeks] = ['section' => "", 'name' => get_string('schedulesum', 'cado'), 'tasks' => [], 'sum' => true];
+        }
+        return [$weeks, $numweeks];
+    }
+    /**
+     * Generate the module sections of the report.
+     *
+     * @param string $modtype is the module type, either 'quiz', 'forum', or 'assign'
+     * @param stdClass $thismod is the module database record
+     * @param mod_cado_check $sched which gets updated with tag entries
+     * @param array $schedule contains all the schedule info
+     * @param array $totalrow contains number of sections
+     */
+    private function getmoddetails2($modtype, $thismod, $sched, &$schedule, $totalrow) {
+        $quiz = $modtype == 'quiz';
+        $forum = $modtype == 'forum';
+        $assign = $modtype == 'assign';
+        $contents = []; // Returned.
+        $thisrubric = $assign || $forum ? $this->get_rubric($thismod->id) : [];
+
+        $dates = [];
+        $completion = [];
+        if ($forum) {
+            $this->labelout($dates, get_string('duedate', 'forum'), $this->usetime($thismod->forumduedate));
+            $this->labelout($dates, get_string('cutoffdate', 'forum'), $this->usetime($thismod->forumcutoffdate));
+            $this->labelout($completion, get_string('completiondiscussions', 'forum'), $thismod->completiondiscussions);
+            $this->labelout($completion, get_string('completionreplies', 'forum'), $thismod->completionreplies);
+            $this->labelout($completion, get_string('completionposts', 'forum'), $thismod->completionposts);
+        };
+        if ($assign) {
+            $this->labelout($dates, get_string('duedate', 'assign'), $this->usetime($thismod->assignduedate));
+            $this->labelout($dates, get_string('cutoffdate', 'assign'), $this->usetime($thismod->assigncutoffdate));
+        };
+        if ($quiz) {
+            $this->labelout($dates, get_string('quizclose', 'quiz'), $this->usetime($thismod->quizduedate));
+            $this->labelout($dates, get_string('quizopen', 'quiz'), $this->usetime($thismod->timeopen));
+            $this->labelout($completion, get_string('timelimit', 'quiz'),
+                $thismod->timelimit == "0" ? get_string('notapplicable', 'cado') : intval($thismod->timelimit / 60) );
+            $this->labelout($completion, get_string('attempts', 'quiz'),
+                $thismod->attempts == "0" ? get_string('notapplicable', 'cado') : $thismod->attempts );
+        };
+        $this->labelout($dates, get_string("{$modtype}expectcompleted", 'cado'), $this->usetime($thismod->completionexpected));
+        $intro = "{$modtype}intro";
+        $name = "{$modtype}name";
+        $contents = [ // Seems to need automatically defined keys for mustache.
+            'module' => $modtype,
+            'cmodid' => $thismod->id,
+            'name' => htmlspecialchars_decode($thismod->$name),
+            'link' => new moodle_url("/mod/{$modtype}/view.php", ['id' => $thismod->id]),
+            'intro' => $thismod->$intro,
+            'introexists' => $intro == true,
+            'dates' => $dates,
+            'dateexists' => !empty($dates),
+            'completion' => $completion,
+            'completionexists' => !empty($completion),
+            'extra' => $sched->get_tags($thismod->id),
+            'rubric' => $thisrubric,
+            'rubricexists' => !empty($thisrubric)
+        ];
+        // Store the link as a string.
+        $contents['link'] = $contents['link']->out();
+
+        if ($sched->schedulesetup) {
+            $duedate = "{$modtype}duedate";
+            $cutoffdate = "{$modtype}cutoffdate";
+            $priority1 = $thismod->$duedate;
+            $priority2 = $thismod->$cutoffdate;
+            $priority3 = $thismod->completionexpected;
+            $orderdate = $priority1 ? $priority1 : ($priority2 ? $priority2 : $priority3);
+            $scheduleentry = [
+                'name' => $contents['name'],
+                'date' => $this->usetime($orderdate, 1)
+            ];
+            if ($contents['extra']) {
+                foreach ($contents['extra'] as $tagdetails) {
+                    $scheduleentry = array_merge($scheduleentry , [$tagdetails['tagcode'] => $tagdetails['tagcontent']]);
+                    if ( is_numeric($tagdetails['tagcontent']) && $totalrow) { // Then add up tag values.
+                        if (!isset($schedule[$totalrow]['tasks'][$tagdetails['tagcode']])) {
+                            $schedule[$totalrow]['tasks'][$tagdetails['tagcode']] = 0;
+                        }
+                        $schedule[$totalrow]['tasks'][$tagdetails['tagcode']] += $tagdetails['tagcontent'];
+                    }
+                }
+            }
+            $contents["extraexists"] = !empty($contents['extra']);
+            $schedule[(int)$thismod->section]["tasks"][] = $scheduleentry;
+        }
+        return $contents;
+    }
+    /**
+     * Does a check that a value exists, and if so adds a label and appends to array.
+     *
+     * @param array $addarray.
+     * @param string $thislabel.
+     * @param string $thisvalue.
+     */
+    private function labelout(&$addarray, $thislabel, $thisvalue) {
+        if ($thisvalue) {
+            $addarray[] = ["label" => $thislabel, "value" => $thisvalue];
+        }
+    }
+    /**
+     * From unix time, returns either userdate or "".
+     *
+     * @param int $inttime is the time given: null, 0 or other int.
+     * @param int $short is the format to use; 1 for with time, -1 for no time, 0 for full.
+     */
+    private function usetime($inttime, $short = 0) {
+        if ($inttime === null) {
+            return null;
+        } else if ($inttime == 0) {
+            return null;
+        } else if ($short == 1) {
+            return userdate($inttime, get_string('strftimedatetimeshort', 'langconfig'));
+        } else if ($short == -1) {
+            return userdate($inttime, get_string('strftimedatefullshort', 'langconfig'));
+        } else {
+            return userdate($inttime, get_string('strftimedatetime', 'langconfig'));
+        }
+    }
+    /**
+     * Runs the SQL Query.
+     *
+     * @param array $modarray list of modules to be included.
+     * @param array $sqlparams = ['course' => $courseid, 'groupingid' => $grouping, 'visible' => $visible].
+     */
+    private function getcadodata($modarray, $sqlparams) {
+        global $DB;
+        if (empty($modarray)) {
+            return [];
+        }
+        list($insql, $inparams) = $DB->get_in_or_equal($modarray, SQL_PARAMS_NAMED, 'type');
+        $sqlparams += $inparams;
+        $forum = in_array('forum', $modarray);
+        $quiz = in_array('quiz', $modarray);
+        $assign = in_array('assign', $modarray);
+
+        // MySQL prior to v8 can't handle 'with' constructs.
+
+        // Get all the groups that may access each activity module.
+        $modgroups = "SELECT cm.id cmod, cm.instance, gm.id modgroup, mo.name modtype, cm.groupingid,
+            cm.completionexpected, cs.section
+            FROM {course} c
+                JOIN {course_modules} cm on cm.course = c.id
+                JOIN {modules} mo on mo.id = cm.module
+                JOIN {course_sections} cs on cm.course = cs.course and cm.section = cs.id
+                LEFT JOIN {groupings} ggm on ggm.id =  cm.groupingid
+                LEFT JOIN {groupings_groups} gggm on gggm.groupingid = ggm.id
+                LEFT JOIN {groups} gm on gggm.groupid = gm.id
+            WHERE c.id=:course and cm.visible >= :visible and mo.name $insql
+                and ((cm.completion <> 0 and c.enablecompletion = 1) or c.enablecompletion = 0)";
+
+        // Get all the groups that are in our target grouping.
+        $coursegrouping = "SELECT g.id coursegroup
+            FROM {groupings} gg
+                JOIN {groupings_groups} ggg on ggg.groupingid = gg.id
+                JOIN {groups} g on  ggg.groupid = g.id
+            WHERE gg.id = :groupingid";
+
+        // Find all the activities that have groups accessing that activity that are in our target grouping,
+        // or activities that do not have grouping restrictions.
+        $chosenmods = "SELECT distinct mg.cmod id, mg.instance, mg.modtype, mg.completionexpected, mg.section
+            FROM ( $modgroups ) mg
+                LEFT JOIN ( $coursegrouping ) cg on cg.coursegroup = mg.modgroup
+            WHERE mg.groupingid= 0 or cg.coursegroup = mg.modgroup";
+
+        // Access all the mod info now given that we have already gathered half the information.
+        $sqlselect = "SELECT cm.* ";
+        $sqlfroms = "
+            FROM ($chosenmods ) cm ";
+        $sqlorderby = "
+            ORDER BY cm.modtype ";
+        if ($forum) {
+            $sqlselect .= ", f.name forumname, f.intro forumintro
+                , f.duedate forumduedate, f.cutoffdate forumcutoffdate
+                , completiondiscussions, completionreplies, completionposts";
+            $sqlfroms .= "
+                LEFT JOIN {forum} f on f.id = cm.instance and cm.modtype = 'forum' ";
+            $sqlorderby .= ", f.duedate";
+        }
+        if ($quiz) {
+            $sqlselect .= ", q.name quizname, q.intro quizintro
+                , timeclose quizduedate, timeopen, timelimit, attempts, (timeclose + timelimit) quizcutoffdate ";
+            $sqlfroms .= "
+                LEFT JOIN {quiz} q on q.id = cm.instance and cm.modtype = 'quiz' ";
+            $sqlorderby .= ", timeclose";
+        }
+        if ($assign) {
+            $sqlselect .= ", a.name assignname, a.intro assignintro
+                , a.duedate assignduedate, a.cutoffdate assigncutoffdate ";
+            $sqlfroms .= "
+                LEFT JOIN {assign} a on a.id = cm.instance and cm.modtype = 'assign' ";
+            $sqlorderby .= ", a.duedate";
+        }
+        $sqlorderby .= ", cm.completionexpected";
+
+        $sql = $sqlselect . $sqlfroms . $sqlorderby;
+        return $DB->get_records_sql($sql, $sqlparams);
     }
 }

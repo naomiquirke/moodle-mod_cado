@@ -44,7 +44,8 @@ class mod_cado_translatecado extends mod_cado_cado{
         $result->cadobiblio = $this->instance->cadobiblio;
         $result->cadocomment = $this->instance->cadocomment;
         $result->cadointro = $this->instance->cadointro;
-        $result->groupingname = $this->groupingid ? $DB->get_record('groupings', array('id' => $this->groupingid), 'name')->name : null;
+        $result->groupingname = $this->groupingid ?
+            $DB->get_record('groupings', array('id' => $this->groupingid), 'name')->name : null;
 
         // Maybe add to data just before output.
         $result->fullname = $this->course->fullname;
@@ -88,7 +89,7 @@ class mod_cado_translatecado extends mod_cado_cado{
         $result->$existsname = $rows->length - 1; // This is zero if no thead.
         if ($result->$existsname) {
             $result->$type = [];
-            for ($i = 3; $i <= $result->$existsname;) { // $i increments in the function.
+            for ($i = 3; $i <= $result->$existsname;) { // Note $i increments in the function.
                 if (is_object($rows->item($i)) && is_object($rows->item($i)->attributes->item(0))) {
                     list($i, $returned) = $this->get_items($rows, 0, $i);
                     $returned->module = $type;
@@ -153,7 +154,7 @@ class mod_cado_translatecado extends mod_cado_cado{
         // Extra: Tags.
         $thismod->extra = [];
         $rows = $items->item($num)->childNodes;
-        for ($i = 1; $i <= ($rows->length - 1); $i += 2) { // $i starts at 1, there is no heading.
+        for ($i = 1; $i <= ($rows->length - 1); $i += 2) { // Here $i starts at 1, there is no heading.
             $thismod->extra[] = (object) [
                 'tagheading' => $rows->item($i)->childNodes->item(1)->childNodes->item(0)->nodeValue,
                 'tagcontent' => $rows->item($i)->childNodes->item(3)->childNodes->item(0)->nodeValue,
