@@ -198,19 +198,19 @@ class mod_cado_cado {
      */
     public function cadogenerate($reportrenderer) {
         global $USER;
-        $genwhat2 = $this->report_course2();
-        $genwhat2->summary = mod_cado_check::options('summary', 'cadooptions') ? $this->course->summary : null;
-        $genwhat2->fullname = $this->course->fullname;
-        $this->instance->generatedjson = json_encode($genwhat2,
+        $genwhat = $this->report_course();
+        $genwhat->summary = mod_cado_check::options('summary', 'cadooptions') ? $this->course->summary : null;
+        $genwhat->fullname = $this->course->fullname;
+        $this->instance->generatedjson = json_encode($genwhat,
             JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
 
-        if (get_config('cado')->storegenerated) {
+        if (get_config('cado')->storegeneratedhtml) {
             $genwhat->logourl = get_config('cado')->showlogo ? $reportrenderer->get_logo_url() : null;
             $genwhat->sitecomment = mod_cado_check::sitecomment();
             $genwhat->cadointro = $this->instance->cadointro;
             $genwhat->cadocomment = mod_cado_check::options('cadocomment', 'cadooptions') ? $this->instance->cadocomment : null;
             $genwhat->cadobiblio = mod_cado_check::options('cadobiblio', 'cadooptions') ? $this->instance->cadobiblio : null;
-            $this->instance->generatedpage = $reportrenderer->render_course($genwhat);
+            $this->instance->generatedpage = $reportrenderer->render_cado($genwhat);
         }
 
         $this->instance->timegenerated = time();
@@ -292,7 +292,7 @@ class mod_cado_cado {
      * Generate the module specific elements for the CADO report and deal with grouping.
      *
      */
-    private function report_course2() {
+    private function report_course() {
         global $DB;
 
         $courseid = $this->course->id;
@@ -314,7 +314,7 @@ class mod_cado_cado {
             $temparray = [];
             foreach ($allmodinfo as $thismod) {
                 if ($thismod->modtype == $thistype) {
-                    $temparray[] = self::getmoddetails2($thistype, $thismod, $sched, $schedule, $sections);
+                    $temparray[] = $this->getmoddetails($thistype, $thismod, $sched, $schedule, $sections);
                 }
             }
             $exists = $thistype . 'exists';
@@ -388,7 +388,7 @@ class mod_cado_cado {
      * @param array $schedule contains all the schedule info
      * @param array $totalrow contains number of sections
      */
-    private function getmoddetails2($modtype, $thismod, $sched, &$schedule, $totalrow) {
+    private function getmoddetails($modtype, $thismod, $sched, &$schedule, $totalrow) {
         $quiz = $modtype == 'quiz';
         $forum = $modtype == 'forum';
         $assign = $modtype == 'assign';

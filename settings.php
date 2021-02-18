@@ -67,7 +67,10 @@ if ($ADMIN->fulltree) {
         get_string('sitecomment', 'cado'), get_string('sitecomment_desc', 'cado') , ''));
         // Note default param_raw and size textbox fine otherwise add cols, rows.
 
-    $settings->add(new admin_setting_configcheckbox('cado/storegenerated',
-        get_string('storegenerated', 'cado'), get_string('storegenerated_desc', 'cado'), 0));
+    $settings->add(new admin_setting_configcheckbox('cado/storegeneratedhtml',
+        get_string('storegeneratedhtml', 'cado'), get_string('storegenerated_desc', 'cado'), 0));
+
+    $settings->add(new admin_setting_configcheckbox('cado/usehtml',
+        get_string('usehtml', 'cado'), get_string('usehtml_desc', 'cado'), 0));
 
 }

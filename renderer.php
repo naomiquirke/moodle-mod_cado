@@ -37,19 +37,9 @@ class mod_cado_renderer extends plugin_renderer_base {
      * Applies cado.mustache and returns.
      * @param stdClass $data
      */
-    public function render_course($data) {
-        if ($data) {
-            return $this->render_from_template('mod_cado/cado', $data);
-        }
-    }
-
-    /**
-     * Applies cado.mustache and outputs.
-     * @param stdClass $data
-     */
     public function render_cado($data) {
         if ($data) {
-            echo $this->render_from_template('mod_cado/cado', $data);
+            return $this->render_from_template('mod_cado/cadocore', $data);
         }
     }
 
@@ -67,14 +57,6 @@ class mod_cado_renderer extends plugin_renderer_base {
      */
     public function render_form_footer() {
         echo $this->output->footer();
-    }
-
-    /**
-     * Outputs already rendered material.
-     * @param string $already
-     */
-    public function rendered_already($already) {
-        echo $already;
     }
 
     /**

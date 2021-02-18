@@ -123,19 +123,21 @@ if ($showcentral) { // Note now outputting the main report.
     if ($compareid) {
         $myrenderer->render_compare($getcompared);
     } else {
-        $coursegenerated = (object) json_decode($viewedcado->instance->generatedjson, true);
-        // Now add the bits that are in the table or are independent to the individual course details.
-        $coursegenerated->logourl = get_config('cado')->showlogo ? $myrenderer->get_logo_url() : null;
-        $coursegenerated->sitecomment = mod_cado_check::sitecomment();
-        $coursegenerated->cadointro = $viewedcado->instance->cadointro;
-        $coursegenerated->cadocomment = mod_cado_check::options('cadocomment', 'cadooptions') ?
-            $viewedcado->instance->cadocomment : null;
-        $coursegenerated->cadobiblio = mod_cado_check::options('cadobiblio', 'cadooptions') ?
-            $viewedcado->instance->cadobiblio : null;
-        // Finally output.
-echo $myrenderer->render_from_template('mod_cado/cadocore', $coursegenerated);
-
-//        $myrenderer->render_cado($coursegenerated);
+        if (get_config('cado')->usehtml && !empty($viewedcado->instance->generatedpage)) {
+            echo $viewedcado->instance->generatedpage;
+        } else {
+            $coursegenerated = (object) json_decode($viewedcado->instance->generatedjson, true);
+            // Now add the bits that are in the table or are independent to the individual course details.
+            $coursegenerated->logourl = get_config('cado')->showlogo ? $myrenderer->get_logo_url() : null;
+            $coursegenerated->sitecomment = mod_cado_check::sitecomment();
+            $coursegenerated->cadointro = $viewedcado->instance->cadointro;
+            $coursegenerated->cadocomment = mod_cado_check::options('cadocomment', 'cadooptions') ?
+                $viewedcado->instance->cadocomment : null;
+            $coursegenerated->cadobiblio = mod_cado_check::options('cadobiblio', 'cadooptions') ?
+                $viewedcado->instance->cadobiblio : null;
+            // Finally output.
+            echo $myrenderer->render_cado($coursegenerated);
+        }
     }
 }
 if ($reportformat == 'print') {
