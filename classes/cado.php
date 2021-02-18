@@ -327,7 +327,7 @@ class mod_cado_cado {
             ksort($schedule, SORT_NUMERIC);
             $courseext->schedule = $schedule;
             $courseext->scheduleexists = true;
-            if ((is_object($sched->tagset) || is_array($sched->tagset)) and $sched->tagsinsched) {
+            if ((is_object($sched->tagset) || is_array($sched->tagset)) && $sched->tagsinsched) {
                 // Checks to see if there actually are any relevant tags, when tags are turned on in the schedule.
                 foreach ($sched->tagset as $tagkey => $tag) {
                     if (isset($sched->schedtag[$tagkey]) && $sched->schedtag[$tagkey]) {
@@ -372,7 +372,8 @@ class mod_cado_cado {
             $weeks[(int)$topic->section] = $week;
         }
         $numweeks = 0;
-        if (get_config('cado')->sumschedule) {
+        $configuration = get_config('cado');
+        if ($configuration->sumschedule && $configuration->tagschedule) {
             $numweeks = count($weeks);
             $weeks[$numweeks] = ['section' => "", 'name' => get_string('schedulesum', 'cado'), 'tasks' => [], 'sum' => true];
         }
