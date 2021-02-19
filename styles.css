@@ -79,7 +79,7 @@ div.cadocentral table.cado-inner-table {
 
 .path-mod-cado [id^="cado"].cado-othermissing,
 .path-mod-cado p.cado-othermissing,
-.path-mod-cado div.othermissing {
+.path-mod-cado div.cado-othermissing {
     background-color: lightgreen;
 }
 

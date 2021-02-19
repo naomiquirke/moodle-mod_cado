@@ -401,27 +401,28 @@
   <div id="cad-title" class = "cado-title">
     <h1>{{fullname}}</h1>
     <h3>{{# str }} cadotitle, mod_cado {{/ str }}          
-        <span id="cado-grouping">
-          {{#groupingname}}
-          {{# str }} forgroup, mod_cado {{/ str }} {{groupingname}}
-          {{/groupingname}} 
+        {{#groupingname}}
+        <span>{{# str }} forgroup, mod_cado {{/ str }}</span>
+        <span id="cado-grouping" {{#dg}}class="{{dg}}"{{/dg}}>
+           {{groupingname}}
         </span>         
+        {{/groupingname}} 
     </h3>
   </div>
   <div style="clear:both;">
     <hr>
   </div>
   {{#cadointro}} 
-  <div id="cado-intro">{{{cadointro}}}</div>
+  <div id="cado-intro" {{#di}}class="{{di}}"{{/di}}>{{{cadointro}}}</div>
   {{/cadointro}}
   {{#summary}}       
   <h2>{{# str }} description, mod_cado {{/ str }}</h2>
-  <div id="cado-coursesummary">{{{summary}}}</div>
+  <div id="cado-coursesummary" {{#ds}}class="{{ds}}"{{/ds}}>{{{summary}}}</div>
   {{/summary}}
   {{#scheduleexists}}{{> mod_cado/cadoschedule}}{{/scheduleexists}}
-  {{#cadocomment}}<div id="cado-comment">{{{cadocomment}}}</div>{{/cadocomment}}
+  {{#cadocomment}}<div id="cado-comment" {{#dc}}class="{{dc}}"{{/dc}}>{{{cadocomment}}}</div>{{/cadocomment}}
   {{#forumexists}}
-  <div id="cado-forum">
+  <div id="cado-forum" {{#df}}class="{{df}}"{{/df}}>
     <h2 class="cad-header">{{# str }} forum, mod_cado {{/ str }}</h2>
     {{#forum}}{{> mod_cado/cadomodule}}{{/forum}}
   </div>
@@ -443,6 +444,6 @@
   <div id="cado-sitecomment">{{{sitecomment}}}</div>
   {{/sitecomment}}
   {{#cadobiblio}}
-  <div id="cado-biblio">{{{cadobiblio}}}</div>
+  <div id="cado-biblio" {{#db}}class="{{db}}"{{/db}}>{{{cadobiblio}}}</div>
   {{/cadobiblio}}
 </div>

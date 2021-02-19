@@ -41,208 +41,212 @@ class mod_cado_comparecado {
      */
     public function compare($origincado, $otherid) {
         global $DB;
-        $result = new stdClass;
+        $result = [];
         $othercmod = $DB->get_record('course_modules', ['id' => $otherid])->instance;
-        $othercado = mod_cado_cado::getcadorecord($othercmod);
-        $othergenerated = $othercado->generatedpage;
-        $origingenerated = $origincado->generatedpage;
-        $result->compareheaderorigin = get_string('compareheaderorigin', 'cado', $origincado->name);
-        $result->compareheaderother = get_string('compareheaderother', 'cado', $othercado->name);
-        $result->commentdiff = (strcasecmp($othercado->approvecomment, $origincado->approvecomment) != 0);
+        $othercado = $DB->get_record('cado', ['id' => $othercmod]);
+        if (empty($othercado->generatedjson)) {
+            // Then CADO must have been generated prior to version 3.0 upgrade, so needs to be translated to JSON.
+            $newothercado = new mod_cado_translatecado($othercado, $othercmod);
+            $othercado = $newothercado->translate();
+        }
+        $otherjson = json_decode($othercado->generatedjson, true);
+        $originjson = json_decode($origincado->generatedjson, true);
+        // Copy of origin JSON.  Can eventually just add to it.
+        $newjson = json_decode($origincado->generatedjson, true);
 
-        // Check to see if not all identical.  Complete identicality will only occur in the same course,
-        // otherwise the cmids will be different. Note we don't care about case, otherwise use strcmp.
-        if (strcasecmp($origingenerated, $othergenerated) != 0) {
-            list($allmatched, $updated) = $this->finddiff($origingenerated, $othergenerated);
-        } else { // Matched and in the same course.
-            $allmatched = true;
+        $result["compareheaderorigin"] = get_string('compareheaderorigin', 'cado', $origincado->name);
+        $result["compareheaderother"] = get_string('compareheaderother', 'cado', $othercado->name);
+        $result["commentdiff"] = (strcasecmp($othercado->approvecomment, $origincado->approvecomment) != 0);
+
+        $allmatched = true;
+        // First, the DB items.  These must be added directly as entries into the JSON for compare.
+        $items = ['intro', 'comment', 'biblio'];
+        foreach ($items as $item) {
+            $descriptor = 'd' . substr($item, 0, 1);
+            $fieldname = 'cado' . $item;
+            $allmatched = $this->applydiff($origincado->$fieldname, $othercado->$fieldname, $descriptor, $fieldname
+                , null, null, $newjson) && $allmatched;
         }
+        // Next the top level items.
+        $allmatched = $this->applydiff($originjson["groupingname"], $otherjson["groupingname"], "dg"
+            , "grouping", null, null, $newjson) && $allmatched;
+        $allmatched = $this->applydiff($originjson["summary"], $otherjson["summary"], "ds"
+            , "summary", null, null, $newjson) && $allmatched;
+
+        // New we need to do the modules.
+        $mods = ['forum', 'quiz', 'assign'];
+        foreach ($mods as $modtype) {
+            $descriptor = 'd' . substr($modtype, 0, 1);
+            $exists = $modtype . 'exists';
+            // Re the existence of the modtype, just apply same logic as applydiff function.
+            if ((!$originjson[$exists]) && (!$otherjson[$exists])) {
+                continue;
+            } else if (!$otherjson[$exists]) {
+                $newjson[$descriptor] = "cado-othermissing";
+                $allmatched = false;
+            } else if (!$originjson[$exists]) {
+                $newjson[$descriptor] = "cado-originmissing";
+                $newjson[$exists] = 1;
+                $newjson[$modtype] = $otherjson[$modtype];
+                $allmatched = false;
+            } else {
+                // Must do a matrix compare, because we don't want to just compare module ids because of backup restores.
+                $allmatched = $this->compare_type($modtype, $originjson, $otherjson, $newjson) && $allmatched;
+            }
+        }
+
+        // Make an overall statement.
         if ($allmatched) {
-            $result->subheader = get_string('comparisonidentical', 'cado');
-            $result->content = $origingenerated;
+            $result["subheader"] = get_string('comparisonidentical', 'cado');
         } else {
-            $result->subheader = get_string('comparisondifferent', 'cado');
-            $result->content = $updated;
+            $result["subheader"] = get_string('comparisondifferent', 'cado');
         }
+        $result["content"] = $newjson;
         return $result;
     }
 
     /**
-     * To find the differences between origin and othe
+     * To get string differences between origin and other cado element.
      *
-     * @param string $origingenerated is the central part of origin cado
-     * @param string $othergenerated is the central part of other cado
-     * @return array [boolean $allmatched, string $updated the compared central part of cado with format updates]
+     * @param string $a is the string from the origin cado
+     * @param string $b is the string from the other cado
+     * @param string $diffdescriptor is the object name / moustache tag to add if required
+     * @param string $childelement is the compared element
+     * @param string $newelement is empty if we are not using indices, otherwise an 'index' for a potential new element
+     * @param array $otherelement is empty if not using indices, otherwise the entire entry for the potential new element
+     * @param array &$parentelement is the array at the parent element level to add to if required
      */
-    private function finddiff($origingenerated, $othergenerated) {
-        $allmatched = true; // Assume all matching until proven not.
-        // Now to setup the id labels arrays.
-        $outerlabels = ['grouping', 'intro', 'coursesummary', 'schedule', 'comment', 'forum', 'quiz'
-            , 'assign', 'sitecomment', 'biblio'];
-        $originarray = explode('id="cado-', $origingenerated);
-        $otherarray = explode('id="cado-', $othergenerated);
+    private function applydiff($a, $b, $diffdescriptor, $childelement, $newelement, $otherelement, &$parentelement) {
+        $strippeda = trim(strip_tags($a));
+        $strippedb = trim(strip_tags($b));
+        if (empty($strippeda) && empty($strippedb)) {
+            return true;
+        } else if (empty($strippeda)) {
+            if (!$newelement) {
+                $parentelement[$childelement] = $b;
+                $parentelement[$diffdescriptor] = "cado-originmissing";
+            } else {
+                $parentelement[$newelement] = $otherelement;
+                $parentelement[$newelement][$diffdescriptor] = "cado-originmissing";
+            }
+        } else if (empty($strippedb)) {
+            if (!$newelement) {
+                $parentelement[$diffdescriptor] = "cado-othermissing";
+            } else {
+                $parentelement[$childelement][$diffdescriptor] = "cado-othermissing";
+            }
+        } else if ($strippeda !== $strippedb) {
+            if (!$newelement) {
+                $parentelement[$diffdescriptor] = "cado-different";
+                // Insert marker at point where difference occurs. This is only of significant use in paragraphs.
+                $newa = substr_replace($a, "\u{2198}", $this->get_diff_pt($a, $b), 0);
+                $parentelement[$childelement] = $newa;
+            } else {
+                $parentelement[$childelement][$diffdescriptor] = "cado-different";
+            }
+        } else {
+            if (!$newelement) {
+                // Just in case these are DB fields not currently present in json, need to add, even if fine.
+                $parentelement[$childelement] = $a;
+            }
+            return true;
+        }
+        return false;
+    }
 
-        (int) $splitcount = 1;
-        foreach ($outerlabels as $value) {
-            // NQ note comparing schedule is really of doubtful value until we get a finer grain compare than we have now.
-            $originstart = strpos($originarray[$splitcount], ">", 0);
-            $origincontent = substr($originarray[$splitcount], $originstart + 1);
-            // Need to keep tags here so we can break down further.
+    /**
+     * To get the difference point in two strings, $a and $b.
+     * Will find first differences even if it is in the html as well.
+     *
+     * @param string $a
+     * @param string $b
+     * @return int position of first difference.
+     */
+    private function get_diff_pt($a, $b) {
+        $a = trim($a);
+        $b = trim($b);
+        $arr1 = str_split($a);
+        $arr2 = str_split($b);
+        $z = strlen($a);
+        for ($i = 0; $i <= $z; $i++) {
+            if ((isset($arr2[$i])) && ($arr1[$i] == $arr2[$i])) {
+                continue;
+            } else {
+                return $i;
+            }
+        }
+        return $i;
+    }
 
-            $otherstart = strpos($otherarray[$splitcount], ">", 0);
-            $othercontent = substr($otherarray[$splitcount], $otherstart + 1);
-            $a1 = $this->baseclean($origincontent);
-            $a2 = $this->baseclean($othercontent);
-            $result = strcasecmp( $a1 , $a2 );
-            if ($result != 0) {
-                if ( in_array($value, ['forum', 'quiz', 'assign'])) {
-                    $origininnerarray = explode('id="cadoi-', $origincontent);
-                    $ori1 = array_map('self::cleanline', $origininnerarray);
-                    $otherinnerarray = explode('id="cadoi-', $othercontent);
-                    $oth1 = array_map('self::cleanline', $otherinnerarray);
-
-                    // Make new arrays with key as cmid.
-                    $origininner = [];
-                    foreach ($ori1 as $value1) {
-                        list($infotype, $cmid, $content) = $value1;
-                        if (!is_numeric($cmid)) {
-                            continue;
-                        } // Skip the blurb at the beginning of the section; there will be no cmid found for this section.
-                        $origininner[$cmid][$infotype] = $content;
+    /**
+     * To find the differences between origin and other.
+     * Origin & other arrays will be changed in the process, as every time we find a match or identify a difference
+     * from the origin, we will note in final, and add a note in the match arrays.
+     *
+     * @param string $type is the mod type.
+     * @param array $origin is the original cado report json.
+     * @param array $other is the compared cado report json.
+     * @param array $final is the comparison output.
+     * @return boolean which says if everything matched.
+     */
+    private function compare_type($type, $origin, $other, &$final) {
+        $matched = true;
+        // Check all first for cmid associations, only then for name associations, and last opp intro associations.
+        foreach (["cmodid", "name", "intro"] as $matchtype) {
+            foreach ($origin[$type] as $orikey1 => &$orimod) {
+                // Ignore origins that have already been matched.
+                if (isset($orimod["done"])) {
+                    continue;
+                }
+                foreach ($other[$type] as $othkey1 => &$othmod) {
+                    // Ignore others that have already been matched.
+                    if (isset($othmod["done"])) {
+                        continue;
                     }
-                    $otherinner = [];
-                    foreach ($oth1 as $value2) {
-                        list($infotype, $cmid, $content) = $value2;
-                        if (!is_numeric($cmid)) {
-                            continue;
-                        } //Skip the blurb at the beginning of the section; there will be no cmid found for this section.
-                        $otherinner[$cmid][$infotype] = $content;
-                    }
-
-                    // Now check for matches from origin to other.
-                    foreach ($origininner as $orikey1 => $orival1) {
-                        foreach ($otherinner as $othkey1 => $othval1) {
-                            if (array_values($orival1) == array_values($othval1)) {// Content match.
-                                $otherinner[$othkey1]['name'] = 'done';
-                                continue 2; // Now go to next $orival1.
-                            }
-                            if (isset($orival1['name']) && isset($othval1['name']) && ($orival1['name'] == $othval1['name'])) {
-                                // Then activities match, but we know the content doesn't.
-                                foreach ($orival1 as $orikey2 => $orival2) { // The key here is the descriptor name.
-                                    if (!isset($othval1[$orikey2])) {// A component of an activity is missing.
-                                        $class = ' class="cado-othermissing"';
-                                        $idname = $value . '-' . $orikey2 . '_' . $orikey1 . '"';
-                                        $originarray[$splitcount] = $this->addalert($originarray[$splitcount], $idname, $class);
-                                        $allmatched = false;
-                                    } else if (strcmp($orival2 , $othval1[$orikey2]) != 0) {
-                                        // Mark the descriptor as different.
-                                        $class = ' class="cado-different"';
-                                        $idname = $value . '-' . $orikey2 . '_' . $orikey1 . '"';
-                                        $originarray[$splitcount] = $this->addalert($originarray[$splitcount], $idname, $class);
-                                        $allmatched = false;
-                                    }
-                                }
-                                // Now set the name as 'done' so that we don't find it again.
-                                $otherinner[$othkey1]['name'] = 'done';
-                                continue 2; // Now go to next $orival1.
-                            }
-                            // Otherwise see if can find match on next loop; if not, then note after the second foreach.
+                    // Find association.
+                    if ($orimod[$matchtype] === $othmod[$matchtype]) {
+                        // Check for partial differences, no exact match search since doesn't add efficiency.
+                        // Then add change record into the final json.
+                        if ($matchtype == "cmodid") {
+                            // Name difference, relevant only when matching cmodid.
+                            $matched = $this->applydiff($orimod["name"], $othmod["name"], "dmn"
+                                , "name", null, null, $final[$type][$orikey1]) && $matched;
                         }
-                        // If arrived here then missing entire activities from other.
-                        $class = ' class="cado-othermissing"';
-                        $idname = $value . '-name_' . $orikey1 . '"';
-                        $originarray[$splitcount] = $this->addalert($originarray[$splitcount], $idname, $class);
-                        $allmatched = false;
+                        // Dates difference.
+                        // Completion difference.
+                        // Tags difference.
+                        // Rubric difference.
+                        // Now make note of the two matching modules, so they don't get matched again (eg in case of duplicates).
+                        $orimod["done"] = $matchtype . ' ' . $orikey1;
+                        $othmod["done"] = $matchtype . ' ' . $othkey1;
+                        // Now break the inner 'other' loop, because we don't want to trigger the not found code @ foreach end.
+                        continue 2;
                     }
-                    // Now check for missing matches from other to origin.
-                    foreach ($otherinner as $othval2) {
-                        if (!isset($othval2['name']) or $othval2['name'] == 'done') {
-                            continue;
-                        } // Not proper section, or already matched.
-                        $classandcomment = '<br><div class="cado-originmissing">'
-                            . get_string('comparemissing', 'cado') . $othval2['name'] .
-                            '</div><br>'; // Add a new comment and apply class to it.
-                        $insertposition = strpos($originarray[$splitcount], '</h2>');
-                        // If there is no appropriate heading, then the above will be 0,
-                        // so just insert after first div of the section instead;
-                        // need to insert after search sequence, so add number of characters in the search sequence.
-                        $insertposition = $insertposition == false ? strpos($originarray[$splitcount], '</div>') + 6
-                            : $insertposition + 5;
-                        $originarray[$splitcount] = substr_replace($originarray[$splitcount], $classandcomment
-                            , $insertposition, 0);
-                        $allmatched = false;
-                    }
-                } else { // Not a module so don't have to do such exhaustive treatment if there is no match.
-                    $class = ' class="cado-different"';
-                    $originarray[$splitcount] = substr_replace($originarray[$splitcount], $class, $originstart, 0);
-                    $allmatched = false;
                 }
             }
-            $splitcount++;
         }
-        $updated = implode('id="cado-', $originarray);
-        return [$allmatched, $updated];
-    }
-
-    /**
-     * To find the core text to be compared
-     *
-     * @param string $oa is the string to label and tidy
-     * @return array of three string variables (infotype) the broad section the text is in, (cmid) course module id; and (content)
-     *
-     */
-    public static function cleanline($oa) {
-        $firstbreak = strpos($oa, '-', 1);
-        if ($firstbreak === false) {
-            return false;
-        } //Then there are no recognizable ids in here at all.
-        $secondbreak = strpos($oa, '_');
-        $thirdbreak = strpos($oa, '">');
-        $thistype = substr( $oa, $firstbreak + 1 , $secondbreak - $firstbreak - 1);
-
-        $ok = substr( $oa, $thirdbreak + 2 ); // It is +2 because we have two characters being searched for rather than one.
-        $ok = strip_tags($ok);
-        $chars = array("\r\n", "\n", "\r", "\t", "\0", "\x0B", "&#9741;"); // Remove the last character in list because I added it.
-        $ok = str_replace($chars, "", $ok);
-        $ok = preg_replace('/\xc2\xa0/', ' ', $ok);
-
-        if ($thistype <> "name") {
-            // If it is a name, then leave the white space in it because it gets used for display when there is an item missing.
-            $ok = str_replace(" ", "", $ok);
-        } else {
-            trim($ok);
+        // Anything not marked done is missing from one of the records.
+        // First find missing others.
+        foreach ($origin[$type] as $orikey => &$orimod) {
+            if (isset($orimod["done"])) {
+                continue;
+            }
+            $final[$type][$orikey]["dm"] = "cado-othermissing";
+            $matched = false;
+            $orimod["done"] = "othermissing" . ' ' . $orikey; // Not needed at this stage except for testing.
         }
-        $arraytoreturn = [$thistype, substr( $oa, $secondbreak + 1, $thirdbreak - $secondbreak - 1), $ok];
-        return $arraytoreturn;
+        // Then find missing origins.
+        foreach ($other[$type] as &$othmod) {
+            if (isset($othmod["done"])) {
+                continue;
+            }
+            $othmod["dm"] = "cado-originmissing";
+            $final[$type][] = $othmod;
+            $matched = false;
+            $othmod["done"] = "originmissing"; // Not needed at this stage except for testing.
+        }
+        error_log("\r\n" . time() . "****** origin *****" . "\r\n" . print_r($origin[$type], true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
+        error_log("\r\n" . time() . "****** other *****" . "\r\n" . print_r($other[$type], true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
+        return $matched;
     }
-
-    /**
-     * This gets used for the quick whole document check.
-     *
-     * @param string $oa is the string in which to add a string
-     */
-    private function baseclean($oa) {
-        $ok = strip_tags($oa);
-        $chars = array("\r\n", "\n", "\r", "\t", "\0", "\x0B", " ");
-        $ok = str_replace($chars, "", $ok);
-        $ok = preg_replace('/\xc2\xa0/', '', $ok);
-        return $ok;
-    }
-
-    /**
-     * Insert a string into string after a particular string
-     *
-     * @param string $base is the string in which to add a string
-     * @param string $positioning is the string after which $note should be added
-     * @param string $note is the string to be inserted
-     *
-     */
-    private function addalert($base, $positioning, $note) {
-        $lengthid = strlen($positioning);
-        $noteplace = strpos($base, $positioning);
-        return substr_replace($base, $note, $noteplace + $lengthid, 0);
-    }
-
-
-
 }

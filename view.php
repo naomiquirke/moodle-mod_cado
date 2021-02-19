@@ -43,7 +43,6 @@ if (empty($viewedcado->instance->generatedjson) && $viewedcado->instance->timege
 if ($compareid && has_capability('mod/cado:compare', $context)) {
     $compared = new mod_cado_comparecado();
     $getcompared = $compared->compare($viewedcado->instance, $compareid);
-
 } else {
     $compareid = null;
 }

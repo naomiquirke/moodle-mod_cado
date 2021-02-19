@@ -24,30 +24,49 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Creates JSON CADO record from HTML record. Used for CADOs created prior to version 3.0.
+ * Creates generated JSON from HTML record. Used for CADOs created prior to version 3.0.
  *
  * @package   mod_cado
  * @copyright 2021 Naomi Quirke
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mod_cado_translatecado extends mod_cado_cado{
+class mod_cado_translatecado {
+    /** @var object instance of cado */
+    public $instance;
+
+    /**
+     * Creates a CADO image.
+     *
+     * @param stdClass $instance CADO database entry
+     */
+    public function __construct($instance) {
+        $this->instance = $instance;
+    }
 
     /**
      * Translates a CADO instance.
      */
     public function translate() {
         global $DB, $PAGE;
+        list($course, $cm) = get_course_and_cm_from_instance($this->instance, 'cado', $this->instance->course);
         $result = new stdClass;
-        $result->groupingname = $this->groupingid ?
-            $DB->get_record('groupings', array('id' => $this->groupingid), 'name')->name : null;
-        $result->fullname = $this->course->fullname;
+        /*
+        It is easier to get grouping name through course module rather than off the html because the grouping name
+        string is embedded with other text. Grouping is not something that is changed once a CADO is approved;
+        because of access issues it rightfully should be reported as what is in the cm even if the name is now 'incorrect'
+        on the CADO with respect to cm, access by particular groups is more important.
+        */
+        $result->groupingname = $cm->groupingid ?
+            $DB->get_record('groupings', array('id' => $cm->groupingid), 'name')->name : null;
 
         $thispage = $this->instance->generatedpage;
         $dom = new DOMDocument();
         $dom->loadHTML($thispage);
 
+        $result->fullname = $this->innerxml($dom->getElementById("cad-title")->childNodes->item(1));
         $result->summary = $this->innerxml($dom->getElementById("cado-coursesummary")->childNodes->item(3));
 
+        // We use the DB version of intro, comment and biblio, rather than picking them up off the HTML.
         // SCHEDULE **********************************************************************************************.
         $header = $dom->getElementsByTagName("thead");
         $result->scheduleexists = $header->length; // This is zero if no thead.
@@ -60,7 +79,9 @@ class mod_cado_translatecado extends mod_cado_cado{
         $this->get_modtype($result, $dom, 'forum');
         $this->instance->generatedjson = json_encode($result,
             JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
-        self::updatecadorecord($this->instance);
+        $this->instance->timemodified = time();
+        $DB->update_record('cado', $this->instance);
+        return $this->instance;
     }
 
     /**

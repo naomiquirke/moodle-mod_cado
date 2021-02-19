@@ -91,58 +91,60 @@
         }
     }
 }}
-    <h2 id="cadoi-{{module}}-name_{{cmodid}}">{{name}} <a class="cad-link" href="{{link}}" target="_blank">&#9741;</a></h2>
-    {{#dateexists}}
-    <h4>{{# str }} duedates, mod_cado {{/ str }}</h4>
-    <div id="cadoi-{{module}}-dates_{{cmodid}}">
-        {{#dates}}
-        <div class="row">
-          <div class = "col-sm-3">{{label}}</div>
-          <div class = "col-sm-3">{{value}}</div>
-        </div>
-        {{/dates}}
-    </div>
-    {{/dateexists}}
-    {{#completionexists}}
-    <h4>{{# str }} completion, mod_cado {{/ str }}</h4>
-    <div id="cadoi-{{module}}-completion_{{cmodid}}">
-        {{#completion}}
-        <div class="row">
-          <div class = "col-sm-3">{{label}}</div>
-          <div class = "col-sm-3">{{value}}</div>
-        </div>
-        {{/completion}}
-    </div>
-    {{/completionexists}}
-    {{#extraexists}}
-    <div id="cadoi-{{module}}-extra_{{cmodid}}">
-      {{#extra}}           
-      <div class="row">
-        <div class = "col-sm-3 cad-tag-head"><h4>{{tagheading}}</h4></div>
-        <div class = "col-sm-3"><h4>{{tagcontent}}</h4></div>
+<div {{#dm}}class="{{dm}}"{{/dm}}>
+  <h2 id="cadoi-{{module}}-name_{{cmodid}}" {{#dmn}}class="{{dmn}}"{{/dmn}}>{{name}} <a class="cad-link" href="{{link}}" target="_blank">&#9741;</a></h2>
+  {{#dateexists}}
+  <h4>{{# str }} duedates, mod_cado {{/ str }}</h4>
+  <div id="cadoi-{{module}}-dates_{{cmodid}}">
+      {{#dates}}
+      <div class="row {{dmd}}">
+        <div class = "col-sm-3">{{label}}</div>
+        <div class = "col-sm-3">{{value}}</div>
       </div>
-      {{/extra}}   
+      {{/dates}}
+  </div>
+  {{/dateexists}}
+  {{#completionexists}}
+  <h4>{{# str }} completion, mod_cado {{/ str }}</h4>
+  <div id="cadoi-{{module}}-completion_{{cmodid}}">
+      {{#completion}}
+      <div class="row">
+        <div class = "col-sm-3">{{label}}</div>
+        <div class = "col-sm-3">{{value}}</div>
+      </div>
+      {{/completion}}
+  </div>
+  {{/completionexists}}
+  {{#extraexists}}
+  <div id="cadoi-{{module}}-extra_{{cmodid}}">
+    {{#extra}}           
+    <div class="row">
+      <div class = "col-sm-3 cad-tag-head"><h4>{{tagheading}}</h4></div>
+      <div class = "col-sm-3"><h4>{{tagcontent}}</h4></div>
     </div>
-    {{/extraexists}}
-    {{#introexists}}
-    <div id="cadoi-{{module}}-intro_{{cmodid}}">
-      <p> </p>
-      {{{intro}}}
-      <p> </p>
-    </div>
-    {{/introexists}}
-    {{#rubricexists}}
-    <h4>{{# str }} rubric, mod_cado {{/ str }} </h4>
-    <div id="cadoi-{{module}}-rubric_{{cmodid}}">
-      <table class="table table-hover">
-        <tbody>
-          {{#rubric}}
-            <tr>
-              <td class="cado-rubric-row-head">{{critdesc}}</td>
-              {{#levels}}<td>{{leveldesc}}<br>({{points}})</td>{{/levels}}
-            </tr>
-          {{/rubric}}
-        </tbody>
-      </table><br>
-    </div>
+    {{/extra}}   
+  </div>
+  {{/extraexists}}
+  {{#introexists}}
+  <div id="cadoi-{{module}}-intro_{{cmodid}}">
+    <p> </p>
+    {{{intro}}}
+    <p> </p>
+  </div>
+  {{/introexists}}
+  {{#rubricexists}}
+  <h4>{{# str }} rubric, mod_cado {{/ str }} </h4>
+  <div id="cadoi-{{module}}-rubric_{{cmodid}}">
+    <table class="table table-hover">
+      <tbody>
+        {{#rubric}}
+          <tr>
+            <td class="cado-rubric-row-head">{{critdesc}}</td>
+            {{#levels}}<td>{{leveldesc}}<br>({{points}})</td>{{/levels}}
+          </tr>
+        {{/rubric}}
+      </tbody>
+    </table><br>
+  </div>
   {{/rubricexists}}
+</div>

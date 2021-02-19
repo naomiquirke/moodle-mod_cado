@@ -388,7 +388,7 @@ class mod_cado_cado {
      * @param array $schedule contains all the schedule info
      * @param array $totalrow contains number of sections
      */
-    private function getmoddetails($modtype, $thismod, $sched, &$schedule, $totalrow) {
+    private function getmoddetails($modtype, $thismod, $sched, $schedule, $totalrow) {
         $quiz = $modtype == 'quiz';
         $forum = $modtype == 'forum';
         $assign = $modtype == 'assign';
