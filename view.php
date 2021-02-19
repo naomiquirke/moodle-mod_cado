@@ -55,7 +55,7 @@ $PAGE->set_heading($viewedcado->instance->name);
 
 $myrenderer = $PAGE->get_renderer('mod_cado');
 if ($reportformat == 'print') {
-    echo '<div style = "max-width:98%;">';  // Note try to get this looking ok on printout try: 19cm; 670px.
+    echo '<div class = "cado-outer-print">';  // Note try to get this looking ok on printout try: 19cm; 670px.
 }
 
 // This tests whether a report has yet been generated, if not and capability exists then it will generate.
@@ -70,11 +70,13 @@ if (!$viewedcado->instance->timeapproved) {  // If not approved.
         $cs->statecomment = has_capability('mod/cado:approve', $context) ?
             get_string('notgenerated', 'cado') : get_string('notavailable', 'cado');
         $showcentral = 0;
-    } else { // Note if can generate then ensure generation then display appropriate status state.
-        if ($viewedcado->instance->timegenerated == 0) {  // Note if not generated, then first generate.
+    } else {
+        // If can generate then if necessary first generate.
+        if ($viewedcado->instance->timegenerated == 0) {
             $viewedcado->cadogenerate($myrenderer);
         }
 
+        // Now display appropriate status state.
         if ($viewedcado->instance->timeproposed == 0) { // Note status state for not yet proposed.
             $cs->statecomment = get_string('generateddraft', 'cado',
                 ['genuser' => mod_cado_check::getusername($viewedcado->instance->generateuser)]);
@@ -89,22 +91,22 @@ if (!$viewedcado->instance->timeapproved) {  // If not approved.
         }
 
         if ($viewedcado->instance->approvecomment) {
-            // Note if there is an approve comment available, even if it is not currently approved, then add here.
+            // If there is an approve comment available, even if not currently approved, add here.
             $cs->notapprovedcomment = get_string('notapproved', 'cado');
             // Note cannot add who didn't approve because it may show someone to whom the cado was subsequently proposed.
             // So add this information automatically to approve/not approved comment.
             $cs->approvecomment = $viewedcado->instance->approvecomment;
         }
     }
-} else { // Note is approved.
+} else { // This is when CADO is approved.
+    // First the situation when user can view the workflow status.
     if (has_capability('mod/cado:generate', $context) || has_capability('mod/cado:approve', $context)) {
-        // Note can show workflow status.
         $cs->statecomment = get_string('approvedon', 'cado',
             ['approver' => mod_cado_check::getusername($viewedcado->instance->approveuser)]);
         $cs->approvecomment = $viewedcado->instance->approvecomment;
         $cs->showtime = $viewedcado->instance->timeapproved;
         // Note add time separately so that it can be formatted by user specification.
-    } else { // Note else only has view rights, no approval information.
+    } else { // Now for when reader only has view rights to CADO, not to approval information.
         $cs = null;
     }
     // Make event for viewing approved CADO.
@@ -116,13 +118,14 @@ if (!$viewedcado->instance->timeapproved) {  // If not approved.
 // Now set view completion and then output.
 $completion = new completion_info($course);
 $completion->set_module_viewed($cm);
-$myrenderer->render_form_header();
 
+$myrenderer->render_form_header();
 $myrenderer->render_state($cs);
-if ($showcentral) { // Note now outputting the main report.
+if ($showcentral) { // Now outputting the main report.
     if ($compareid) {
         $myrenderer->render_compare($getcompared);
     } else {
+        // First see if user is to view the HTML version, showing effect of site settings from the time CADO generated.
         if (get_config('cado')->usehtml && !empty($viewedcado->instance->generatedpage)) {
             echo $viewedcado->instance->generatedpage;
         } else {

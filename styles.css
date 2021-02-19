@@ -121,6 +121,9 @@ div.cadocentral table.cado-inner-table {
 }
 
 @media print {
+    .path-mod-cado div.cado-outer-print {
+        max-width:98%;
+    }
     .path-mod-cado a.cad-link {
         color: transparent;
     }
