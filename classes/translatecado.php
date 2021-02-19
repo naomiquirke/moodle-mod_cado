@@ -18,16 +18,16 @@
  * Functions to translate CADO record from HTML version to JSON version.
  *
  * @package   mod_cado
- * @copyright 2020 Naomi Quirke
+ * @copyright 2021 Naomi Quirke
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Changes CADO record from HTML version to JSON version.
+ * Creates JSON CADO record from HTML record. Used for CADOs created prior to version 3.0.
  *
  * @package   mod_cado
- * @copyright 2020 Naomi Quirke
+ * @copyright 2021 Naomi Quirke
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_cado_translatecado extends mod_cado_cado{
@@ -38,24 +38,15 @@ class mod_cado_translatecado extends mod_cado_cado{
     public function translate() {
         global $DB, $PAGE;
         $result = new stdClass;
-
-        // These can eventually just be put in the data just before output.
-
-        $result->cadobiblio = $this->instance->cadobiblio;
-        $result->cadocomment = $this->instance->cadocomment;
-        $result->cadointro = $this->instance->cadointro;
         $result->groupingname = $this->groupingid ?
             $DB->get_record('groupings', array('id' => $this->groupingid), 'name')->name : null;
-
-        // Maybe add to data just before output.
         $result->fullname = $this->course->fullname;
 
-        $origingenerated = $this->instance->generatedpage;
+        $thispage = $this->instance->generatedpage;
         $dom = new DOMDocument();
-        $dom->loadHTML($origingenerated);
+        $dom->loadHTML($thispage);
 
         $result->summary = $this->innerxml($dom->getElementById("cado-coursesummary")->childNodes->item(3));
-        $result->sitecomment = $this->innerxml($dom->getElementById("cado-sitecomment")->childNodes->item(1));
 
         // SCHEDULE **********************************************************************************************.
         $header = $dom->getElementsByTagName("thead");
@@ -67,15 +58,13 @@ class mod_cado_translatecado extends mod_cado_cado{
         $this->get_modtype($result, $dom, 'quiz');
         $this->get_modtype($result, $dom, 'assign');
         $this->get_modtype($result, $dom, 'forum');
-        $dataout = json_encode($result,
+        $this->instance->generatedjson = json_encode($result,
             JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
-
-        error_log("\r\n" . time() . "****** result *****" . "\r\n" . print_r($dataout, true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
-        return $result;
+        self::updatecadorecord($this->instance);
     }
 
     /**
-     * Gets module items.
+     * Gets module types.
      *
      * @param stdClass $result
      * @param DOMDocument $doc
@@ -102,7 +91,7 @@ class mod_cado_translatecado extends mod_cado_cado{
     }
 
     /**
-     * Gets module items.
+     * Gets module items for type.
      *
      * @param DOMNodeList $item
      * @param Boolean $rubric
