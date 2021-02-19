@@ -125,8 +125,8 @@ if ($showcentral) { // Now outputting the main report.
     if ($compareid) {
         $myrenderer->render_compare($getcompared);
     } else {
-        // First see if user is to view the HTML version, showing effect of site settings from the time CADO generated.
-        if (get_config('cado')->usehtml && !empty($viewedcado->instance->generatedpage)) {
+        // First see if user is to view the HTML version, retaining effect of site settings from the time CADO approved.
+        if ($viewedcado->instance->timeapproved && get_config('cado')->usehtml && !empty($viewedcado->instance->generatedpage)) {
             echo $viewedcado->instance->generatedpage;
         } else {
             $coursegenerated = (object) json_decode($viewedcado->instance->generatedjson, true);
