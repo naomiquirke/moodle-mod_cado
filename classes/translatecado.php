@@ -33,14 +33,19 @@ defined('MOODLE_INTERNAL') || die();
 class mod_cado_translatecado {
     /** @var object instance of cado */
     public $instance;
+    /** @var int groupingid of cado */
+    public $groupingid;
 
     /**
      * Creates a CADO image.
      *
      * @param stdClass $instance CADO database entry
      */
-    public function __construct($instance) {
+    public function __construct($instance, $groupingid = null) {
         $this->instance = $instance;
+        if ($groupingid !== null) {
+            $this->groupingid = $groupingid;
+        }
     }
 
     /**
@@ -48,16 +53,19 @@ class mod_cado_translatecado {
      */
     public function translate() {
         global $DB, $PAGE;
-        list($course, $cm) = get_course_and_cm_from_instance($this->instance, 'cado', $this->instance->course);
+        if ($this->groupingid === null) {
+            /*
+            It is easier to get grouping name through course module rather than off the html because the grouping name
+            string is embedded with other text. Grouping is not something that is changed once a CADO is approved;
+            because of access issues it rightfully should be reported as what is in the cm even if the name is now 'incorrect'
+            on the CADO with respect to cm, access by particular groups is more important.
+            */
+            list($course, $cm) = get_course_and_cm_from_instance($this->instance, 'cado', $this->instance->course);
+            $this->groupingid = $cm->groupingid;
+        }
         $result = new stdClass;
-        /*
-        It is easier to get grouping name through course module rather than off the html because the grouping name
-        string is embedded with other text. Grouping is not something that is changed once a CADO is approved;
-        because of access issues it rightfully should be reported as what is in the cm even if the name is now 'incorrect'
-        on the CADO with respect to cm, access by particular groups is more important.
-        */
-        $result->groupingname = $cm->groupingid ?
-            $DB->get_record('groupings', array('id' => $cm->groupingid), 'name')->name : null;
+        $result->groupingname = $this->groupingid ?
+            $DB->get_record('groupings', ['id' => $this->groupingid], 'name')->name : null;
 
         $thispage = $this->instance->generatedpage;
         $dom = new DOMDocument();
@@ -125,7 +133,7 @@ class mod_cado_translatecado {
         $thismod->cmodid = substr($nameid, strpos($nameid, '_') + 1);
         $thismod->name = $items->item($num)->childNodes->item(0)->nodeValue;
         $thismod->link = $items->item($num)->childNodes->item(1)->attributes->item(1)->nodeValue;
-        $thismod->dateexists = false;
+        $thismod->datesexists = false;
         $thismod->completionexists = false;
         $thismod->extraexists = false;
         $thismod->introexists = false;
@@ -140,7 +148,7 @@ class mod_cado_translatecado {
                 'label' => $rows->item($i)->childNodes->item(1)->nodeValue,
                 'value' => $rows->item($i)->childNodes->item(3)->nodeValue,
             ];
-            $thismod->dateexists = true;
+            $thismod->datesexists = true;
         }
         $num += 2;
         // Completion.
@@ -166,8 +174,8 @@ class mod_cado_translatecado {
         $rows = $items->item($num)->childNodes;
         for ($i = 1; $i <= ($rows->length - 1); $i += 2) { // Here $i starts at 1, there is no heading.
             $thismod->extra[] = (object) [
-                'tagheading' => $rows->item($i)->childNodes->item(1)->childNodes->item(0)->nodeValue,
-                'tagcontent' => $rows->item($i)->childNodes->item(3)->childNodes->item(0)->nodeValue,
+                'label' => $rows->item($i)->childNodes->item(1)->childNodes->item(0)->nodeValue,
+                'value' => $rows->item($i)->childNodes->item(3)->childNodes->item(0)->nodeValue,
             ];
             $thismod->extraexists = true;
         }

@@ -388,7 +388,7 @@ class mod_cado_cado {
      * @param array $schedule contains all the schedule info
      * @param array $totalrow contains number of sections
      */
-    private function getmoddetails($modtype, $thismod, $sched, $schedule, $totalrow) {
+    private function getmoddetails($modtype, $thismod, $sched, &$schedule, $totalrow) {
         $quiz = $modtype == 'quiz';
         $forum = $modtype == 'forum';
         $assign = $modtype == 'assign';
@@ -427,7 +427,7 @@ class mod_cado_cado {
             'intro' => $thismod->$intro,
             'introexists' => $intro == true,
             'dates' => $dates,
-            'dateexists' => !empty($dates),
+            'datesexists' => !empty($dates),
             'completion' => $completion,
             'completionexists' => !empty($completion),
             'extra' => $sched->get_tags($thismod->id),
@@ -450,12 +450,12 @@ class mod_cado_cado {
             ];
             if ($contents['extra']) {
                 foreach ($contents['extra'] as $tagdetails) {
-                    $scheduleentry = array_merge($scheduleentry , [$tagdetails['tagcode'] => $tagdetails['tagcontent']]);
-                    if ( is_numeric($tagdetails['tagcontent']) && $totalrow) { // Then add up tag values.
+                    $scheduleentry = array_merge($scheduleentry , [$tagdetails['tagcode'] => $tagdetails['value']]);
+                    if ( is_numeric($tagdetails['value']) && $totalrow) { // Then add up tag values.
                         if (!isset($schedule[$totalrow]['tasks'][$tagdetails['tagcode']])) {
                             $schedule[$totalrow]['tasks'][$tagdetails['tagcode']] = 0;
                         }
-                        $schedule[$totalrow]['tasks'][$tagdetails['tagcode']] += $tagdetails['tagcontent'];
+                        $schedule[$totalrow]['tasks'][$tagdetails['tagcode']] += $tagdetails['value'];
                     }
                 }
             }

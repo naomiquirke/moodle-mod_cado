@@ -35,7 +35,7 @@
             "cmodid": 97,
             "name": "Less important but still important forum ",
             "link": "http://localhost/moodle_latest/moodle/mod/forum/view.php?id=97&forceview=1",
-            "dateexists": true,
+            "datesexists": true,
             "completionexists": true,
             "extraexists": false,
             "introexists": true,
@@ -64,7 +64,7 @@
             "cmodid": 95,
             "name": "Important forum (LO:3 0%) ",
             "link": "http://localhost/moodle_latest/moodle/mod/forum/view.php?id=95&forceview=1",
-            "dateexists": true,
+            "datesexists": true,
             "completionexists": true,
             "extraexists": false,
             "introexists": true,
@@ -93,7 +93,7 @@
 }}
 <div {{#dm}}class="{{dm}}"{{/dm}}>
   <h2 id="cadoi-{{module}}-name_{{cmodid}}" {{#dmn}}class="{{dmn}}"{{/dmn}}>{{name}} <a class="cad-link" href="{{link}}" target="_blank">&#9741;</a></h2>
-  {{#dateexists}}
+  {{#datesexists}}
   <h4>{{# str }} duedates, mod_cado {{/ str }}</h4>
   <div id="cadoi-{{module}}-dates_{{cmodid}}">
       {{#dates}}
@@ -103,7 +103,7 @@
       </div>
       {{/dates}}
   </div>
-  {{/dateexists}}
+  {{/datesexists}}
   {{#completionexists}}
   <h4>{{# str }} completion, mod_cado {{/ str }}</h4>
   <div id="cadoi-{{module}}-completion_{{cmodid}}">
@@ -119,14 +119,14 @@
   <div id="cadoi-{{module}}-extra_{{cmodid}}">
     {{#extra}}           
     <div class="row">
-      <div class = "col-sm-3 cad-tag-head"><h4>{{tagheading}}</h4></div>
-      <div class = "col-sm-3"><h4>{{tagcontent}}</h4></div>
+      <div class = "col-sm-3 cad-tag-head"><h4>{{label}}</h4></div>
+      <div class = "col-sm-3"><h4>{{value}}</h4></div>
     </div>
     {{/extra}}   
   </div>
   {{/extraexists}}
   {{#introexists}}
-  <div id="cadoi-{{module}}-intro_{{cmodid}}">
+  <div id="cadoi-{{module}}-intro_{{cmodid}}" {{#dmi}}class="{{dmi}}"{{/dmi}}">
     <p> </p>
     {{{intro}}}
     <p> </p>

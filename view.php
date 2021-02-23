@@ -36,7 +36,8 @@ require_capability('mod/cado:view', $context);
 $viewedcado = new mod_cado_cado($context, $cm, $course);
 if (empty($viewedcado->instance->generatedjson) && $viewedcado->instance->timegenerated) {
     // Then CADO must have been generated prior to version 3.0 upgrade, so needs to be translated to JSON.
-    $viewedcado = new mod_cado_translatecado($context, $cm, $course);
+    $newinstance = $viewedcado->instance;
+    $viewedcado = new mod_cado_translatecado($newinstance, $cm->groupingid);
     $viewedcado->translate();
 }
 

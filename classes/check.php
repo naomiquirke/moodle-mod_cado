@@ -79,8 +79,8 @@ class mod_cado_check {
                         $this->schedtag[$tagkey] = true;
                     }
                     $tagdetails->tagcode = $tagkey;
-                    $tagdetails->tagheading = $this->tagset[$tagkey];
-                    $tagdetails->tagcontent = $thistaglist[1];
+                    $tagdetails->label = $this->tagset[$tagkey];
+                    $tagdetails->value = $thistaglist[1];
                     $tagdetails->cmid = $thisresult->itemid;
                     $this->taglist[] = $tagdetails;
                 }
@@ -101,7 +101,7 @@ class mod_cado_check {
             $thisarray = [];
             foreach ($this->taglist as $tagdetails) {
                 if ($tagdetails->cmid == $mod) {
-                    $thisarray[] = ['tagheading' => $tagdetails->tagheading, 'tagcontent' => $tagdetails->tagcontent,
+                    $thisarray[] = ['label' => $tagdetails->label, 'value' => $tagdetails->value,
                         'tagcode' => $tagdetails->tagcode];
                 }
             }

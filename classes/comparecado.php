@@ -46,7 +46,7 @@ class mod_cado_comparecado {
         $othercado = $DB->get_record('cado', ['id' => $othercmod]);
         if (empty($othercado->generatedjson)) {
             // Then CADO must have been generated prior to version 3.0 upgrade, so needs to be translated to JSON.
-            $newothercado = new mod_cado_translatecado($othercado, $othercmod);
+            $newothercado = new mod_cado_translatecado($othercado);
             $othercado = $newothercado->translate();
         }
         $otherjson = json_decode($othercado->generatedjson, true);
@@ -75,25 +75,8 @@ class mod_cado_comparecado {
 
         // New we need to do the modules.
         $mods = ['forum', 'quiz', 'assign'];
-        foreach ($mods as $modtype) {
-            $descriptor = 'd' . substr($modtype, 0, 1);
-            $exists = $modtype . 'exists';
-            // Re the existence of the modtype, just apply same logic as applydiff function.
-            if ((!$originjson[$exists]) && (!$otherjson[$exists])) {
-                continue;
-            } else if (!$otherjson[$exists]) {
-                $newjson[$descriptor] = "cado-othermissing";
-                $allmatched = false;
-            } else if (!$originjson[$exists]) {
-                $newjson[$descriptor] = "cado-originmissing";
-                $newjson[$exists] = 1;
-                $newjson[$modtype] = $otherjson[$modtype];
-                $allmatched = false;
-            } else {
-                // Must do a matrix compare, because we don't want to just compare module ids because of backup restores.
-                $allmatched = $this->compare_type($modtype, $originjson, $otherjson, $newjson) && $allmatched;
-            }
-        }
+        $allmatched = $this->exists_check($mods, "d", $originjson, $otherjson, $newjson, "compare_type")
+            && $allmatched;
 
         // Make an overall statement.
         if ($allmatched) {
@@ -106,76 +89,40 @@ class mod_cado_comparecado {
     }
 
     /**
-     * To get string differences between origin and other cado element.
+     * To get whether sections exist between origin and other cado element, and if they do compare them.
      *
-     * @param string $a is the string from the origin cado
-     * @param string $b is the string from the other cado
-     * @param string $diffdescriptor is the object name / moustache tag to add if required
-     * @param string $childelement is the compared element
-     * @param string $newelement is empty if we are not using indices, otherwise an 'index' for a potential new element
-     * @param array $otherelement is empty if not using indices, otherwise the entire entry for the potential new element
-     * @param array &$parentelement is the array at the parent element level to add to if required
+     * @param array $items list of elements to check.
+     * @param string $prefix combined with element identifier used for moustache template to add the appropriate class.
+     * @param array $ori is origin element.
+     * @param array $oth is other element.
+     * @param string $inner is the inner function to run when the elements both exist. Either: compare_type or...
+     * @param array $result is the element to be updated for final display.
      */
-    private function applydiff($a, $b, $diffdescriptor, $childelement, $newelement, $otherelement, &$parentelement) {
-        $strippeda = trim(strip_tags($a));
-        $strippedb = trim(strip_tags($b));
-        if (empty($strippeda) && empty($strippedb)) {
-            return true;
-        } else if (empty($strippeda)) {
-            if (!$newelement) {
-                $parentelement[$childelement] = $b;
-                $parentelement[$diffdescriptor] = "cado-originmissing";
-            } else {
-                $parentelement[$newelement] = $otherelement;
-                $parentelement[$newelement][$diffdescriptor] = "cado-originmissing";
-            }
-        } else if (empty($strippedb)) {
-            if (!$newelement) {
-                $parentelement[$diffdescriptor] = "cado-othermissing";
-            } else {
-                $parentelement[$childelement][$diffdescriptor] = "cado-othermissing";
-            }
-        } else if ($strippeda !== $strippedb) {
-            if (!$newelement) {
-                $parentelement[$diffdescriptor] = "cado-different";
-                // Insert marker at point where difference occurs. This is only of significant use in paragraphs.
-                $newa = substr_replace($a, "\u{2198}", $this->get_diff_pt($a, $b), 0);
-                $parentelement[$childelement] = $newa;
-            } else {
-                $parentelement[$childelement][$diffdescriptor] = "cado-different";
-            }
-        } else {
-            if (!$newelement) {
-                // Just in case these are DB fields not currently present in json, need to add, even if fine.
-                $parentelement[$childelement] = $a;
-            }
-            return true;
-        }
-        return false;
-    }
+    private function exists_check($items, $prefix, $ori, $oth, &$result, $inner) {
+        $itemmatch = true;
+//        error_log("\r\n" . time() . "****** ori *****" . "\r\n" . print_r($ori, true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
+        foreach ($items as $itemtype) {
+            $descriptor = $prefix . substr($itemtype, 0, 1);
+            $exists = $itemtype . 'exists';
+            // Re the existence of the itemtype, just apply same logic as applydiff function.
 
-    /**
-     * To get the difference point in two strings, $a and $b.
-     * Will find first differences even if it is in the html as well.
-     *
-     * @param string $a
-     * @param string $b
-     * @return int position of first difference.
-     */
-    private function get_diff_pt($a, $b) {
-        $a = trim($a);
-        $b = trim($b);
-        $arr1 = str_split($a);
-        $arr2 = str_split($b);
-        $z = strlen($a);
-        for ($i = 0; $i <= $z; $i++) {
-            if ((isset($arr2[$i])) && ($arr1[$i] == $arr2[$i])) {
+            if ((!$ori[$exists]) && (!$oth[$exists])) {
                 continue;
+            } else if (!$oth[$exists]) {
+                $result[$descriptor] = "cado-othermissing";
+                $itemmatch = false;
+            } else if (!$ori[$exists]) {
+                $result[$descriptor] = "cado-originmissing";
+                $result[$exists] = 1;
+                $result[$itemtype] = $otherjson[$itemtype];
+                $itemmatch = false;
             } else {
-                return $i;
+                $params = [$itemtype, $ori, $oth, &$result];
+                // Must do a matrix compare, because we don't want to just compare module ids because of backup restores.
+                $itemmatch = call_user_func_array([$this, $inner], [&$params])  && $itemmatch;
             }
         }
-        return $i;
+        return $itemmatch;
     }
 
     /**
@@ -189,10 +136,12 @@ class mod_cado_comparecado {
      * @param array $final is the comparison output.
      * @return boolean which says if everything matched.
      */
-    private function compare_type($type, $origin, $other, &$final) {
+    private function compare_type(&$params) {
+        list($type, $origin, $other, &$final) = $params;
         $matched = true;
-        // Check all first for cmid associations, only then for name associations, and last opp intro associations.
-        foreach (["cmodid", "name", "intro"] as $matchtype) {
+        // Check all first for cmid associations, only then for name associations.
+        // Above necessary because cmid is to be checked with highest priority for all.
+        foreach (["cmodid", "name"] as $matchtype) {
             foreach ($origin[$type] as $orikey1 => &$orimod) {
                 // Ignore origins that have already been matched.
                 if (isset($orimod["done"])) {
@@ -212,9 +161,12 @@ class mod_cado_comparecado {
                             $matched = $this->applydiff($orimod["name"], $othmod["name"], "dmn"
                                 , "name", null, null, $final[$type][$orikey1]) && $matched;
                         }
-                        // Dates difference.
-                        // Completion difference.
-                        // Tags difference.
+                        $matched = $this->exists_check(["intro"], "dm", $orimod, $othmod, $final[$type][$orikey1]
+                        , "compare_straight", $final) && $matched;
+/*                        $sections = ["dates", "completion", "extra"];
+                        $matched = $this->exists_check($sections, "dmin", $orimod, $othmod, $final[$type][$orikey1]
+                        , "compare_inner", $final) && $matched;
+*/
                         // Rubric difference.
                         // Now make note of the two matching modules, so they don't get matched again (eg in case of duplicates).
                         $orimod["done"] = $matchtype . ' ' . $orikey1;
@@ -245,8 +197,161 @@ class mod_cado_comparecado {
             $matched = false;
             $othmod["done"] = "originmissing"; // Not needed at this stage except for testing.
         }
-        error_log("\r\n" . time() . "****** origin *****" . "\r\n" . print_r($origin[$type], true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
-        error_log("\r\n" . time() . "****** other *****" . "\r\n" . print_r($other[$type], true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
         return $matched;
     }
+
+    /**
+     * To find the differences between origin and other.
+     * Origininner & otherinner arrays are changed, as every time we find a match or identify a difference
+     * we note this in finalinner, and add a note in the match arrays.
+     *
+     * @param string $type is the section type.
+     * @param array $origininner is the original cado report json.
+     * @param array $otherinner is the compared cado report json.
+     * @param array $finalinner is the comparison output.
+     * @return boolean which says if everything matched.
+     */
+    private function compare_straight(&$params) {
+        list($type, $origininner, $otherinner, &$finalinner) = $params;
+        $matched = $this->applydiff($origininner[$type], $otherinner[$type], "dmi"
+                        , "intro", null, null, $finalinner);
+    if (!$matched) {
+        error_log("\r\n" . time() . "****** finalinner *****" . "\r\n" . print_r($finalinner, true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
+    }
+        return $matched;
+    }
+
+    /**
+     * To find the differences between origin and other.
+     * Origininner & otherinner arrays are changed, as every time we find a match or identify a difference
+     * we note this in finalinner, and add a note in the match arrays.
+     *
+     * @param string $type is the section type.
+     * @param array $origininner is the original cado report json.
+     * @param array $otherinner is the compared cado report json.
+     * @param array $finalinner is the comparison output.
+     * @return boolean which says if everything matched.
+     */
+    private function compare_inner(&$params) {
+        list($type, $origininner, $otherinner, &$finalinner) = $params;
+        $matchedinner = true;
+        foreach ($origininner[$type] as $orikey1 => &$orimod) {
+            // Ignore origins that have already been matched.
+            if (isset($orimod["done"])) {
+                continue;
+            }
+            foreach ($otherinner[$type] as $othkey1 => &$othmod) {
+                // Ignore others that have already been matched.
+                if (isset($othmod["done"])) {
+                    continue;
+                }
+                // Find label association.
+                if ($orimod[0] === $othmod[0]) {
+                    $matchedinner = $this->applydiff($orimod[1], $othmod[1], "dmi1"
+                        , $orikey1, 1, $othmod, $finalinner[$type]) && $matchedinner;
+                    $orimod["done"] = $matchtype . ' ' . $orikey1;
+                    $othmod["done"] = $matchtype . ' ' . $othkey1;
+                    // Now break the inner 'other' loop, because we don't want to trigger the not found code @ foreach end.
+                    continue 2;
+                }
+            }
+        }
+        // Anything not marked done is missing from one of the records.
+        foreach ($origininner[$type] as $orikey1 => &$orimod) {
+            if (isset($orimod["done"])) {
+                continue;
+            }
+            $finalinner[$type][$orikey]["dml"] = "cado-othermissing";
+            $matchedinner = false;
+            $orimod["done"] = "othermissing" . ' ' . $orikey; // Not needed at this stage except for testing.
+        }
+        // Then find missing origins.
+        foreach ($otherinner[$type] as $othkey1 => &$othmod) {
+            if (isset($othmod["done"])) {
+                continue;
+            }
+            $othmod["dml"] = "cado-originmissing";
+            $finalinner[$type][] = $othmod;
+            $matchedinner = false;
+            $othmod["done"] = "originmissing"; // Not needed at this stage except for testing.
+        }
+        return $matchedinner;
+    }
+
+    /**
+     * To get string differences between origin and other cado element.
+     *
+     * @param string $a is the string from the origin cado
+     * @param string $b is the string from the other cado
+     * @param string $diffdescriptor is the object name / moustache tag to add if required
+     * @param string $childelement is the compared element
+     * @param int $newelement is empty if we are not using indices, otherwise element index of $a.
+     * @param array $otherelement is empty if not using indices, otherwise the entire record for the new element.
+     * @param array &$resultelement is the array at the parent element level to add to if required
+     */
+    private function applydiff($a, $b, $diffdescriptor, $childelement, $newelement, $otherelement, &$resultelement) {
+        $strippeda = trim(strip_tags($a));
+        $strippedb = trim(strip_tags($b));
+        if (empty($strippeda) && empty($strippedb)) {
+            return true;
+        } else if (empty($strippeda)) {
+            if (!$newelement) {
+                $resultelement[$childelement] = $b;
+                $resultelement[$diffdescriptor] = "cado-originmissing";
+            } else {
+                $resultelement[$childelement][$newelement] = $otherelement;
+                $resultelement[$childelement][$diffdescriptor] = "cado-originmissing";
+            }
+        } else if (empty($strippedb)) {
+            if (!$newelement) {
+                $resultelement[$diffdescriptor] = "cado-othermissing";
+            } else {
+                $resultelement[$childelement][$diffdescriptor] = "cado-othermissing";
+            }
+        } else if ($strippeda !== $strippedb) {
+            if (!$newelement) {
+                $resultelement[$diffdescriptor] = "cado-different";
+                // Insert marker at point where difference occurs. This is only of significant use in paragraphs.
+                $newa = substr_replace($a, "\u{2198}", $this->get_diff_pt($a, $b), 0);
+                $resultelement[$childelement] = $newa;
+            } else {
+                $resultelement[$childelement][$diffdescriptor] = "cado-different";
+            }
+if ($diffdescriptor == "dmi") {
+    error_log("\r\n" . time() . "****** resultelement[$diffdescriptor] *****" . "\r\n" . print_r($resultelement[$diffdescriptor], true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
+}
+        } else {
+            if (!$newelement) {
+                // Just in case these are DB fields not currently present in json, need to add, even if fine.
+                $resultelement[$childelement] = $a;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * To get the difference point in two strings, $a and $b.
+     * Will find first differences even if it is in the html as well.
+     *
+     * @param string $a
+     * @param string $b
+     * @return int position of first difference.
+     */
+    private function get_diff_pt($a, $b) {
+        $a = trim($a);
+        $b = trim($b);
+        $arr1 = str_split($a);
+        $arr2 = str_split($b);
+        $z = strlen($a);
+        for ($i = 0; $i <= $z; $i++) {
+            if ((isset($arr2[$i])) && ($arr1[$i] == $arr2[$i])) {
+                continue;
+            } else {
+                return $i;
+            }
+        }
+        return $i;
+    }
+
 }
