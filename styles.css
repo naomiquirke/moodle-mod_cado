@@ -72,7 +72,9 @@ div.cadocentral table.cado-inner-table {
 }
 
 .path-mod-cado [id^="cado"].cado-different,
-.path-mod-cado p.cado-different {
+.path-mod-cado p.cado-different,
+.path-mod-cado .col-sm-3>.col-sm-3.cado-different,
+.path-mod-cado .cado-different {
     background-color: pink;
     text-decoration: dotted lightgrey;
 }

@@ -100,7 +100,6 @@ class mod_cado_comparecado {
      */
     private function exists_check($items, $prefix, $ori, $oth, &$result, $inner) {
         $itemmatch = true;
-//        error_log("\r\n" . time() . "****** ori *****" . "\r\n" . print_r($ori, true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
         foreach ($items as $itemtype) {
             $descriptor = $prefix . substr($itemtype, 0, 1);
             $exists = $itemtype . 'exists';
@@ -114,12 +113,13 @@ class mod_cado_comparecado {
             } else if (!$ori[$exists]) {
                 $result[$descriptor] = "cado-originmissing";
                 $result[$exists] = 1;
-                $result[$itemtype] = $otherjson[$itemtype];
+                $result[$itemtype] = $oth[$itemtype];
                 $itemmatch = false;
             } else {
                 $params = [$itemtype, $ori, $oth, &$result];
                 // Must do a matrix compare, because we don't want to just compare module ids because of backup restores.
-                $itemmatch = call_user_func_array([$this, $inner], [&$params])  && $itemmatch;
+                $temp = call_user_func_array([$this, $inner], [&$params]);
+                $itemmatch = $temp && $itemmatch;
             }
         }
         return $itemmatch;
@@ -163,10 +163,10 @@ class mod_cado_comparecado {
                         }
                         $matched = $this->exists_check(["intro"], "dm", $orimod, $othmod, $final[$type][$orikey1]
                         , "compare_straight", $final) && $matched;
-/*                        $sections = ["dates", "completion", "extra"];
-                        $matched = $this->exists_check($sections, "dmin", $orimod, $othmod, $final[$type][$orikey1]
+                        $sections = ["dates", "completion", "extra"];
+                        $matched = $this->exists_check($sections, "dms", $orimod, $othmod, $final[$type][$orikey1]
                         , "compare_inner", $final) && $matched;
-*/
+
                         // Rubric difference.
                         // Now make note of the two matching modules, so they don't get matched again (eg in case of duplicates).
                         $orimod["done"] = $matchtype . ' ' . $orikey1;
@@ -215,9 +215,6 @@ class mod_cado_comparecado {
         list($type, $origininner, $otherinner, &$finalinner) = $params;
         $matched = $this->applydiff($origininner[$type], $otherinner[$type], "dmi"
                         , "intro", null, null, $finalinner);
-    if (!$matched) {
-        error_log("\r\n" . time() . "****** finalinner *****" . "\r\n" . print_r($finalinner, true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
-    }
         return $matched;
     }
 
@@ -246,11 +243,11 @@ class mod_cado_comparecado {
                     continue;
                 }
                 // Find label association.
-                if ($orimod[0] === $othmod[0]) {
-                    $matchedinner = $this->applydiff($orimod[1], $othmod[1], "dmi1"
-                        , $orikey1, 1, $othmod, $finalinner[$type]) && $matchedinner;
-                    $orimod["done"] = $matchtype . ' ' . $orikey1;
-                    $othmod["done"] = $matchtype . ' ' . $othkey1;
+                if ($orimod["label"] === $othmod["label"]) {
+                    $matchedinner = $this->applydiff($orimod["value"], $othmod["value"], "dmil"
+                        , $orikey1, "value", $othmod, $finalinner[$type]) && $matchedinner;
+                    $orimod["done"] = true;
+                    $othmod["done"] = true;
                     // Now break the inner 'other' loop, because we don't want to trigger the not found code @ foreach end.
                     continue 2;
                 }
@@ -261,9 +258,9 @@ class mod_cado_comparecado {
             if (isset($orimod["done"])) {
                 continue;
             }
-            $finalinner[$type][$orikey]["dml"] = "cado-othermissing";
+            $finalinner[$type][$orikey1]["dml"] = "cado-othermissing";
             $matchedinner = false;
-            $orimod["done"] = "othermissing" . ' ' . $orikey; // Not needed at this stage except for testing.
+            $orimod["done"] = "othermissing" . ' ' . $orikey1; // Not needed at this stage except for testing.
         }
         // Then find missing origins.
         foreach ($otherinner[$type] as $othkey1 => &$othmod) {
@@ -275,6 +272,9 @@ class mod_cado_comparecado {
             $matchedinner = false;
             $othmod["done"] = "originmissing"; // Not needed at this stage except for testing.
         }
+    if (!$matchedinner) {
+//        error_log("\r\n" . time() . "****** finalinner *****" . "\r\n" . print_r($finalinner, true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
+    }
         return $matchedinner;
     }
 
@@ -285,7 +285,7 @@ class mod_cado_comparecado {
      * @param string $b is the string from the other cado
      * @param string $diffdescriptor is the object name / moustache tag to add if required
      * @param string $childelement is the compared element
-     * @param int $newelement is empty if we are not using indices, otherwise element index of $a.
+     * @param string $newelement is empty if we are not using indices, otherwise element index of $a.
      * @param array $otherelement is empty if not using indices, otherwise the entire record for the new element.
      * @param array &$resultelement is the array at the parent element level to add to if required
      */
@@ -317,8 +317,8 @@ class mod_cado_comparecado {
             } else {
                 $resultelement[$childelement][$diffdescriptor] = "cado-different";
             }
-if ($diffdescriptor == "dmi") {
-    error_log("\r\n" . time() . "****** resultelement[$diffdescriptor] *****" . "\r\n" . print_r($resultelement[$diffdescriptor], true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
+if ($diffdescriptor == "dmil") {
+//    error_log("\r\n" . time() . "****** resultelement[$diffdescriptor] *****" . "\r\n" . print_r($resultelement[$diffdescriptor], true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
 }
         } else {
             if (!$newelement) {
