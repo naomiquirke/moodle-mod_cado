@@ -134,13 +134,13 @@
   {{/introexists}}
   {{#rubricexists}}
   <h4>{{# str }} rubric, mod_cado {{/ str }} </h4>
-  <div id="cadoi-{{module}}-rubric_{{cmodid}}">
+  <div id="cadoi-{{module}}-rubric_{{cmodid}}" {{#dmr}}class="{{dmr}}"{{/dmr}}>
     <table class="table table-hover">
       <tbody>
         {{#rubric}}
-          <tr>
+          <tr {{#dmrc}}class="{{dmrc}}"{{/dmrc}}>
             <td class="cado-rubric-row-head">{{critdesc}}</td>
-            {{#levels}}<td>{{leveldesc}}<br>({{points}})</td>{{/levels}}
+            {{#levels}}<td {{#dmrl}}class="{{dmrl}}"{{/dmrl}}>{{leveldesc}}<br>({{points}})</td>{{/levels}}
           </tr>
         {{/rubric}}
       </tbody>

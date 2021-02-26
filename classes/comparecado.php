@@ -142,12 +142,12 @@ class mod_cado_comparecado {
         // Check all first for cmid associations, only then for name associations.
         // Above necessary because cmid is to be checked with highest priority for all.
         foreach (["cmodid", "name"] as $matchtype) {
-            foreach ($origin[$type] as $orikey1 => &$orimod) {
+            foreach ($origin[$type] as $orimodindex => &$orimod) {
                 // Ignore origins that have already been matched.
                 if (isset($orimod["done"])) {
                     continue;
                 }
-                foreach ($other[$type] as $othkey1 => &$othmod) {
+                foreach ($other[$type] as $othmodindex => &$othmod) {
                     // Ignore others that have already been matched.
                     if (isset($othmod["done"])) {
                         continue;
@@ -159,18 +159,18 @@ class mod_cado_comparecado {
                         if ($matchtype == "cmodid") {
                             // Name difference, relevant only when matching cmodid.
                             $matched = $this->applydiff($orimod["name"], $othmod["name"], "dmn"
-                                , "name", null, null, $final[$type][$orikey1]) && $matched;
+                                , "name", null, null, $final[$type][$orimodindex]) && $matched;
                         }
-                        $matched = $this->exists_check(["intro"], "dm", $orimod, $othmod, $final[$type][$orikey1]
-                        , "compare_straight", $final) && $matched;
-                        $sections = ["dates", "completion", "extra"];
-                        $matched = $this->exists_check($sections, "dms", $orimod, $othmod, $final[$type][$orikey1]
-                        , "compare_inner", $final) && $matched;
+                        $matched = $this->exists_check(["intro"], "dm", $orimod, $othmod, $final[$type][$orimodindex]
+                            , "compare_straight", $final) && $matched;
+                        $matched = $this->exists_check(["dates", "completion", "extra"], "dms", $orimod, $othmod
+                            , $final[$type][$orimodindex], "compare_inner", $final) && $matched;
+                        $matched = $this->exists_check(["rubric"], "dm", $orimod, $othmod, $final[$type][$orimodindex]
+                            , "compare_rubric", $final) && $matched;
 
-                        // Rubric difference.
                         // Now make note of the two matching modules, so they don't get matched again (eg in case of duplicates).
-                        $orimod["done"] = $matchtype . ' ' . $orikey1;
-                        $othmod["done"] = $matchtype . ' ' . $othkey1;
+                        $orimod["done"] = $matchtype . ' ' . $orimodindex;
+                        $othmod["done"] = $matchtype . ' ' . $othmodindex;
                         // Now break the inner 'other' loop, because we don't want to trigger the not found code @ foreach end.
                         continue 2;
                     }
@@ -178,32 +178,12 @@ class mod_cado_comparecado {
             }
         }
         // Anything not marked done is missing from one of the records.
-        // First find missing others.
-        foreach ($origin[$type] as $orikey => &$orimod) {
-            if (isset($orimod["done"])) {
-                continue;
-            }
-            $final[$type][$orikey]["dm"] = "cado-othermissing";
-            $matched = false;
-            $orimod["done"] = "othermissing" . ' ' . $orikey; // Not needed at this stage except for testing.
-        }
-        // Then find missing origins.
-        foreach ($other[$type] as &$othmod) {
-            if (isset($othmod["done"])) {
-                continue;
-            }
-            $othmod["dm"] = "cado-originmissing";
-            $final[$type][] = $othmod;
-            $matched = false;
-            $othmod["done"] = "originmissing"; // Not needed at this stage except for testing.
-        }
-        return $matched;
+        return $this->findgaps($origin[$type], $other[$type], $final[$type], "dm")
+            && $matched;
     }
 
     /**
-     * To find the differences between origin and other.
-     * Origininner & otherinner arrays are changed, as every time we find a match or identify a difference
-     * we note this in finalinner, and add a note in the match arrays.
+     * To find the differences between origin and other for the intro and update classes on result.
      *
      * @param string $type is the section type.
      * @param array $origininner is the original cado report json.
@@ -214,14 +194,50 @@ class mod_cado_comparecado {
     private function compare_straight(&$params) {
         list($type, $origininner, $otherinner, &$finalinner) = $params;
         $matched = $this->applydiff($origininner[$type], $otherinner[$type], "dmi"
-                        , "intro", null, null, $finalinner);
+            , "intro", null, null, $finalinner);
         return $matched;
     }
 
     /**
-     * To find the differences between origin and other.
-     * Origininner & otherinner arrays are changed, as every time we find a match or identify a difference
-     * we note this in finalinner, and add a note in the match arrays.
+     * To find the differences between origin and other for rubric and update classes on result.
+     *
+     * @param string $type is the section type.
+     * @param array $origininner is the original cado report json.
+     * @param array $otherinner is the compared cado report json.
+     * @param array $finalinner is the comparison output.
+     * @return boolean which says if everything matched.
+     */
+    private function compare_rubric(&$params) {
+        list($type, $origininner, $otherinner, &$finalinner) = $params;
+        $matchedinner = true;
+        foreach ($origininner[$type] as $oricritkey => &$oricriterion) {
+            foreach ($otherinner[$type] as &$othcriterion) {
+                // Ignore others that have already been matched.
+                if (isset($othcriterion["done"])) {
+                    continue;
+                }
+                if ($oricriterion["critdesc"] === $othcriterion["critdesc"]) {
+                    // Just do a straight comparison of all criterion levels, nothing fancy.
+                    $orilevelpack = json_encode($oricriterion["levels"]);
+                    $othlevelpack = json_encode($othcriterion["levels"]);
+                    if ($orilevelpack !== $othlevelpack) {
+                        $finalinner[$type][$oricritkey]["dmrl"] = "cado-different";
+                    }
+                    // Now mark each side of match as done so can't be selected again.
+                    $oricriterion["done"] = true;
+                    $othcriterion["done"] = true;
+                    continue 2;
+                }
+            }
+        }
+        // Anything not marked done is missing from one of the records.
+        $temp = $this->findgaps($origininner[$type], $otherinner[$type], $finalinner[$type], "dmrc");
+error_log("\r\n" . time() . "****** matchedinner - second check *****" . "\r\n" . print_r($temp, true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
+        return $temp && $matchedinner;
+    }
+
+    /**
+     * To find the differences between origin and other for dates, completion and tags and update classes on result.
      *
      * @param string $type is the section type.
      * @param array $origininner is the original cado report json.
@@ -233,10 +249,6 @@ class mod_cado_comparecado {
         list($type, $origininner, $otherinner, &$finalinner) = $params;
         $matchedinner = true;
         foreach ($origininner[$type] as $orikey1 => &$orimod) {
-            // Ignore origins that have already been matched.
-            if (isset($orimod["done"])) {
-                continue;
-            }
             foreach ($otherinner[$type] as $othkey1 => &$othmod) {
                 // Ignore others that have already been matched.
                 if (isset($othmod["done"])) {
@@ -254,27 +266,37 @@ class mod_cado_comparecado {
             }
         }
         // Anything not marked done is missing from one of the records.
-        foreach ($origininner[$type] as $orikey1 => &$orimod) {
-            if (isset($orimod["done"])) {
+        return $this->findgaps($origininner[$type], $otherinner[$type], $finalinner[$type], "dml")
+            && $matchedinner;
+    }
+
+    /**
+     * To update missing element differences between origin and other after the matching is done.
+     * @param array $ori origin element.
+     * @param array $oth other element.
+     * @param array &$diffresult resulting element.
+     * @param string $difflabel label for style element.
+     * @return boolean whether matched or not.
+     */
+    private function findgaps($ori, $oth, &$diffresult, $difflabel) {
+        $matchedinner = true;
+        // Anything not marked done is missing from one of the records.
+        foreach ($ori as $key1 => &$element1) {
+            if (isset($element1["done"])) {
                 continue;
             }
-            $finalinner[$type][$orikey1]["dml"] = "cado-othermissing";
+            $diffresult[$key1][$difflabel] = "cado-othermissing";
             $matchedinner = false;
-            $orimod["done"] = "othermissing" . ' ' . $orikey1; // Not needed at this stage except for testing.
         }
         // Then find missing origins.
-        foreach ($otherinner[$type] as $othkey1 => &$othmod) {
-            if (isset($othmod["done"])) {
+        foreach ($oth as $key2 => &$element2) {
+            if (isset($element2["done"])) {
                 continue;
             }
-            $othmod["dml"] = "cado-originmissing";
-            $finalinner[$type][] = $othmod;
+            $element2[$difflabel] = "cado-originmissing";
+            $diffresult[] = $element2;
             $matchedinner = false;
-            $othmod["done"] = "originmissing"; // Not needed at this stage except for testing.
         }
-    if (!$matchedinner) {
-//        error_log("\r\n" . time() . "****** finalinner *****" . "\r\n" . print_r($finalinner, true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
-    }
         return $matchedinner;
     }
 
@@ -288,6 +310,7 @@ class mod_cado_comparecado {
      * @param string $newelement is empty if we are not using indices, otherwise element index of $a.
      * @param array $otherelement is empty if not using indices, otherwise the entire record for the new element.
      * @param array &$resultelement is the array at the parent element level to add to if required
+     * @return boolean whether matched or not.
      */
     private function applydiff($a, $b, $diffdescriptor, $childelement, $newelement, $otherelement, &$resultelement) {
         $strippeda = trim(strip_tags($a));
@@ -317,14 +340,7 @@ class mod_cado_comparecado {
             } else {
                 $resultelement[$childelement][$diffdescriptor] = "cado-different";
             }
-if ($diffdescriptor == "dmil") {
-//    error_log("\r\n" . time() . "****** resultelement[$diffdescriptor] *****" . "\r\n" . print_r($resultelement[$diffdescriptor], true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
-}
         } else {
-            if (!$newelement) {
-                // Just in case these are DB fields not currently present in json, need to add, even if fine.
-                $resultelement[$childelement] = $a;
-            }
             return true;
         }
         return false;
@@ -344,7 +360,7 @@ if ($diffdescriptor == "dmil") {
         $arr1 = str_split($a);
         $arr2 = str_split($b);
         $z = strlen($a);
-        for ($i = 0; $i <= $z; $i++) {
+        for ($i = 0; $i < $z; $i++) {
             if ((isset($arr2[$i])) && ($arr1[$i] == $arr2[$i])) {
                 continue;
             } else {

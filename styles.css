@@ -81,14 +81,17 @@ div.cadocentral table.cado-inner-table {
 
 .path-mod-cado [id^="cado"].cado-othermissing,
 .path-mod-cado p.cado-othermissing,
+.path-mod-cado .cado-othermissing,
 .path-mod-cado div.cado-othermissing {
     background-color: lightgreen;
 }
 
 .path-mod-cado [id^="cado"].cado-originmissing,
 .path-mod-cado div.cado-originmissing,
+.path-mod-cado .cado-originmissing,
 .path-mod-cado p.cado-originmissing {
     background-color: yellow;
+    text-decoration-line: line-through;
 }
 
 .path-mod-cado div#cad-title {
