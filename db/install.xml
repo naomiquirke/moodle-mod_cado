@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="mod/cado/db" VERSION="2020022100" COMMENT="XMLDB file for Moodle mod/cado"
+<XMLDB PATH="mod/cado/db" VERSION="2021012000" COMMENT="XMLDB file for Moodle mod/cado"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
