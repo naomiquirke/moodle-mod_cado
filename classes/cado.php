@@ -300,6 +300,7 @@ class mod_cado_cado {
         $visible = get_config('cado')->inchidden == 1 ? 0 : 1;
 
         $courseext = new stdClass;
+        $courseext->version = $this->get_version();
         $courseext->groupingname = $grouping ? $DB->get_record('groupings', array('id' => $grouping), 'name')->name : null;
 
         // SCHEDULE and TAGS SETUP.
@@ -573,5 +574,19 @@ class mod_cado_cado {
 
         $sql = $sqlselect . $sqlfroms . $sqlorderby;
         return $DB->get_records_sql($sql, $sqlparams);
+    }
+
+    /**
+     * Obtains version number from version.php for this plugin.
+     *
+     * @return string Version number
+     */
+    protected function get_version() {
+        global $CFG;
+        $plugin = new stdClass;
+        $plugin->version = null;
+        $module = $plugin;
+        include($CFG->dirroot . '/mod/cado/version.php');
+        return $plugin->version;
     }
 }
