@@ -62,9 +62,46 @@ class mobile {
             $args->data = get_string('notavailable', 'cado');
         } else {
             $args->approved = true;
-            $mobcado = str_replace('>&#9741;', ' core-link capture="true" >&#9741;', $cadoinstance->generatedpage);
-            $args->data = $mobcado;
+/*            $mobcado = str_replace('>&#9741;', ' core-link capture="true" >&#9741;', $cadoinstance->generatedpage);
+            $args->data = $mobcado;*/
+            $args->data = (object) json_decode($cadoinstance->generatedjson, true);
+            $args->data->sitecomment = trim($siteoptions->sitecomment);
+            $args->data->cadocomment = in_array( 'cadocomment' , $siteoptionset ) ? $cadoinstance->cadocomment : null;
+            $args->data->cadobiblio = in_array( 'cadobiblio' , $siteoptionset ) ? $cadoinstance->cadobiblio : null;
+            $args->data->cadointro = $cadoinstance->cadointro;
+            $args->data->mobileapp = 1;
         }
+        $myjavascript = "
+            console.log('Helooo! DOM is available now!');
+        ";
+/*
+            var cadocollapse = document.querySelectorAll('.cadohide');
+            for (let i = 0; i < cadocollapse.length; ++i) {
+                cadocollapse[i].id = 'cado-collapse-' + i;
+                cadocollapse[i].style.display = 'none';
+                cadocollapse[i].parentElement.cadochild = i;
+                cadocollapse[i].parentElement.addEventListener('click', function () {
+                    el = document.querySelector(`#cado-collapse-${this.cadochild}`);
+                    togglehide(el);
+                    if (el.style.display === 'block') {
+                    }
+                });
+            }
+            function togglehide(targeted) {
+                if (targeted.style.display === 'none') {
+                    for (let i = 0; i < cadocollapse.length; ++i) {
+                        cadocollapse[i].style.display = 'none';
+                    }
+                    targeted.style.display = 'block';
+                    targeted.addEventListener('click', function () {
+                        togglehide(this);
+                    });
+
+                } else {
+                    targeted.style.display = 'none';
+                }
+            }
+*/
         return array(
             'templates' => array(
                 array(
@@ -72,7 +109,7 @@ class mobile {
                     'html' => $OUTPUT->render_from_template('mod_cado/mobile_cadoview', $args),
                 ),
             ),
-            'javascript' => '',
+            'javascript' => "setTimeout(function() { $myjavascript });",
             'otherdata' => '',
             'files' => ''
         );

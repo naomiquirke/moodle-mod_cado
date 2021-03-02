@@ -36,8 +36,8 @@ $addons = array(
                 'delegate' => 'CoreCourseModuleDelegate', // Delegate (where to display the link to the add-on).
                 'method' => 'mobile_course_view', // Main function in \mod_cado\classes\output\mobile.
                 'styles' => [
-                    'url' => '/mod/cado/mobile/styles.css',
-                    'version' => 9
+                    'url' => '/mod/cado/mobile/mobilestyles.css',
+                    'version' => 14
                 ],
                 'offlinefunctions' => array(
                     'mobile_course_view' => array(),
@@ -51,6 +51,12 @@ $addons = array(
             array('pluginname', 'cado'),
             array('notavailable', 'cado'),
             array('approvedon', 'cado'),
+            array('cadotitle', 'cado'),
+            array('forgroup', 'cado'),
+            array('description', 'cado'),
+            array('forum', 'cado'),
+            array('quiz', 'cado'),
+            array('assign', 'cado'),
         )
     )
 );
