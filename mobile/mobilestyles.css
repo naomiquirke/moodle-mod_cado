@@ -1,10 +1,10 @@
 ion-grid#cado-sched-outer ion-row.cado-topic-first {
-    border-style: solid, solid, none, solid;
+    border-style: solid solid none solid;
     border-width: thin;
     background-color: gainsboro;
 }
 ion-grid#cado-sched-outer ion-row.cado-topic-second {
-    border-style: none, solid, solid, solid;
+    border-style: none solid solid solid;
     border-width: thin;
 }
 ion-row.cado-sched-heads {
@@ -12,10 +12,10 @@ ion-row.cado-sched-heads {
     border-color: black;
 }
 ion-row.cado-topic-first.cado-sched-body {
-    border-color: black, black,gainsboro,black;
+    border-color: black black gainsboro black;
 }
 ion-row.cado-topic-second.cado-sched-body {
-    border-color: gainsboro, black,gainsboro,black;
+    border-color: gainsboro black gainsboro black;
 }
 ion-col.cado-sched-total {
     font-weight: bolder;

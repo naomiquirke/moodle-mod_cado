@@ -16,9 +16,9 @@
 
 }}
 {{!
-    @template mod_cado/cado
+    @template mod_cado/cadomodule
 
-    Displays main CADO report
+    Displays module part of CADO report
 
     Classes required for JS:
     * none
@@ -30,66 +30,128 @@
     * none
 
     Example context (json):
-    {"forum": {
-        "0": {
-            "cmodid": 97,
-            "name": "Less important but still important forum ",
-            "link": "http://localhost/moodle_latest/moodle/mod/forum/view.php?id=97&forceview=1",
-            "datesexists": true,
-            "completionexists": true,
-            "extraexists": false,
-            "introexists": true,
-            "rubricexists": false,
-            "dates": {
-                "0": {
-                    "label": "Date to be completed by: ",
-                    "value": "22 October 2020, 1:51 PM"
-                }
+      {
+        "cmodid": 96,
+        "name": "a1 with rubric (80% LO:1) ",
+        "link": "http://localhost/moodle_latest/moodle/mod/assign/view.php?id=96&forceview=1",
+        "datesexists": true,
+        "completionexists": false,
+        "extraexists": true,
+        "introexists": true,
+        "rubricexists": true,
+        "dates": {
+            "0": {
+                "label": "Date to be completed by: ",
+                "value": "22 January 2021, 5:21 PM"
             },
-            "completion": {
-                "0": {
-                    "label": "Student must create discussions:",
-                    "value": 1
-                },
-                "1": {
-                    "label": "Student must post replies:",
-                    "value": 3
-                }
+            "1": {
+                "label": "Due date: ",
+                "value": "2 January 2021, 5:00 AM"
             },
-            "extra": {},
-            "intro": "Urgles. ",
-            "module": "forum"
+            "2": {
+                "label": "Cut-off date: ",
+                "value": "22 January 2021, 5:21 PM"
+            }
         },
-        "1": {
-            "cmodid": 95,
-            "name": "Important forum (LO:3 0%) ",
-            "link": "http://localhost/moodle_latest/moodle/mod/forum/view.php?id=95&forceview=1",
-            "datesexists": true,
-            "completionexists": true,
-            "extraexists": false,
-            "introexists": true,
-            "rubricexists": false,
-            "dates": {
-                "0": {
-                    "label": "Date to be completed by: ",
-                    "value": "22 December 2020, 1:51 PM"
-                }
+        "extra": {
+            "0": {
+                "label": "Word count: ",
+                "value": 1000
             },
-            "completion": {
-                "0": {
-                    "label": "Student must create discussions:",
-                    "value": 1
+            "1": {
+                "label": "Final grade %: ",
+                "value": 80
+            },
+            "2": {
+                "label": "Hours: ",
+                "value": 30
+            }
+        },
+        "intro": "Description ",
+        "rubric": {
+            "0": {
+                "levels": {
+                    "0": {
+                        "leveldesc": "ultimate",
+                        "points": 5
+                    },
+                    "1": {
+                        "leveldesc": "lovely",
+                        "points": 4
+                    },
+                    "2": {
+                        "leveldesc": "ok",
+                        "points": 3
+                    },
+                    "3": {
+                        "leveldesc": "acceptable",
+                        "points": 2
+                    },
+                    "4": {
+                        "leveldesc": "unacceptable",
+                        "points": 1
+                    },
+                    "5": {
+                        "leveldesc": "dreadful",
+                        "points": 0
+                    }
                 },
-                "1": {
-                    "label": "Student must post replies:",
-                    "value": 1
-                }
+                "critdesc": "and the rest"
             },
-            "extra": {},
-            "intro": "What a wonderful day for a forum post. ",
-            "module": "forum"
-        }
-    }
+            "1": {
+                "levels": {
+                    "0": {
+                        "leveldesc": "this awesome",
+                        "points": 3
+                    },
+                    "1": {
+                        "leveldesc": "this nice",
+                        "points": 1
+                    },
+                    "2": {
+                        "leveldesc": "this bad",
+                        "points": 0
+                    }
+                },
+                "critdesc": "the other"
+            },
+            "2": {
+                "levels": {
+                    "0": {
+                        "leveldesc": "this great",
+                        "points": 2
+                    },
+                    "1": {
+                        "leveldesc": "this ok",
+                        "points": 1
+                    },
+                    "2": {
+                        "leveldesc": "this what?",
+                        "points": 0
+                    }
+                },
+                "critdesc": "this"
+            },
+            "3": {
+                "levels": {
+                    "0": {
+                        "leveldesc": "that great",
+                        "points": 2
+                    },
+                    "1": {
+                        "leveldesc": "that ok",
+                        "points": 1
+                    },
+                    "2": {
+                        "leveldesc": "that what?",
+                        "points": 0
+                    }
+                },
+                "critdesc": "that"
+            }
+        },
+        "module": "assign"
+      }
 }}
 <div {{#dm}}class="{{dm}}"{{/dm}}>
   <h2 id="cadoi-{{module}}-name_{{cmodid}}" {{#dmn}}class="{{dmn}}"{{/dmn}}>{{name}} <a class="cad-link" href="{{link}}" target="_blank">&#9741;</a></h2>
