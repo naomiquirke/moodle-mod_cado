@@ -25,8 +25,8 @@
 /**
  * @module mod_cado/filterform
  */
-define(['jquery'],
-    function ($) {
+define([],
+    function () {
         /**
          * @alias module:mod_cado/filterform
          */
@@ -34,34 +34,40 @@ define(['jquery'],
         return {
             init: function (cadolist) {
                 // cadolist has records from Cado: id and name; from Course: shortname, fullname, startdate.
+                const cadoids = Object.entries(cadolist);
                 const dateselects = document.querySelectorAll("select[id^='id_compare']");
                 dateselects.forEach(function (dateselect) {
                     dateselect.addEventListener('change', updatechoices);
                 });
 
-                const coursename = $("#id_coursename");
-                coursename.on('change', () => updatechoices());
-                const cadochoice = $("#id_cadoid");
+                const coursename = document.getElementById('id_coursename');
+                coursename.addEventListener('change', updatechoices);
+                const cadochoice = document.getElementById('id_cadoid');
                 updatechoices();
 
                 // Changing the content of cadochoice selector.
                 function updatechoices() {
-                    cadochoice.empty();
-                    cadochoice.append(`<option value="0">---</option>`);
-                    cadochoice.prop('selectedIndex', 0);
-                    let sdate = new Date($("#id_comparestartdate_year").val(),
-                        $("#id_comparestartdate_month").val(),
-                        $("#id_comparestartdate_day").val());
+                    // First remove existing.
+                    while (cadochoice.firstChild) {
+                        cadochoice.removeChild(cadochoice.firstChild);
+                    }
+                    cadochoice.insertAdjacentHTML('afterbegin', `<option value="0">---</option>`);
+                    cadochoice.selectedIndex = 0;
+                    let sdate = new Date(document.getElementById('id_comparestartdate_year').value,
+                        document.getElementById('id_comparestartdate_month').value,
+                        document.getElementById('id_comparestartdate_day').value);
                     let startdate = Math.floor(sdate.getTime() / 1000);
-                    let edate = new Date($("#id_compareenddate_year").val(),
-                        $("#id_compareenddate_month").val(),
-                        $("#id_compareenddate_day").val());
+                    let edate = new Date(document.getElementById('id_compareenddate_year').value,
+                        document.getElementById('id_compareenddate_month').value,
+                        document.getElementById('id_compareenddate_day').value);
                     let enddate = Math.floor(edate.getTime() / 1000);
-                    $.each(cadolist, function (index, value) {
-                        if ((value.startdate >= startdate) &&
-                            (value.startdate <= enddate) &&
-                            (value.shortname.indexOf(coursename.val()) >= 0)) {
-                            cadochoice.append(`<option value=${index}>${value.shortname} --- ${value.name}</option>`);
+
+                    cadoids.forEach(function (value) {
+                        if ((value[1].startdate >= startdate) &&
+                            (value[1].startdate <= enddate) &&
+                            (value[1].shortname.indexOf(coursename.value) >= 0)) {
+                            cadochoice.insertAdjacentHTML('afterbegin',
+                                `<option value=${value[0]}>${value[1].shortname} --- ${value[1].name}</option>`);
                         }
                     });
                 }
