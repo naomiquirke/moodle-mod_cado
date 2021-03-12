@@ -11,9 +11,21 @@ Updates
 =======
 Version 3.0
 -----------
-* Turnitin assignments are now included.
-* The mobile version has its own CADO template.
-Mechanism: To enable future activity mods to be more flexibly included and to allow multiple CADO templates, a new database field containing the JSON formatted data for each template is used to store a CADO rather than using an HTML format. The HTML field will continue to be loaded and stored for users wishing to access the HTML view in external reports (determined in plugin admin settings).
+* The mobile CADO display is now more appropriate for a small screen.
+* The compare function has been improved:
+** The CADO chooser dialog now updates the list of CADOs dynamically
+** The compare function is now more detailed:
+*** There is an arrow marker showing where text begins differing
+*** Missing information is now added into the compare display with the appropriate highlight colour, and missing text is marked using a strikeout font style
+*** Compare now also checks for differences between individual dates, tags and rubric rows
+** Style changes in the CADO template will not affect the compare functionality
+
+Mechanism: A new database field containing JSON formatted data is now used to store CADO data rather than storing generated HTML. This JSON data will enable future activity mods to be included more flexibly, and allow the CADO template to be reorganised. Because of this, a number of functions and the mustache templates were revised.
+
+Any view of past-approved CADOs which naturally only have an HTML version will trigger the automatic creation of JSON data.  The HTML will not be overwritten.
+
+New option: 
+* "Store HTML version". The HTML field containing the generated CADO may continue to be loaded and stored for users wishing to access the HTML view in external reports.  By default this functionality will be turned off in plugin admin settings, just to avoid double storage.
 
 Version 2.1
 -----------
