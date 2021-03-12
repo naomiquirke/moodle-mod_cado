@@ -60,11 +60,17 @@ class mod_cado_comparecado {
 
         $allmatched = true;
         // First, the DB items.  These must be added directly as entries into the JSON for compare.
-        $items = ['intro', 'comment', 'biblio'];
+        $allmatched = $this->applydiff($origincado->cadointro, $othercado->cadointro, 'di', 'cadointro'
+            , null, null, $newjson) && $allmatched;
+        // With the next two DB items, they may be present in DB, but shouldn't be included due to site settings at gen time.
+        $items = ['comment', 'biblio'];
         foreach ($items as $item) {
             $descriptor = 'd' . substr($item, 0, 1);
             $fieldname = 'cado' . $item;
-            $allmatched = $this->applydiff($origincado->$fieldname, $othercado->$fieldname, $descriptor, $fieldname
+            $exists = $item . 'exists';
+            $first = $originjson[$exists] ? $origincado->$fieldname : null;
+            $second = $otherjson[$exists] ? $othercado->$fieldname : null;
+            $allmatched = $this->applydiff($first, $second, $descriptor, $fieldname
                 , null, null, $newjson) && $allmatched;
         }
         // Next the top level items.
@@ -72,6 +78,8 @@ class mod_cado_comparecado {
             , "grouping", null, null, $newjson) && $allmatched;
         $allmatched = $this->applydiff($originjson["summary"], $otherjson["summary"], "ds"
             , "summary", null, null, $newjson) && $allmatched;
+        $allmatched = $this->applydiff($originjson["sitecomment"], $otherjson["sitecomment"], "dsc"
+            , "sitecomment", null, null, $newjson) && $allmatched;
 
         // New we need to do the modules.
         $mods = ['forum', 'quiz', 'assign'];
@@ -232,7 +240,6 @@ class mod_cado_comparecado {
         }
         // Anything not marked done is missing from one of the records.
         $temp = $this->findgaps($origininner[$type], $otherinner[$type], $finalinner[$type], "dmrc");
-error_log("\r\n" . time() . "****** matchedinner - second check *****" . "\r\n" . print_r($temp, true), 3, "d:\moodle_server\server\myroot\mylogs\myerrors.log");
         return $temp && $matchedinner;
     }
 
@@ -335,7 +342,7 @@ error_log("\r\n" . time() . "****** matchedinner - second check *****" . "\r\n" 
             if (!$newelement) {
                 $resultelement[$diffdescriptor] = "cado-different";
                 // Insert marker at point where difference occurs. This is only of significant use in paragraphs.
-                $newa = substr_replace($a, "\u{2198}", $this->get_diff_pt($a, $b), 0);
+                $newa = $this->get_diff_pt($a, $b);
                 $resultelement[$childelement] = $newa;
             } else {
                 $resultelement[$childelement][$diffdescriptor] = "cado-different";
@@ -346,15 +353,17 @@ error_log("\r\n" . time() . "****** matchedinner - second check *****" . "\r\n" 
         return false;
     }
 
+
     /**
-     * To get the difference point in two strings, $a and $b.
-     * Will find first differences even if it is in the html as well.
+     * To get the difference point in two texts, $a and $b.
+     * Note it is html agnostic, it will disrupt the html to place the marker.
      *
      * @param string $a
      * @param string $b
      * @return int position of first difference.
      */
     private function get_diff_pt($a, $b) {
+
         $a = trim($a);
         $b = trim($b);
         $arr1 = str_split($a);
@@ -364,10 +373,10 @@ error_log("\r\n" . time() . "****** matchedinner - second check *****" . "\r\n" 
             if ((isset($arr2[$i])) && ($arr1[$i] == $arr2[$i])) {
                 continue;
             } else {
-                return $i;
+                break;
             }
         }
-        return $i;
+        return substr_replace($a, "\u{2198}", $i, 0);
     }
 
 }

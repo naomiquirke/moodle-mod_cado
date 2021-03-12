@@ -198,18 +198,28 @@ class mod_cado_cado {
      */
     public function cadogenerate($reportrenderer) {
         global $USER;
+        $siteoptions = get_config('cado');
+        $chosenset = explode (",", $siteoptions->cadooptions);
+        $siteoptions->cadooptions = $chosenset;
+
         $genwhat = $this->report_course();
-        $genwhat->summary = mod_cado_check::options('summary', 'cadooptions') ? $this->course->summary : null;
+        /* Not sufficient to just use existence of content as the boolean.
+        Because if site options change off then on, want to retrieve the text. */
+        $genwhat->commentexists = in_array( 'cadocomment' , $chosenset );
+        $genwhat->biblioexists = in_array( 'cadobiblio' , $chosenset );
+        // Keep this because it is not obvious why an activity may have been included or not in the future.
+        $genwhat->inchidden = $siteoptions->inchidden;
+        $genwhat->summary = in_array( 'summary' , $chosenset ) ? $this->course->summary : null;
+        $genwhat->sitecomment = mod_cado_check::sitecomment();
         $genwhat->fullname = $this->course->fullname;
         $this->instance->generatedjson = json_encode($genwhat,
             JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
 
         if (get_config('cado')->storegeneratedhtml) {
-            $genwhat->logourl = get_config('cado')->showlogo ? $reportrenderer->get_logo_url() : null;
-            $genwhat->sitecomment = mod_cado_check::sitecomment();
+            $genwhat->logourl = $siteoptions->showlogo ? $reportrenderer->get_logo_url() : null;
             $genwhat->cadointro = $this->instance->cadointro;
-            $genwhat->cadocomment = mod_cado_check::options('cadocomment', 'cadooptions') ? $this->instance->cadocomment : null;
-            $genwhat->cadobiblio = mod_cado_check::options('cadobiblio', 'cadooptions') ? $this->instance->cadobiblio : null;
+            $genwhat->cadocomment = $genwhat->commentexists ? $this->instance->cadocomment : null;
+            $genwhat->cadobiblio = $genwhat->biblioexists ? $this->instance->cadobiblio : null;
             $this->instance->generatedpage = $reportrenderer->render_cado($genwhat);
         }
 
@@ -300,7 +310,7 @@ class mod_cado_cado {
         $visible = get_config('cado')->inchidden == 1 ? 0 : 1;
 
         $courseext = new stdClass;
-        $courseext->version = $this->get_version();
+        $courseext->cadoversion = $this->get_version();
         $courseext->groupingname = $grouping ? $DB->get_record('groupings', array('id' => $grouping), 'name')->name : null;
 
         // SCHEDULE and TAGS SETUP.

@@ -76,8 +76,8 @@ if (!$viewedcado->instance->timeapproved) {  // If not approved.
         $cs->statecomment = has_capability('mod/cado:approve', $context) ?
             get_string('notgenerated', 'cado') : get_string('notavailable', 'cado');
         $showcentral = 0;
-    } else {
-        // If can generate then if necessary first generate.
+    } else { // Able to generate.
+        // If not yet generated, then generate.
         if ($viewedcado->instance->timegenerated == 0) {
             $viewedcado->cadogenerate($myrenderer);
         }
@@ -131,22 +131,16 @@ if ($showcentral) { // Now outputting the main report.
     if ($compareid) {
         $myrenderer->render_compare($getcompared);
     } else {
-        // First see if user is to view the HTML version, retaining effect of site settings from the time CADO approved.
-        if ($viewedcado->instance->timeapproved && get_config('cado')->usehtml && !empty($viewedcado->instance->generatedpage)) {
-            echo $viewedcado->instance->generatedpage;
-        } else {
-            $coursegenerated = (object) json_decode($viewedcado->instance->generatedjson, true);
-            // Now add the bits that are in the table or are independent to the individual course details.
-            $coursegenerated->logourl = get_config('cado')->showlogo ? $myrenderer->get_logo_url() : null;
-            $coursegenerated->sitecomment = mod_cado_check::sitecomment();
-            $coursegenerated->cadointro = $viewedcado->instance->cadointro;
-            $coursegenerated->cadocomment = mod_cado_check::options('cadocomment', 'cadooptions') ?
-                $viewedcado->instance->cadocomment : null;
-            $coursegenerated->cadobiblio = mod_cado_check::options('cadobiblio', 'cadooptions') ?
-                $viewedcado->instance->cadobiblio : null;
-            // Finally output.
-            echo $myrenderer->render_cado($coursegenerated);
-        }
+        $coursegenerated = (object) json_decode($viewedcado->instance->generatedjson, true);
+        // Now add the bits that are in the table or are independent to the individual course details.
+        $coursegenerated->logourl = get_config('cado')->showlogo ? $myrenderer->get_logo_url() : null;
+        $coursegenerated->cadointro = $viewedcado->instance->cadointro;
+        // Include these based on site settings at time of generation.
+        $coursegenerated->cadocomment = $coursegenerated->commentexists ? $viewedcado->instance->cadocomment : null;
+        $coursegenerated->cadobiblio = $coursegenerated->biblioexists ? $viewedcado->instance->cadobiblio : null;
+
+        // Finally output.
+        echo $myrenderer->render_cado($coursegenerated);
     }
 }
 if ($reportformat == 'print') {
