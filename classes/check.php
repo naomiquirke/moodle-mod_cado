@@ -51,12 +51,13 @@ class mod_cado_check {
      */
     public function __construct($courseid) {
         global $DB;
+        $config = get_config('cado');
         $this->schedulesetup = $this->options('schedule', 'cadooptions') ? 1 : 0; // Schedule wanted.
-        $this->tagsinsched = $this->schedulesetup && get_config('cado')->tagschedule ? 1 : 0; // Tags in schedule or not.
+        $this->tagsinsched = $this->schedulesetup && $config->tagschedule ? 1 : 0; // Tags in schedule or not.
         $gettags = $this->options('tags', 'cadooptions');
-        if ($gettags && get_config('cado')->tagslist) { // Check to see if tags wanted at all and tags are present.
+        if ($gettags && $config->tagslist) { // Check to see if tags wanted at all and tags are present.
 
-            $tags = explode (",", get_config('cado')->tagslist);
+            $tags = explode (",", $config->tagslist);
             foreach ($tags as $key => $value) {
                 $this->tagset['tag' . $key] = trim($value);
             }
