@@ -51,25 +51,29 @@ class mod_cado_comparecado {
         }
         $otherjson = json_decode($othercado->generatedjson, true);
         $originjson = json_decode($origincado->generatedjson, true);
-        // Copy of origin JSON.  Can eventually just add to it.
+        // Copy of origin JSON.  Will be adding normal DB fields and compare classes to it.
         $newjson = json_decode($origincado->generatedjson, true);
+        $newjson['cadointro'] = $origincado->cadointro;
+        $newjson['cadobiblio'] = $origincado->cadobiblio;
+        $newjson['cadocomment'] = $origincado->cadocomment;
 
         $result["compareheaderorigin"] = get_string('compareheaderorigin', 'cado', $origincado->name);
         $result["compareheaderother"] = get_string('compareheaderother', 'cado', $othercado->name);
         $result["commentdiff"] = (strcasecmp($othercado->approvecomment, $origincado->approvecomment) != 0);
 
         $allmatched = true;
-        // First, the DB items.  These must be added directly as entries into the JSON for compare.
+        // First, the DB items.  These must be brought from the DB record for compare.
         $allmatched = $this->applydiff($origincado->cadointro, $othercado->cadointro, 'di', 'cadointro'
             , null, null, $newjson) && $allmatched;
-        // With the next two DB items, they may be present in DB, but shouldn't be included due to site settings at gen time.
+        // With the next two DB items, they may be present in DB, but may also not be displayed due to site settings at gen time.
         $items = ['comment', 'biblio'];
         foreach ($items as $item) {
             $descriptor = 'd' . substr($item, 0, 1);
             $fieldname = 'cado' . $item;
             $exists = $item . 'exists';
-            $first = $originjson[$exists] ? $origincado->$fieldname : null;
-            $second = $otherjson[$exists] ? $othercado->$fieldname : null;
+            $first = $originjson[$exists] ? $origincado->$fieldname : '';
+            $second = $otherjson[$exists] ? $othercado->$fieldname : '';
+
             $allmatched = $this->applydiff($first, $second, $descriptor, $fieldname
                 , null, null, $newjson) && $allmatched;
         }
@@ -111,8 +115,9 @@ class mod_cado_comparecado {
         foreach ($items as $itemtype) {
             $descriptor = $prefix . substr($itemtype, 0, 1);
             $exists = $itemtype . 'exists';
+            $ori[$exists] = isset($ori[$exists]) ? $ori[$exists] : false;
+            $oth[$exists] = isset($oth[$exists]) ? $oth[$exists] : false;
             // Re the existence of the itemtype, just apply same logic as applydiff function.
-
             if ((!$ori[$exists]) && (!$oth[$exists])) {
                 continue;
             } else if (!$oth[$exists]) {
