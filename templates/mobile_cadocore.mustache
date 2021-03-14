@@ -398,7 +398,7 @@
     <h3><%# str %> cadotitle, mod_cado <%/ str %>          
         <%#groupingname%>
         <span><%# str %> forgroup, mod_cado <%/ str %></span>
-        <span id="cado-grouping" <%#dg%>class="<%dg%>"<%/dg%>>
+        <span id="cado-grouping">
            <%groupingname%>
         </span>         
         <%/groupingname%> 
@@ -408,16 +408,16 @@
     <hr>
   </div>
   <%#cadointro%> 
-  <div id="cado-intro" <%#di%>class="<%di%>"<%/di%>><%{cadointro}%></div>
+  <div id="cado-intro"><%{cadointro}%></div>
   <%/cadointro%>
   <%#summary%>       
   <h2><%# str %> description, mod_cado <%/ str %></h2>
-  <div id="cado-coursesummary" <%#ds%>class="<%ds%>"<%/ds%>><%{summary}%></div>
+  <div id="cado-coursesummary"><%{summary}%></div>
   <%/summary%>
   <%#scheduleexists%><%> mod_cado/mobile_cadoschedule%><%/scheduleexists%>
-  <%#cadocomment%><div id="cado-comment" <%#dc%>class="<%dc%>"<%/dc%>><%{cadocomment}%></div><%/cadocomment%>
+  <%#cadocomment%><div id="cado-comment"><%{cadocomment}%></div><%/cadocomment%>
   <%#forumexists%>
-  <div id="cado-forum" <%#df%>class="<%df%>"<%/df%>>
+  <div id="cado-forum">
     <h2 class="cad-header"><%# str %> forum, mod_cado <%/ str %></h2>
     <%#forum%><%> mod_cado/mobile_cadomodule%><%/forum%>
   </div>
@@ -436,9 +436,9 @@
   <%/assignexists%>
   <br><hr><br>
   <%#sitecomment%>
-  <div id="cado-sitecomment" <%#dsc%>class="<%dsc%>"<%/dsc%>><%{sitecomment}%></div>
+  <div id="cado-sitecomment"><%{sitecomment}%></div>
   <%/sitecomment%>
   <%#cadobiblio%>
-  <div id="cado-biblio" <%#db%>class="<%db%>"<%/db%>><%{cadobiblio}%></div>
+  <div id="cado-biblio"><%{cadobiblio}%></div>
   <%/cadobiblio%>
 </div>
