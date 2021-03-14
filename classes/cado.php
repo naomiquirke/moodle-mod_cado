@@ -321,7 +321,7 @@ class mod_cado_cado {
         $modlist = get_config('cado')->activityoptions;
         $modarray = explode(',', $modlist);
         $allmodinfo = $this->getcadodata($modarray, ['course' => $courseid, 'groupingid' => $grouping, 'visible' => $visible]);
-        foreach ($modarray as $thistype) {
+        foreach (['forum', 'quiz', 'assign'] as $thistype) { // Include *all* possible, because need to get exists boolean below.
             $temparray = [];
             foreach ($allmodinfo as $thismod) {
                 if ($thismod->modtype == $thistype) {
@@ -400,32 +400,33 @@ class mod_cado_cado {
      * @param array $totalrow contains number of sections
      */
     private function getmoddetails($modtype, $thismod, $sched, &$schedule, $totalrow) {
-        $quiz = $modtype == 'quiz';
-        $forum = $modtype == 'forum';
-        $assign = $modtype == 'assign';
         $contents = []; // Returned.
-        $thisrubric = $assign || $forum ? $this->get_rubric($thismod->id) : [];
+        $thisrubric = $modtype == 'assign' || $modtype == 'forum' ? $this->get_rubric($thismod->id) : [];
 
         $dates = [];
         $completion = [];
-        if ($forum) {
+        if ($modtype == 'forum') {
             $this->labelout($dates, get_string('duedate', 'forum'), $this->usetime($thismod->forumduedate));
             $this->labelout($dates, get_string('cutoffdate', 'forum'), $this->usetime($thismod->forumcutoffdate));
             $this->labelout($completion, get_string('completiondiscussions', 'forum'), $thismod->completiondiscussions);
             $this->labelout($completion, get_string('completionreplies', 'forum'), $thismod->completionreplies);
             $this->labelout($completion, get_string('completionposts', 'forum'), $thismod->completionposts);
         };
-        if ($assign) {
+        if ($modtype == 'assign') {
             $this->labelout($dates, get_string('duedate', 'assign'), $this->usetime($thismod->assignduedate));
             $this->labelout($dates, get_string('cutoffdate', 'assign'), $this->usetime($thismod->assigncutoffdate));
         };
-        if ($quiz) {
-            $this->labelout($dates, get_string('quizclose', 'quiz'), $this->usetime($thismod->quizduedate));
+        if ($modtype == 'quiz') {
+            $this->labelout($dates, get_string('quizclose', 'quiz'), $this->usetime($thismod->timeclose));
             $this->labelout($dates, get_string('quizopen', 'quiz'), $this->usetime($thismod->timeopen));
             $this->labelout($completion, get_string('timelimit', 'quiz'),
                 $thismod->timelimit == "0" ? get_string('notapplicable', 'cado') : intval($thismod->timelimit / 60) );
             $this->labelout($completion, get_string('attempts', 'quiz'),
                 $thismod->attempts == "0" ? get_string('notapplicable', 'cado') : $thismod->attempts );
+            $thismod->quizduedate = $thismod->timeclose ? $thismod->timeclose :
+                ($thismod->timeopen ? $thismod->timeopen +
+                ($thismod->timelimit ? $thismod->timelimit : 0) : 0);
+            $thismod->quizcutoffdate = 0;
         };
         $this->labelout($dates, get_string("{$modtype}expectcompleted", 'cado'), $this->usetime($thismod->completionexpected));
         $intro = "{$modtype}intro";
@@ -568,7 +569,7 @@ class mod_cado_cado {
         }
         if ($quiz) {
             $sqlselect .= ", q.name quizname, q.intro quizintro
-                , timeclose quizduedate, timeopen, timelimit, attempts, (timeclose + timelimit) quizcutoffdate ";
+                , timeclose, timeopen, timelimit, attempts ";
             $sqlfroms .= "
                 LEFT JOIN {quiz} q on q.id = cm.instance and cm.modtype = 'quiz' ";
             $sqlorderby .= ", timeclose";
