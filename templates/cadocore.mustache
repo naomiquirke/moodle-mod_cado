@@ -428,13 +428,13 @@
   </div>
   {{/forumexists}}
   {{#quizexists}}
-  <div id="cado-quiz">
+  <div id="cado-quiz" {{#dq}}class="{{dq}}"{{/dq}}>
     <h2 class="cad-header">{{# str }} quiz, mod_cado {{/ str }}</h2>
     {{#quiz}}{{> mod_cado/cadomodule}}{{/quiz}}
   </div>
   {{/quizexists}}
   {{#assignexists}}
-  <div id="cado-assign">
+  <div id="cado-assign" {{#da}}class="{{da}}"{{/da}}>
     <h2 class="cad-header">{{# str }} assign, mod_cado {{/ str }}</h2>
     {{#assign}}{{> mod_cado/cadomodule}}{{/assign}}
   </div>
