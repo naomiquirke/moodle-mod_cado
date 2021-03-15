@@ -82,7 +82,7 @@ class mod_cado_compare_form extends moodleform {
         $courseresult = $DB->get_records_sql($sql, ["currentcado" => $this->_customdata['instance']]);
         $chosencourses["0"] = "---";
         foreach ($courseresult as $thisresult) {
-            $chosencourses[$thisresult ->id] = $thisresult ->shortname . ' --- ' . $thisresult ->name;
+            $chosencourses[$thisresult->id] = $thisresult->shortname . ' --- ' . $thisresult->name;
         }
         return [$courseresult, $chosencourses];
     }
