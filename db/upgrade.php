@@ -44,9 +44,6 @@ function xmldb_cado_upgrade($oldversion = 0) {
         // Adding field to table cado.
         $newfield = $table->add_field('generatedjson', XMLDB_TYPE_TEXT);
 
-        // NQ Set default value here as conversion back from HTML, and drop generated page field.  Then we know it exists properly.
-        // public function add_field($name, $type, $precision=null, $unsigned=null, $notnull=null, $sequence=null, $default=null, $previous=null)
-
         if (!$dbman->field_exists($table, $newfield)) {
             $dbman->add_field($table, $newfield);
         }
