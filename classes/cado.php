@@ -596,7 +596,6 @@ class mod_cado_cado {
         global $CFG;
         $plugin = new stdClass;
         $plugin->version = null;
-        $module = $plugin;
         include($CFG->dirroot . '/mod/cado/version.php');
         return $plugin->version;
     }
