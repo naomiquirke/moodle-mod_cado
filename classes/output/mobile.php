@@ -44,7 +44,7 @@ class mobile {
      * @return array       HTML, javascript and otherdata
      */
     public static function mobile_course_view($args) {
-        global $OUTPUT, $USER, $DB;
+        global $OUTPUT, $DB;
 
         $args = (object) $args;
         $cm = get_coursemodule_from_id('cado', $args->cmid);
