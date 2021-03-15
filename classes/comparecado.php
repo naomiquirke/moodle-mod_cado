@@ -261,7 +261,7 @@ class mod_cado_comparecado {
         list($type, $origininner, $otherinner, &$finalinner) = $params;
         $matchedinner = true;
         foreach ($origininner[$type] as $orikey1 => &$orimod) {
-            foreach ($otherinner[$type] as $othkey1 => &$othmod) {
+            foreach ($otherinner[$type] as &$othmod) {
                 // Ignore others that have already been matched.
                 if (isset($othmod["done"])) {
                     continue;
@@ -301,7 +301,7 @@ class mod_cado_comparecado {
             $matchedinner = false;
         }
         // Then find missing origins.
-        foreach ($oth as $key2 => &$element2) {
+        foreach ($oth as &$element2) {
             if (isset($element2["done"])) {
                 continue;
             }
