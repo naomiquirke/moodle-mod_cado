@@ -113,7 +113,7 @@ class mod_cado_translatecado {
             $result->$type = [];
             for ($i = 3; $i <= $result->$existsname;) { // Note $i increments in the function.
                 if (is_object($rows->item($i)) && is_object($rows->item($i)->attributes->item(0))) {
-                    list($i, $returned) = $this->get_items($rows, 0, $i);
+                    list($i, $returned) = $this->get_items($rows, $i);
                     $returned->module = $type;
                     $result->{$type}[] = $returned;
                 } else {
@@ -127,11 +127,10 @@ class mod_cado_translatecado {
      * Gets module items for type.
      *
      * @param DOMNodeList $item
-     * @param Boolean $rubric
      * @param Int $num
      *
      */
-    private function get_items($items, $rubric, $num) {
+    private function get_items($items, $num) {
         $thismod = new stdClass;
         $nameid = $items->item($num)->attributes->item(0)->nodeValue;
         $thismod->cmodid = substr($nameid, strpos($nameid, '_') + 1);
