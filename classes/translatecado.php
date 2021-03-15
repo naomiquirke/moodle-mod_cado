@@ -52,15 +52,15 @@ class mod_cado_translatecado {
      * Translates a CADO instance.
      */
     public function translate() {
-        global $DB, $PAGE;
-        if ($this->groupingid === null) {
+        global $DB;
+        if ($this->groupingid === null) { // Then we are translating a CADO stored in DB, and don't yet have grouping info.
             /*
             It is easier to get grouping name through course module rather than off the html because the grouping name
             string is embedded with other text. Grouping is not something that is changed once a CADO is approved;
             because of access issues it rightfully should be reported as what is in the cm even if the name is now 'incorrect'
             on the CADO with respect to cm, access by particular groups is more important.
             */
-            list($course, $cm) = get_course_and_cm_from_instance($this->instance, 'cado', $this->instance->course);
+            $cm = get_fast_modinfo($this->instance->course)->instances['cado'][$this->instance->id];
             $this->groupingid = $cm->groupingid;
         }
         $result = new stdClass;
