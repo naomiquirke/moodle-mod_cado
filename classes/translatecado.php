@@ -39,7 +39,8 @@ class mod_cado_translatecado {
     /**
      * Creates a CADO image.
      *
-     * @param stdClass $instance CADO database entry
+     * @param object $instance CADO database entry
+     * @param int $groupingid if known
      */
     public function __construct($instance, $groupingid = null) {
         $this->instance = $instance;
@@ -99,9 +100,9 @@ class mod_cado_translatecado {
     /**
      * Gets module types.
      *
-     * @param stdClass $result
+     * @param object $result
      * @param DOMDocument $doc
-     * @param String $type is the mod type
+     * @param string $type is the mod type
      *
      */
     private function get_modtype(&$result, $doc, $type) {
@@ -126,9 +127,9 @@ class mod_cado_translatecado {
     /**
      * Gets module items for type.
      *
-     * @param DOMNodeList $item
-     * @param Int $num
-     *
+     * @param DOMNodeList $items lines to categorise
+     * @param int $num line number
+     * @return array
      */
     private function get_items($items, $num) {
         $thismod = new stdClass;
@@ -223,7 +224,7 @@ class mod_cado_translatecado {
      *
      * @param DOMNodeList $schedbody
      * @param stdClass $result
-     *
+     * @return void
      */
     private function get_schedule_body($schedbody, &$result) {
         $counter = 0;
@@ -271,7 +272,7 @@ class mod_cado_translatecado {
      *
      * @param DOMNodeList $header
      * @param stdClass $result
-     *
+     * @return void
      */
     private function get_schedule_head($header, &$result) {
         $row = $header->item(0)->childNodes->item(1);
@@ -306,7 +307,7 @@ class mod_cado_translatecado {
      * Gets innerXML
      *
      * @param DOMNode $node is the dom node
-     *
+     * @return string
      */
     private function innerxml($node) {
         if ($node->hasChildNodes()) {
