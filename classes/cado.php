@@ -477,11 +477,11 @@ class mod_cado_cado {
         return $contents;
     }
     /**
-     * Does a check that a value exists, and if so adds a label and appends to array.
+     * Does a check that a value exists and is non-zero, and if so adds a label and appends to results array.
      *
-     * @param array $addarray.
-     * @param string $thislabel.
-     * @param string $thisvalue.
+     * @param array $addarray results output.
+     * @param string $thislabel the label to add.
+     * @param string $thisvalue the value to add.
      */
     private function labelout(&$addarray, $thislabel, $thisvalue) {
         if ($thisvalue) {
