@@ -54,7 +54,7 @@ define([],
                     cadochoice.insertAdjacentHTML('afterbegin', `<option value="0">---</option>`);
                     cadochoice.selectedIndex = 0;
                     let sdate = new Date(document.getElementById('id_comparestartdate_year').value,
-                        document.getElementById('id_comparestartdate_month').value,
+                        document.getElementById('id_comparestartdate_month').value - 1,
                         document.getElementById('id_comparestartdate_day').value);
                     let startdate = Math.floor(sdate.getTime() / 1000);
                     let edate = new Date(document.getElementById('id_compareenddate_year').value,
