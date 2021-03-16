@@ -54,10 +54,10 @@ class mod_cado_comparecado {
         $otherjson = json_decode($othercado->generatedjson, true);
         $originjson = json_decode($origincado->generatedjson, true);
         // Copy of origin JSON.  Will be adding normal DB fields and compare classes to it.
-        $newjson = json_decode($origincado->generatedjson, true);
-        $newjson['cadointro'] = $origincado->cadointro;
-        $newjson['cadobiblio'] = $origincado->cadobiblio;
-        $newjson['cadocomment'] = $origincado->cadocomment;
+        $this->newjson = json_decode($origincado->generatedjson, true);
+        $this->newjson['cadointro'] = $origincado->cadointro;
+        $this->newjson['cadobiblio'] = $origincado->cadobiblio;
+        $this->newjson['cadocomment'] = $origincado->cadocomment;
 
         $result["compareheaderorigin"] = get_string('compareheaderorigin', 'cado', $origincado->name);
         $result["compareheaderother"] = get_string('compareheaderother', 'cado', $othercado->name);
@@ -65,8 +65,8 @@ class mod_cado_comparecado {
 
         $allmatched = true;
         // First, the DB items.  These must be brought from the DB record for compare.
-        $allmatched = $this->applydiff($origincado->cadointro, $othercado->cadointro, 'di', 'cadointro'
-            , null, null, $newjson) && $allmatched;
+        $allmatched = $this->applytopdiff($origincado->cadointro, $othercado->cadointro, 'di', 'cadointro'
+            ) && $allmatched;
         // With the next two DB items, they may be present in DB, but may also not be displayed due to site settings at gen time.
         $items = ['comment', 'biblio'];
         foreach ($items as $item) {
@@ -76,19 +76,18 @@ class mod_cado_comparecado {
             $first = $originjson[$exists] ? $origincado->$fieldname : '';
             $second = $otherjson[$exists] ? $othercado->$fieldname : '';
 
-            $allmatched = $this->applydiff($first, $second, $descriptor, $fieldname
-                , null, null, $newjson) && $allmatched;
+            $allmatched = $this->applytopdiff($first, $second, $descriptor, $fieldname
+                ) && $allmatched;
         }
         // Next the top level items.
-        $allmatched = $this->applydiff($originjson["groupingname"], $otherjson["groupingname"], "dg"
-            , "grouping", null, null, $newjson) && $allmatched;
-        $allmatched = $this->applydiff($originjson["summary"], $otherjson["summary"], "ds"
-            , "summary", null, null, $newjson) && $allmatched;
-        $allmatched = $this->applydiff($originjson["sitecomment"], $otherjson["sitecomment"], "dsc"
-            , "sitecomment", null, null, $newjson) && $allmatched;
+        $allmatched = $this->applytopdiff($originjson["groupingname"], $otherjson["groupingname"], "dg"
+            , "grouping") && $allmatched;
+        $allmatched = $this->applytopdiff($originjson["summary"], $otherjson["summary"], "ds"
+            , "summary") && $allmatched;
+        $allmatched = $this->applytopdiff($originjson["sitecomment"], $otherjson["sitecomment"], "dsc"
+            , "sitecomment") && $allmatched;
 
         // New we need to do the modules.
-        $this->newjson = $newjson;
         $mods = ['forum', 'quiz', 'assign'];
         $allmatched = $this->exists_check($mods, "d", $originjson, $otherjson, "compare_type")
             && $allmatched;
@@ -106,20 +105,21 @@ class mod_cado_comparecado {
     /**
      * To get whether sections exist between origin and other cado element, and if they do compare them.
      *
-     * @param array $items list of elements to check.
+     * @param array $items elements to check.
      * @param string $prefix combined with element identifier used for moustache template to add the appropriate class.
      * @param array $ori is origin element.
      * @param array $oth is other element.
      * @param string $inner is the inner function to run when the elements both exist. Either: compare_type or...
      * @param string $section is the output section of result json.
      * @param string $index is the output index of result json.
+     * @return boolean
      */
     private function exists_check($items, $prefix, $ori, $oth, $inner, $section = null, $index = null) {
         $itemmatch = true;
-        if ($section) {
-            $result = $this->newjson;
+        if ($section === null) {
+            $result = &$this->newjson;
         } else {
-            $result = $this->newjson[$section][$index];
+            $result = &$this->newjson[$section][$index];
         }
         foreach ($items as $itemtype) {
             $descriptor = $prefix . substr($itemtype, 0, 1);
@@ -219,7 +219,7 @@ class mod_cado_comparecado {
     private function compare_rubric(&$params) {
         list($type, $origininner, $otherinner, $section, $index) = $params;
         $matchedinner = true;
-        $finalinner = $this->newjson[$section][$index][$type];
+        $finalinner = &$this->newjson[$section][$index][$type];
         foreach ($origininner[$type] as $oricritkey => &$oricriterion) {
             foreach ($otherinner[$type] as &$othcriterion) {
                 // Ignore others that have already been matched.
@@ -259,7 +259,7 @@ class mod_cado_comparecado {
     private function compare_inner(&$params) {
         list($type, $origininner, $otherinner, $section, $index) = $params;
         $matchedinner = true;
-        $finalinner = $this->newjson[$section][$index][$type];
+        $finalinner = &$this->newjson[$section][$index][$type];
         foreach ($origininner[$type] as $orikey1 => &$orimod) {
             foreach ($otherinner[$type] as &$othmod) {
                 // Ignore others that have already been matched.
@@ -358,14 +358,43 @@ class mod_cado_comparecado {
         return false;
     }
 
+    /**
+     * To get string differences between origin and other cado element.
+     *
+     * @param string $a is the string from the origin cado
+     * @param string $b is the string from the other cado
+     * @param string $diffdescriptor is the object name / moustache tag to add if required
+     * @param string $childelement is the compared element
+     * @return boolean whether matched or not.
+     */
+    private function applytopdiff($a, $b, $diffdescriptor, $childelement) {
+        $strippeda = trim(strip_tags($a));
+        $strippedb = trim(strip_tags($b));
+        if (empty($strippeda) && empty($strippedb)) {
+            return true;
+        } else if (empty($strippeda)) {
+            $this->newjson[$childelement] = $b;
+            $this->newjson[$diffdescriptor] = "cado-originmissing";
+        } else if (empty($strippedb)) {
+            $this->newjson[$diffdescriptor] = "cado-othermissing";
+        } else if ($strippeda !== $strippedb) {
+            $this->newjson[$diffdescriptor] = "cado-different";
+            // Insert marker at point where difference occurs. This is only of significant use in paragraphs.
+            $newa = $this->get_diff_pt($a, $b);
+            $this->newjson[$childelement] = $newa;
+        } else {
+            return true;
+        }
+        return false;
+    }
 
     /**
-     * To get the difference point in two texts, $a and $b.
+     * To put a marker in at the difference point in two texts, $a and $b.
      * Note it is html agnostic, it will disrupt the html to place the marker.
      *
      * @param string $a
      * @param string $b
-     * @return int position of first difference.
+     * @return string updated $a.
      */
     private function get_diff_pt($a, $b) {
 
