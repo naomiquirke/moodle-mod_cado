@@ -1,3 +1,5 @@
+/* stylelint-disable selector-type-no-unknown -- ion styles not recognised */
+/* stylelint-enable selector-type-no-unknown ignoreTypes:["/^ion-/"] */
 ion-grid#cado-sched-outer ion-row.cado-topic-first {
     border-style: solid solid none solid;
     border-width: thin;
@@ -26,6 +28,13 @@ ion-col.cado-tag-label {
 ion-col.cado-labels {
     font-weight: bolder;
 }
+div.cadocentral [id^="cadoi-assign-rubric_"] ion-row {
+    font-size: small;
+}
+div.cadocentral ion-col.cado-rubric-row-head {
+    font-weight: bolder;
+}
+/* stylelint-enable */
 div.cadocentral .cado-inserthtml {
     margin-top: 1em;
     margin-bottom: 1em;
@@ -34,14 +43,6 @@ div.cadocentral .cado-inserthtml {
     border-width: thin;
     border-color:gainsboro;
 }
-div.cadocentral [id^="cadoi-assign-rubric_"] ion-row {
-    font-size: small;
-}
-
-div.cadocentral ion-col.cado-rubric-row-head {
-    font-weight: bolder;
-}
-
 div.cadocentral a.cad-link {
     color: blue;
     text-decoration: none;
