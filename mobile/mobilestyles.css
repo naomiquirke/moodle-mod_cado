@@ -1,5 +1,4 @@
 /* stylelint-disable selector-type-no-unknown -- ion styles not recognised */
-/* stylelint-enable selector-type-no-unknown ignoreTypes:["/^ion-/"] */
 ion-grid#cado-sched-outer ion-row.cado-topic-first {
     border-style: solid solid none solid;
     border-width: thin;
