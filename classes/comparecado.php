@@ -286,7 +286,7 @@ class mod_cado_comparecado {
      * To update missing element differences between origin and other after the matching is done.
      * @param array $ori origin element.
      * @param array $oth other element.
-     * @param array &$diffresult resulting element.
+     * @param array $diffresult resulting element.
      * @param string $difflabel label for style element.
      * @return boolean whether matched or not.
      */
@@ -321,7 +321,7 @@ class mod_cado_comparecado {
      * @param string $childelement is the compared element
      * @param string $newelement is empty if we are not using indices, otherwise element index of $a.
      * @param array $otherelement is empty if not using indices, otherwise the entire record for the new element.
-     * @param array &$resultelement is the array at the parent element level to add to if required
+     * @param array $resultelement is the array at the parent element level to add to if required
      * @return boolean whether matched or not.
      */
     private function applydiff($a, $b, $diffdescriptor, $childelement, $newelement, $otherelement, &$resultelement) {
