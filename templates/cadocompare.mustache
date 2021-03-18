@@ -26,14 +26,28 @@
     * none
 
     Context variables required for this template:
-    * none
+    * content Object: contains data for mod_cado/cadocore with changes indicated by styles.
 
     Example context (json):
     {
         "compareheaderorigin" : "Origin CADO: \"Example CADO\"",
         "compareheaderother" : "Other CADO: \"CADO for Basic Course, grouping First\"",
         "subheader" : "Comparison key: pink highlights changes between origin and other, green highlights when only origin CADO has an activity, yellow highlights when only other CADO has an activity.",
-        "content" : "Encloses the rest of template mod_cado/cadocore.",
+        "content" : {
+            "cadointro": "<p dir=\"ltr\" style=\"text-align:left;\">Hello</p>",
+            "groupingname": "First",
+            "dg": "cado-different"
+            "weekly": false,
+            "forumexists": false,
+            "quizexists": false,
+            "assignexists": false,
+            "scheduleexists": false,
+            "commentexists": false,
+            "biblioexists": false,
+            "inchidden": 0,
+            "summary": "<p>A random course</p>",
+            "fullname": "Random course"
+        },
         "commentdiff" : true
     }
 }}

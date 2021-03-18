@@ -30,366 +30,369 @@
     * none
 
     Example context (json):
-  {
-    "cadobiblio": "<p dir=\"ltr\" style=\"text-align:left;\">sdfsdf</p>",
-    "cadocomment": "<p dir=\"ltr\" style=\"text-align:left;\">sdfsdf</p>",
-    "cadointro": "<p dir=\"ltr\" style=\"text-align:left;\">fsdfsdf</p>",
-    "groupingname": "First",
-    "fullname": "Introduction to Logic",
-    "summary": "<p>First course on PHP test system</p>",
-    "sitecomment": "<p dir=\"ltr\" style=\"text-align: left;\">sadfs d sfs fsf sf sfsdf sdf </p>",
-    "scheduleexists": 1,
-    "schedheads": {
-        "section": "Section",
-        "startdate": null,
-        "name": "Topic",
-        "task": "Task",
-        "date": "Date due"
-    },
-    "weekly": false,
-    "tagsinsched": 3,
-    "headtag0": "Word count",
-    "headtag1": "Final grade %",
-    "headtag2": "Hours",
-    "schedule": {
-        "0": {
-            "tasks": {},
-            "section": 0,
-            "startdate": null,
-            "sum": 0,
-            "name": "General sections "
-        },
-        "1": {
-            "tasks": {
-                "0": {
-                    "name": "Awesome quiz 1  (LO:3 5%)",
-                    "date": "22/07/20, 14:33",
-                    "tag0": "",
-                    "tag1": "",
-                    "tag2": 10
-                }
-            },
-            "section": 1,
-            "startdate": null,
-            "sum": 0,
-            "name": "Topic 1 "
-        },
-        "2": {
-            "tasks": {
-                "0": {
-                    "name": "Important forum (LO:3 0%)",
-                    "date": "22/12/20, 13:51",
-                    "tag0": "",
-                    "tag1": "",
-                    "tag2": ""
+    {
+        "cadobiblio": "<p dir=\"ltr\" style=\"text-align:left;\">sdfsdf</p>",
+        "cadocomment": "<p dir=\"ltr\" style=\"text-align:left;\">sdfsdf</p>",
+        "cadointro": "<p dir=\"ltr\" style=\"text-align:left;\">fsdfsdf</p>",
+        "groupingname": "First",
+        "weekly": false,
+        "forumexists": true,
+        "forum": {
+            "0": {
+                "module": "forum",
+                "cmodid": 97,
+                "name": "Less important but still important forum",
+                "link": "http://localhost/moodle_latest/moodle/mod/forum/view.php?id=97",
+                "intro": "<p>Urgles.</p>",
+                "introexists": true,
+                "dates": {
+                    "0": {
+                        "label": "Date to be completed by",
+                        "value": "22 October 2020, 1:51 PM"
+                    }
                 },
-                "1": {
-                    "name": "a1 with rubric (80% LO:1)",
-                    "date": "2/01/21, 05:00",
+                "datesexists": true,
+                "completion": {
+                    "0": {
+                        "label": "Student must create discussions:",
+                        "value": 1
+                    },
+                    "1": {
+                        "label": "Student must post replies:",
+                        "value": 3
+                    }
+                },
+                "completionexists": true,
+                "extra": {},
+                "rubric": {},
+                "rubricexists": false,
+                "extraexists": false
+            },
+            "1": {
+                "module": "forum",
+                "cmodid": 95,
+                "name": "Important forum (LO:3 0%)",
+                "link": "http://localhost/moodle_latest/moodle/mod/forum/view.php?id=95",
+                "intro": "<p>What a wonderful day for a forum post.</p>",
+                "introexists": true,
+                "dates": {
+                    "0": {
+                        "label": "Date to be completed by",
+                        "value": "22 December 2020, 1:51 PM"
+                    }
+                },
+                "datesexists": true,
+                "completion": {
+                    "0": {
+                        "label": "Student must create discussions:",
+                        "value": 1
+                    },
+                    "1": {
+                        "label": "Student must post replies:",
+                        "value": 1
+                    }
+                },
+                "completionexists": true,
+                "extra": {},
+                "rubric": {},
+                "rubricexists": false,
+                "extraexists": false
+            }
+        },
+        "quizexists": true,
+        "quiz": {
+            "0": {
+                "module": "quiz",
+                "cmodid": 94,
+                "name": "Awesome quiz 1  (LO:3 5%)",
+                "link": "http://localhost/moodle_latest/moodle/mod/quiz/view.php?id=94",
+                "intro": "<p>Do this awesome quiz or else.</p>",
+                "introexists": true,
+                "dates": {
+                    "0": {
+                        "label": "Close the quiz",
+                        "value": "22 July 2020, 2:33 PM"
+                    }
+                },
+                "datesexists": true,
+                "completion": {
+                    "0": {
+                        "label": "Time limit",
+                        "value": "Not set"
+                    },
+                    "1": {
+                        "label": "Attempts",
+                        "value": "Not set"
+                    }
+                },
+                "completionexists": true,
+                "extra": {
+                    "0": {
+                        "label": "Hours",
+                        "value": 10,
+                        "tagcode": "tag2"
+                    }
+                },
+                "rubric": {},
+                "rubricexists": false,
+                "extraexists": true
+            }
+        },
+        "assignexists": true,
+        "assign": {
+            "0": {
+                "module": "assign",
+                "cmodid": 96,
+                "name": "a1 with rubric (80% LO:1)",
+                "link": "http://localhost/moodle_latest/moodle/mod/assign/view.php?id=96",
+                "intro": "<p>Description</p>",
+                "introexists": true,
+                "dates": {
+                    "0": {
+                        "label": "Due date",
+                        "value": "2 January 2021, 5:00 AM"
+                    },
+                    "1": {
+                        "label": "Cut-off date",
+                        "value": "22 January 2021, 5:21 PM"
+                    },
+                    "2": {
+                        "label": "Date to be completed by",
+                        "value": "22 January 2021, 5:21 PM"
+                    }
+                },
+                "datesexists": true,
+                "completion": {},
+                "completionexists": false,
+                "extra": {
+                    "0": {
+                        "label": "Word count",
+                        "value": 1000,
+                        "tagcode": "tag0"
+                    },
+                    "1": {
+                        "label": "Final grade %",
+                        "value": 80,
+                        "tagcode": "tag1"
+                    },
+                    "2": {
+                        "label": "Hours",
+                        "value": 30,
+                        "tagcode": "tag2"
+                    }
+                },
+                "rubric": {
+                    "0": {
+                        "critdesc": "and the rest",
+                        "levels": {
+                            "0": {
+                                "leveldesc": "ultimate",
+                                "points": 5
+                            },
+                            "1": {
+                                "leveldesc": "lovely",
+                                "points": 4
+                            },
+                            "2": {
+                                "leveldesc": "ok",
+                                "points": 3
+                            },
+                            "3": {
+                                "leveldesc": "acceptable",
+                                "points": 2
+                            },
+                            "4": {
+                                "leveldesc": "unacceptable",
+                                "points": 1
+                            },
+                            "5": {
+                                "leveldesc": "dreadful",
+                                "points": 0
+                            }
+                        },
+                        "totalpoints": -5
+                    },
+                    "1": {
+                        "critdesc": "the other",
+                        "levels": {
+                            "0": {
+                                "leveldesc": "this awesome",
+                                "points": 3
+                            },
+                            "1": {
+                                "leveldesc": "this nice",
+                                "points": 1
+                            },
+                            "2": {
+                                "leveldesc": "this bad",
+                                "points": 0
+                            }
+                        },
+                        "totalpoints": -3
+                    },
+                    "2": {
+                        "critdesc": "this",
+                        "levels": {
+                            "0": {
+                                "leveldesc": "this great",
+                                "points": 2
+                            },
+                            "1": {
+                                "leveldesc": "this ok",
+                                "points": 1
+                            },
+                            "2": {
+                                "leveldesc": "this what?",
+                                "points": 0
+                            }
+                        },
+                        "totalpoints": -2
+                    },
+                    "3": {
+                        "critdesc": "that",
+                        "levels": {
+                            "0": {
+                                "leveldesc": "that great",
+                                "points": 2
+                            },
+                            "1": {
+                                "leveldesc": "that ok",
+                                "points": 1
+                            },
+                            "2": {
+                                "leveldesc": "that what?",
+                                "points": 0
+                            }
+                        },
+                        "totalpoints": -2
+                    }
+                },
+                "rubricexists": true,
+                "extraexists": true
+            },
+            "1": {
+                "module": "assign",
+                "cmodid": 98,
+                "name": "a2 no rubric (5% LO:2) ",
+                "link": "http://localhost/moodle_latest/moodle/mod/assign/view.php?id=98",
+                "intro": "<p>Description</p>",
+                "introexists": true,
+                "dates": {
+                    "0": {
+                        "label": "Due date",
+                        "value": "2 January 2021, 5:00 AM"
+                    },
+                    "1": {
+                        "label": "Cut-off date",
+                        "value": "22 January 2021, 5:21 PM"
+                    },
+                    "2": {
+                        "label": "Date to be completed by",
+                        "value": "22 January 2021, 5:21 PM"
+                    }
+                },
+                "datesexists": true,
+                "completion": {},
+                "completionexists": false,
+                "extra": {
+                    "0": {
+                        "label": "Hours",
+                        "value": 30,
+                        "tagcode": "tag2"
+                    }
+                },
+                "rubric": {},
+                "rubricexists": false,
+                "extraexists": true
+            }
+        },
+        "schedule": {
+            "0": {
+                "section": 0,
+                "name": "General sections",
+                "startdate": null,
+                "tasks": {},
+                "sum": 0
+            },
+            "1": {
+                "section": 1,
+                "name": "Hello is there anyone out there.",
+                "startdate": null,
+                "tasks": {
+                    "0": {
+                        "name": "Awesome quiz 1  (LO:3 5%)",
+                        "date": "22/07/20, 14:33",
+                        "tag2": 10
+                    }
+                },
+                "sum": 0
+            },
+            "2": {
+                "section": 2,
+                "name": "",
+                "startdate": null,
+                "tasks": {
+                    "0": {
+                        "name": "Important forum (LO:3 0%)",
+                        "date": "22/12/20, 13:51"
+                    },
+                    "1": {
+                        "name": "a1 with rubric (80% LO:1)",
+                        "date": "2/01/21, 05:00",
+                        "tag0": 1000,
+                        "tag1": 80,
+                        "tag2": 30
+                    }
+                },
+                "sum": 0
+            },
+            "3": {
+                "section": 3,
+                "name": "",
+                "startdate": null,
+                "tasks": {
+                    "0": {
+                        "name": "Less important but still important forum",
+                        "date": "22/10/20, 13:51"
+                    },
+                    "1": {
+                        "name": "a2 no rubric (5% LO:2) ",
+                        "date": "2/01/21, 05:00",
+                        "tag2": 30
+                    }
+                },
+                "sum": 0
+            },
+            "4": {
+                "section": "",
+                "name": "TOTALS",
+                "tasks": {
+                    "tag2": 70,
                     "tag0": 1000,
-                    "tag1": 80,
-                    "tag2": 30
-                }
-            },
-            "section": 2,
-            "startdate": null,
-            "sum": 0,
-            "name": " "
+                    "tag1": 80
+                },
+                "sum": true
+            }
         },
-        "3": {
-            "tasks": {
-                "0": {
-                    "name": "Less important but still important forum",
-                    "date": "22/10/20, 13:51",
-                    "tag0": "",
-                    "tag1": "",
-                    "tag2": ""
-                },
-                "1": {
-                    "name": "a2 no rubric (5% LO:2) ",
-                    "date": "2/01/21, 05:00",
-                    "tag0": "",
-                    "tag1": "",
-                    "tag2": 30
-                }
-            },
-            "section": 3,
-            "startdate": null,
-            "sum": 0,
-            "name": " "
+        "scheduleexists": true,
+        "headtag0": "Word count",
+        "tagsinsched": true,
+        "headtag1": "Final grade %",
+        "headtag2": "Hours",
+        "schedheads": {
+            "section": "Section",
+            "startdate": "Start date of week",
+            "name": "Topic",
+            "task": "Task",
+            "date": "Date due"
         },
-        "4": {
-            "tasks": {
-                "0": {
-                    "name": "",
-                    "date": "",
-                    "tag0": 1000,
-                    "tag1": 80,
-                    "tag2": 70
-                }
-            },
-            "section": "",
-            "startdate": null,
-            "sum": 1,
-            "name": "TOTALS "
-        }
-    },
-    "quizexists": 12,
-    "quiz": {
-        "0": {
-            "cmodid": 94,
-            "name": "Awesome quiz 1  (LO:3 5%) ",
-            "link": "http://localhost/moodle_latest/moodle/mod/quiz/view.php?id=94&forceview=1",
-            "datesexists": true,
-            "completionexists": true,
-            "extraexists": true,
-            "introexists": true,
-            "rubricexists": false,
-            "dates": {
-                "0": {
-                    "label": "Close the quiz: ",
-                    "value": "22 July 2020, 2:33 PM"
-                }
-            },
-            "completion": {
-                "0": {
-                    "label": "Time limit (minutes): ",
-                    "value": "Not set"
-                },
-                "1": {
-                    "label": "Attempts: ",
-                    "value": "Not set"
-                }
-            },
-            "extra": {
-                "0": {
-                    "label": "Hours: ",
-                    "value": 10
-                }
-            },
-            "intro": "Do this awesome quiz or else. ",
-            "module": "quiz"
-        }
-    },
-    "assignexists": 26,
-    "assign": {
-        "0": {
-            "cmodid": 96,
-            "name": "a1 with rubric (80% LO:1) ",
-            "link": "http://localhost/moodle_latest/moodle/mod/assign/view.php?id=96&forceview=1",
-            "datesexists": true,
-            "completionexists": false,
-            "extraexists": true,
-            "introexists": true,
-            "rubricexists": true,
-            "dates": {
-                "0": {
-                    "label": "Date to be completed by: ",
-                    "value": "22 January 2021, 5:21 PM"
-                },
-                "1": {
-                    "label": "Due date: ",
-                    "value": "2 January 2021, 5:00 AM"
-                },
-                "2": {
-                    "label": "Cut-off date: ",
-                    "value": "22 January 2021, 5:21 PM"
-                }
-            },
-            "extra": {
-                "0": {
-                    "label": "Word count: ",
-                    "value": 1000
-                },
-                "1": {
-                    "label": "Final grade %: ",
-                    "value": 80
-                },
-                "2": {
-                    "label": "Hours: ",
-                    "value": 30
-                }
-            },
-            "intro": "Description ",
-            "rubric": {
-                "0": {
-                    "levels": {
-                        "0": {
-                            "leveldesc": "ultimate",
-                            "points": 5
-                        },
-                        "1": {
-                            "leveldesc": "lovely",
-                            "points": 4
-                        },
-                        "2": {
-                            "leveldesc": "ok",
-                            "points": 3
-                        },
-                        "3": {
-                            "leveldesc": "acceptable",
-                            "points": 2
-                        },
-                        "4": {
-                            "leveldesc": "unacceptable",
-                            "points": 1
-                        },
-                        "5": {
-                            "leveldesc": "dreadful",
-                            "points": 0
-                        }
-                    },
-                    "critdesc": "and the rest"
-                },
-                "1": {
-                    "levels": {
-                        "0": {
-                            "leveldesc": "this awesome",
-                            "points": 3
-                        },
-                        "1": {
-                            "leveldesc": "this nice",
-                            "points": 1
-                        },
-                        "2": {
-                            "leveldesc": "this bad",
-                            "points": 0
-                        }
-                    },
-                    "critdesc": "the other"
-                },
-                "2": {
-                    "levels": {
-                        "0": {
-                            "leveldesc": "this great",
-                            "points": 2
-                        },
-                        "1": {
-                            "leveldesc": "this ok",
-                            "points": 1
-                        },
-                        "2": {
-                            "leveldesc": "this what?",
-                            "points": 0
-                        }
-                    },
-                    "critdesc": "this"
-                },
-                "3": {
-                    "levels": {
-                        "0": {
-                            "leveldesc": "that great",
-                            "points": 2
-                        },
-                        "1": {
-                            "leveldesc": "that ok",
-                            "points": 1
-                        },
-                        "2": {
-                            "leveldesc": "that what?",
-                            "points": 0
-                        }
-                    },
-                    "critdesc": "that"
-                }
-            },
-            "module": "assign"
-        },
-        "1": {
-            "cmodid": 98,
-            "name": "a2 no rubric (5% LO:2)  ",
-            "link": "http://localhost/moodle_latest/moodle/mod/assign/view.php?id=98&forceview=1",
-            "datesexists": true,
-            "completionexists": false,
-            "extraexists": true,
-            "introexists": true,
-            "rubricexists": false,
-            "dates": {
-                "0": {
-                    "label": "Date to be completed by: ",
-                    "value": "22 January 2021, 5:21 PM"
-                },
-                "1": {
-                    "label": "Due date: ",
-                    "value": "2 January 2021, 5:00 AM"
-                },
-                "2": {
-                    "label": "Cut-off date: ",
-                    "value": "22 January 2021, 5:21 PM"
-                }
-            },
-            "extra": {
-                "0": {
-                    "label": "Hours: ",
-                    "value": 30
-                }
-            },
-            "intro": "Description ",
-            "module": "assign"
-        }
-    },
-    "forumexists": 22,
-    "forum": {
-        "0": {
-            "cmodid": 97,
-            "name": "Less important but still important forum ",
-            "link": "http://localhost/moodle_latest/moodle/mod/forum/view.php?id=97&forceview=1",
-            "datesexists": true,
-            "completionexists": true,
-            "extraexists": false,
-            "introexists": true,
-            "rubricexists": false,
-            "dates": {
-                "0": {
-                    "label": "Date to be completed by: ",
-                    "value": "22 October 2020, 1:51 PM"
-                }
-            },
-            "completion": {
-                "0": {
-                    "label": "Student must create discussions:",
-                    "value": 1
-                },
-                "1": {
-                    "label": "Student must post replies:",
-                    "value": 3
-                }
-            },
-            "extra": {},
-            "intro": "Urgles. ",
-            "module": "forum"
-        },
-        "1": {
-            "cmodid": 95,
-            "name": "Important forum (LO:3 0%) ",
-            "link": "http://localhost/moodle_latest/moodle/mod/forum/view.php?id=95&forceview=1",
-            "datesexists": true,
-            "completionexists": true,
-            "extraexists": false,
-            "introexists": true,
-            "rubricexists": false,
-            "dates": {
-                "0": {
-                    "label": "Date to be completed by: ",
-                    "value": "22 December 2020, 1:51 PM"
-                }
-            },
-            "completion": {
-                "0": {
-                    "label": "Student must create discussions:",
-                    "value": 1
-                },
-                "1": {
-                    "label": "Student must post replies:",
-                    "value": 1
-                }
-            },
-            "extra": {},
-            "intro": "What a wonderful day for a forum post. ",
-            "module": "forum"
-        }
+        "commentexists": true,
+        "biblioexists": true,
+        "inchidden": 0,
+        "summary": "<p>First course on PHP test system</p>",
+        "sitecomment": "<p dir=\"ltr\" style=\"text-align: left;\">This is a sitewide coment.</p><p dir=\"ltr\" style=\"text-align: left;\">sadfs d sfs fsf sf sfsdf sdf&nbsp;</p><p dir=\"ltr\" style=\"text-align: left;\">end of sitewide comment</p>",
+        "fullname": "Introduction to Logic"
     }
-  }
 }}
 
 <div class="cadocentral">
