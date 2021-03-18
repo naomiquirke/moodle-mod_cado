@@ -148,7 +148,7 @@ class mod_cado_comparecado {
     }
 
     /**
-     * To find the differences between origin and other at the first level
+     * To find the differences between origin and other at the first level of module.
      * Origin & other arrays will be changed in the process, as every time we find a match or identify a difference
      * from the origin, we will note in result, and add a note in the match arrays.
      *
@@ -201,7 +201,7 @@ class mod_cado_comparecado {
             }
         }
         // Anything not marked done is missing from one of the records.
-        return $this->findgaps($origin[$type], $other[$type], $final[$type], "dm")
+        return $this->findgaps($origin[$type], $other[$type], $this->newjson[$type], "dm")
             && $matched;
     }
 

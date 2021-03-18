@@ -50,8 +50,9 @@ Feature: Teachers can compare cado activity reports
       | quiz     | C2     | quiz2    | Quiz 1 | Quiz 1 description | 1          | 1         | GG3      |
     And the following "activities" exist:
       | activity | name    | intro       | course | idnumber | groupmode | grouping | completion | duedate      |
-      | forum    | Forum 1 | forum intro | C1     | forum2   | 1         | GG2      | 1          | ##tomorrow## |
-      | forum    | Forum 1 | forum intro | C2     | forum3   | 1         | GG3      | 1          | ##today##    |
+      | forum    | Forum 1 | forum intro | C1     | forum1   | 1         | GG1      | 1          | ##tomorrow## |
+      | forum    | Forum 2 | forum intro | C1     | forum2   | 1         | GG2      | 1          | ##tomorrow## |
+      | forum    | Forum 2 | forum intro | C2     | forum3   | 1         | GG3      | 1          | ##today##    |
     And I log in as "teacher1"
 
   Scenario: See no differences between identical CADOs
@@ -96,22 +97,6 @@ Feature: Teachers can compare cado activity reports
     And ".cado-othermissing" "css_element" should exist in the "#cado-quiz" "css_element"
 
   Scenario: See differences between different CADOs in the same course
-    And I am on "Course 2" course homepage with editing mode on
-    And I follow "Assign 1"
-    And I navigate to "Edit settings" in current page administration
-    And I set the following fields to these values:
-      | Tags | Hours::5 |
-    And I press "Save and return to course"
-    And I add a "CADO report" to section "1" and I fill the form with:
-      | Name for this CADO report | CADO test 3 |
-      | Grouping                  | Grouping 2  |
-    And I follow "CADO test 3"
-    And I am on "Course 2" course homepage
-    And I add a "CADO report" to section "1" and I fill the form with:
-      | Name for this CADO report | CADO test 4 |
-      | Grouping                  | Grouping 2  |
-    And I follow "CADO test 4"
-
     When I am on "Course 1" course homepage with editing mode on
     And I add a "CADO report" to section "1" and I fill the form with:
       | Name for this CADO report | CADO test 2 |
@@ -130,3 +115,4 @@ Feature: Teachers can compare cado activity reports
     And I should see "involved" in the "#cado-assign .cado-different" "css_element"
     And ".cado-othermissing" "css_element" should exist in the "#cado-quiz" "css_element"
     And ".cado-originmissing" "css_element" should exist in the "#cado-forum" "css_element"
+    And ".cado-othermissing" "css_element" should exist in the "#cado-forum" "css_element"
