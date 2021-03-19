@@ -1,53 +1,45 @@
-/* stylelint-disable selector-type-no-unknown -- ion styles not recognised */
-ion-grid#cado-sched-outer ion-row.cado-topic-first {
+div.cadocentral div#cado-schedule #cado-sched-outer .cado-topic-first {
     border-style: solid solid none solid;
     border-width: thin;
     background-color: gainsboro;
 }
-ion-grid#cado-sched-outer ion-row.cado-topic-second {
+div.cadocentral div#cado-schedule #cado-sched-outer .cado-topic-second {
     border-style: none solid solid solid;
     border-width: thin;
 }
-ion-row.cado-sched-heads {
+div.cadocentral div#cado-schedule .cado-sched-heads {
     font-weight: bolder;
     border-color: black;
 }
-ion-row.cado-topic-first.cado-sched-body {
+div.cadocentral div#cado-schedule .cado-topic-first.cado-sched-body {
     border-color: black black gainsboro black;
 }
-ion-row.cado-topic-second.cado-sched-body {
+div.cadocentral div#cado-schedule .cado-topic-second.cado-sched-body {
     border-color: gainsboro black gainsboro black;
 }
-ion-col.cado-sched-total {
+div.cadocentral div#cado-schedule .cado-sched-total {
     font-weight: bolder;
 }
-ion-col.cado-tag-label {
+div.cadocentral .cado-tag-label {
     padding: unset;
 }
-ion-col.cado-labels {
+div.cadocentral .cado-moddetail-heads {
     font-weight: bolder;
 }
-div.cadocentral [id^="cadoi-assign-rubric_"] ion-row {
+div.cadocentral [id*="-rubric_"] {
     font-size: small;
 }
-div.cadocentral ion-col.cado-rubric-row-head {
+div.cadocentral [id*="-rubric_"] .cado-rubric-row-head {
     font-weight: bolder;
 }
-/* stylelint-enable */
 div.cadocentral .cado-inserthtml {
     margin-top: 1em;
     margin-bottom: 1em;
-    padding: 1em;
-    border-style: solid;
-    border-width: thin;
-    border-color:gainsboro;
+    padding: 1em 0 1em 0;
+    border-top: thin solid gainsboro;
+    border-bottom: thin solid gainsboro;
 }
 div.cadocentral a.cad-link {
     color: blue;
-    text-decoration: none;
-}
-
-div.cadocentral a.cad-link:hover {
-    text-shadow: 1px 1px 2px red, 0 0 1em blue, 0 0 0.2em blue;
     text-decoration: none;
 }

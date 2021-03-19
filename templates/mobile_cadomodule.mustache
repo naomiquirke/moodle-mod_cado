@@ -27,7 +27,9 @@
     * none
 
     Context variables required for this template:
-    * none
+    * module string: module type
+    * cmodid int: module id number
+    * link string: link to resource
 
     Example context (json):
       {
@@ -163,7 +165,7 @@
     </ion-card-header>
     <ion-card-content class="cado-cardcontent">
       <%#datesexists%>
-      <h4><%# str %> duedates, mod_cado <%/ str %></h4>
+      <p class="cado-moddetail-heads"><%# str %> duedates, mod_cado <%/ str %></p>
       <ion-grid id="cadoi-<%module%>-dates_<%cmodid%>">
         <%#dates%>
           <ion-row>
@@ -176,7 +178,7 @@
       </ion-grid>
       <%/datesexists%>
       <%#completionexists%>
-      <h4><%# str %> completion, mod_cado <%/ str %></h4>
+      <p class="cado-moddetail-heads"><%# str %> completion, mod_cado <%/ str %></p>
       <ion-grid id="cadoi-<%module%>-completion_<%cmodid%>">
           <%#completion%>
           <ion-row>
@@ -193,10 +195,10 @@
         <%#extra%>           
         <ion-row>
           <ion-col col-lg-2 col-md-4 col-5>
-            <h4><%label%></h4>
+            <p class="cado-moddetail-heads cado-tag-label"><%label%></p>
           </ion-col>
           <ion-col col-lg-2 col-md-4 col-5>
-            <h4><%value%></h4>
+            <p class="cado-moddetail-heads"><%value%></p>
           </ion-col>
         </ion-row>
         <%/extra%>   
@@ -208,7 +210,7 @@
       </div>
       <%/introexists%>
       <%#rubricexists%>
-      <h4><%# str %> rubric, mod_cado <%/ str %> </h4>
+      <p class="cado-moddetail-heads"><%# str %> rubric, mod_cado <%/ str %> </p>
       <ion-grid id="cadoi-<%module%>-rubric_<%cmodid%>">
         <%#rubric%>
           <ion-row>

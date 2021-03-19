@@ -37,7 +37,7 @@ $addons = array(
                 'method' => 'mobile_course_view', // Main function in \mod_cado\classes\output\mobile.
                 'styles' => [
                     'url' => '/mod/cado/mobile/mobilestyles.css',
-                    'version' => 14
+                    'version' => 16
                 ],
                 'offlinefunctions' => array(
                     'mobile_course_view' => array(),
