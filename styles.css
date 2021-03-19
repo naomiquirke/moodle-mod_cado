@@ -130,9 +130,11 @@ div.cadocentral table.cado-inner-table {
     margin-bottom: 1em;
     padding: 1em 0 1em 0;
 }
+
 .path-mod-cado .cado-tag-label {
     padding: unset;
 }
+
 @media print {
     .path-mod-cado div.cado-outer-print {
         max-width: 98%;
