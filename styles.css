@@ -131,8 +131,13 @@ div.cadocentral table.cado-inner-table {
     padding: 1em 0 1em 0;
 }
 
-.path-mod-cado .cado-tag-label {
-    padding: unset;
+.path-mod-cado .cado-detail-heads {
+    font-weight: lighter;
+    font-size: larger;
+    vertical-align: bottom;
+    margin: 0;
+    padding-top: 0.75rem;
+    padding-bottom: 0.25rem;
 }
 
 @media print {

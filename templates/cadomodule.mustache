@@ -164,7 +164,7 @@
 <div {{#dm}}class="{{dm}}"{{/dm}}>
   <h2 id="cadoi-{{module}}-name_{{cmodid}}" {{#dmn}}class="{{dmn}}"{{/dmn}}>{{name}} <a class="cad-link" href="{{link}}" target="_blank">&#9741;</a></h2>
   {{#datesexists}}
-  <h4>{{# str }} duedates, mod_cado {{/ str }}</h4>
+  <p class="cado-detail-heads">{{# str }} duedates, mod_cado {{/ str }}</p>
   <div id="cadoi-{{module}}-dates_{{cmodid}}" {{#dmsd}}class="{{dmsd}}"{{/dmsd}}>
       {{#dates}}
       <div class="row {{dml}}">
@@ -175,7 +175,7 @@
   </div>
   {{/datesexists}}
   {{#completionexists}}
-  <h4>{{# str }} completion, mod_cado {{/ str }}</h4>
+  <p class="cado-detail-heads">{{# str }} completion, mod_cado {{/ str }}</p>
   <div id="cadoi-{{module}}-completion_{{cmodid}}" {{#dmsc}}class="{{dmsc}}"{{/dmsc}}>
       {{#completion}}
       <div class="row {{dml}}">
@@ -189,12 +189,8 @@
   <div id="cadoi-{{module}}-extra_{{cmodid}}" {{#dmse}}class="{{dmse}}"{{/dmse}}>
     {{#extra}}
     <div class="row {{dml}}">
-        <div class = "col-sm-3"><h4 class="cado-tag-label">
-            {{label}} 
-        </h4> </div>
-        <div class = "col-sm-3 {{dmil}}"><h4>
-            {{value}} 
-        </h4> </div>
+        <div class = "col-sm-3 cado-detail-heads">{{label}}</div>
+        <div class = "col-sm-3 cado-detail-heads {{dmil}}">{{value}}</div>
     </div>
     {{/extra}}   
   </div>
@@ -205,7 +201,7 @@
   </div>
   {{/introexists}}
   {{#rubricexists}}
-  <h4>{{# str }} rubric, mod_cado {{/ str }} </h4>
+  <p class="cado-detail-heads">{{# str }} rubric, mod_cado {{/ str }} </p>
   <div id="cadoi-{{module}}-rubric_{{cmodid}}" {{#dmr}}class="{{dmr}}"{{/dmr}}>
     <table class="table table-hover">
       <tbody>
