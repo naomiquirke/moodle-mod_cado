@@ -128,7 +128,7 @@ div.cadocentral table.cado-inner-table {
 .path-mod-cado .cado-inserthtml {
     margin-top: 1em;
     margin-bottom: 1em;
-    padding: 1em;
+    padding: 1em 0 1em 0;
 }
 
 @media print {
