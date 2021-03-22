@@ -85,7 +85,7 @@ class mod_cado_translatecado {
         $result->scheduleexists = $header->length; // This is zero if no thead.
         if ($result->scheduleexists) {
             $this->get_schedule_head($header, $result);
-            $this->get_schedule_body($dom->getElementsByTagName("tbody")->item(0)->childNodes, $result);
+            $this->get_schedule_body($dom->getElementsByTagName("tbody")->item(0), $result);
         }
         $this->get_modtype($result, $dom, 'quiz');
         $this->get_modtype($result, $dom, 'assign');
@@ -112,14 +112,11 @@ class mod_cado_translatecado {
         $result->$existsname = $rows->length - 1; // This is zero if no thead.
         if ($result->$existsname) {
             $result->$type = [];
-            for ($i = 3; $i <= $result->$existsname;) { // Note $i increments in the function.
-                if (is_object($rows->item($i)) && is_object($rows->item($i)->attributes->item(0))) {
-                    list($i, $returned) = $this->get_items($rows, $i);
-                    $returned->module = $type;
-                    $result->{$type}[] = $returned;
-                } else {
-                    $i += 2;
-                }
+            $mod = $modsouter->getElementsByTagName("h2");
+            for ($i = 1; $i < $mod->length; $i++) { // First h2 is a title.
+                $returned = $this->getmoditems($mod->item($i), $doc, $type);
+                $returned->module = $type;
+                $result->{$type}[] = $returned;
             }
         }
     }
@@ -131,92 +128,91 @@ class mod_cado_translatecado {
      * @param int $num line number
      * @return array
      */
-    private function get_items($items, $num) {
+    private function getmoditems($moditem, $docouter, $type) {
         $thismod = new stdClass;
-        $nameid = $items->item($num)->attributes->item(0)->nodeValue;
-        $thismod->cmodid = substr($nameid, strpos($nameid, '_') + 1);
-        $thismod->name = $items->item($num)->childNodes->item(0)->nodeValue;
-        $thismod->link = $items->item($num)->childNodes->item(1)->attributes->item(1)->nodeValue;
+        $nameid = $moditem->attributes->item(0)->nodeValue;
+        $cmodid = substr($nameid, strpos($nameid, '_') + 1);
+        $thismod->cmodid = $cmodid;
+        $thismod->name = $moditem->childNodes->item(0)->nodeValue;
+        $thismod->link = $moditem->childNodes->item(1)->attributes->item(1)->nodeValue;
         $thismod->datesexists = false;
         $thismod->completionexists = false;
         $thismod->extraexists = false;
         $thismod->introexists = false;
         $thismod->rubricexists = false;
 
-        $num += 2;
         // Dates.
+        $dates = $docouter->getElementById("cadoi-$type-dates_$cmodid");
         $thismod->dates = [];
-        $rows = $items->item($num)->childNodes;
-        for ($i = 3; $i <= ($rows->length - 1); $i += 2) {
-            $thismod->dates[] = (object) [
-                'label' => $rows->item($i)->childNodes->item(1)->nodeValue,
-                'value' => $rows->item($i)->childNodes->item(3)->nodeValue,
-            ];
-            $thismod->datesexists = true;
-        }
-        $num += 2;
-        // Completion.
-        if (is_object($items->item($num)) &&
-            (strpos($items->item($num)->attributes->item(0)->nodeValue, 'completion') !== false)) {
-            $thismod->completionexists = true;
-            $thismod->completion = [];
-            $rows = $items->item($num)->childNodes;
-            for ($i = 2; $i <= ($rows->length - 1); $i += 2) {
-                // For quiz, $i starts at 2, not 3 because no whitespace before heading node. Vice versa for forum.
-                if ($rows->item($i)->childNodes === null) {
-                    $i++;
-                }
-                $thismod->completion[] = (object) [
-                    'label' => $rows->item($i)->childNodes->item(1)->nodeValue,
-                    'value' => $rows->item($i)->childNodes->item(3)->nodeValue,
+        if (is_object($dates)) {
+            $rows = $dates->getElementsByTagName("div");
+            for ($i = 0; $i < $rows->length; $i += 3) {
+                $thismod->dates[] = (object) [
+                    'label' => $rows->item($i + 1)->nodeValue,
+                    'value' => $rows->item($i + 2)->nodeValue,
                 ];
+                $thismod->datesexists = true;
             }
-            $num += 2;
+        }
+        // Completion.
+        $completions = $docouter->getElementById("cadoi-$type-completion_$cmodid");
+        $thismod->completion = [];
+        if (is_object($completions)) {
+            $rows = $completions->getElementsByTagName("div");
+            for ($i = 0; $i < $rows->length; $i += 3) {
+                $thismod->completion[] = (object) [
+                    'label' => $rows->item($i + 1)->nodeValue,
+                    'value' => $rows->item($i + 2)->nodeValue,
+                ];
+                $thismod->completionexists = true;
+            }
         }
         // Extra: Tags.
+        $extra = $docouter->getElementById("cadoi-$type-extra_$cmodid");
         $thismod->extra = [];
-        $rows = $items->item($num)->childNodes;
-        for ($i = 1; $i <= ($rows->length - 1); $i += 2) { // Here $i starts at 1, there is no heading.
-            $thismod->extra[] = (object) [
-                'label' => $rows->item($i)->childNodes->item(1)->childNodes->item(0)->nodeValue,
-                'value' => $rows->item($i)->childNodes->item(3)->childNodes->item(0)->nodeValue,
-            ];
-            $thismod->extraexists = true;
+        if (is_object($extra)) {
+            $rows = $extra->getElementsByTagName("div");
+            for ($i = 0; $i < $rows->length; $i += 3) {
+                $thismod->extra[] = (object) [
+                    'label' => $rows->item($i + 1)->getElementsByTagName('h4')->item(0)->nodeValue,
+                    'value' => $rows->item($i + 2)->getElementsByTagName('h4')->item(0)->nodeValue,
+                ];
+                $thismod->extraexists = true;
+            }
         }
         // Intro.
-        $num += 2;
-        // Intro is encased by two text nodes, but may be many text nodes.
+        $intro = $docouter->getElementById("cadoi-$type-intro_$cmodid");
         $thismod->intro = '';
-        for ($i = 1; $i < $items->item($num)->childNodes->length; $i++) {
-            $thismod->intro .= $this->innerxml($items->item($num)->childNodes->item($i));
-            $thismod->introexists = true;
+        if (is_object($intro)) {
+            // Intro is encased by two text nodes, so don't include first or last childnode.
+            for ($i = 1; $i < $intro->childNodes->length - 1; $i++) {
+                $thismod->intro .= $this->innerxml($intro->childNodes->item($i));
+                $thismod->introexists = true;
+            }
         }
 
         // Rubric.
-        $num += 2;
-        if (is_object($items->item($num)) && ($items->item($num)->tagName == 'h4')) {
-            $num += 2;
-            $thismod->rubric = [];
+        $rubric = $docouter->getElementById("cadoi-$type-rubric_$cmodid");
+        $thismod->rubric = [];
+        if (is_object($rubric)) {
             $thismod->rubricexists = true;
-            $rows = $items->item($num)->childNodes->item(1)->childNodes->item(1)->childNodes;
-            $currentlevel = new stdClass;
-            for ($i = 1; $i <= ($rows->length - 1); $i += 2) {
+            $rows = $rubric->getElementsByTagName("tr");
+            for ($i = 0; $i < $rows->length; $i++) {
                 $currentlevel = new stdClass;
                 $currentlevel->levels = [];
-                $cols = $rows->item($i)->childNodes;
-                $currentlevel->critdesc = $cols->item(1)->textContent;
-                for ($j = 3; $j <= ($cols->length - 1); $j += 2) {
+                $cols = $rows->item($i)->getElementsByTagName("td");
+                $currentlevel->critdesc = $cols->item(0)->textContent;
+                for ($j = 1; $j < $cols->length; $j++) {
                     $points = $cols->item($j)->childNodes->item(2)->textContent;
                     $currentlevel->levels[] = (object) [
                         'leveldesc' => $cols->item($j)->childNodes->item(0)->textContent,
-                        'points' => substr($points, 1, strlen($points) - 2)
+                        'points' => substr($points, 1, strlen($points) - 2) // Get rid of brackets.
                     ];
                 }
                 $thismod->rubric[] = $currentlevel;
             }
-            $num += 2;
         }
-        return [$num, $thismod];
+        return $thismod;
     }
 
     /**
@@ -227,40 +223,42 @@ class mod_cado_translatecado {
      * @return void
      */
     private function get_schedule_body($schedbody, &$result) {
-        $counter = 0;
-        $itemadd = $result->weekly ? 2 : 0;
+        $itemadd = $result->weekly ? 1 : 0;
         $result->schedule = [];
-        foreach ($schedbody as $row) {
-            $counter ++; // White space issue in getting nodes.
-            if ($counter % 2 == 1) {
+        $rows = $schedbody->getElementsByTagName("tr");
+        for ($i = 0; $i < $rows->length; $i++) {
+            if ($rows->item($i)->parentNode !== $schedbody) {
                 continue;
             }
             $schedrow = new stdClass();
             $schedrow->tasks = [];
-            $schedrow->section = $row->childNodes->item(1)->nodeValue;
-            $schedrow->startdate = $result->weekly ? $row->childNodes->item(3)->nodeValue : null;
-            $topicclass = $row->childNodes->item(3 + $itemadd)->attributes->item(0)->nodeValue;
+            $cols = $rows->item($i)->getElementsByTagName("td");
+
+            $schedrow->section = $cols->item(0)->nodeValue;
+            $schedrow->startdate = $result->weekly ? $cols->item(1)->nodeValue : null;
+            $topicclass = $cols->item(1 + $itemadd)->attributes->item(0)->nodeValue;
             if (!strpos($topicclass, 'total')) { // Doesn't appear, or appears at end of class list.
                 $schedrow->sum = 0;
             } else {
                 $schedrow->sum = 1;
             }
-            $schedrow->name = $row->childNodes->item(3 + $itemadd)->nodeValue; // Topic.
-            $subtablerows = $row->childNodes->item(5 + $itemadd)->childNodes->item(1)->childNodes;
-            if ($subtablerows->length <= 1) { // No tasks.
+            $schedrow->name = $cols->item(1 + $itemadd)->nodeValue; // Topic.
+            $subtablerows = $cols->item(2 + $itemadd)->getElementsByTagName("tr");
+            if ($subtablerows->length < 1) { // No tasks.
                 $result->schedule[] = $schedrow;
                 continue;
             }
             foreach ($subtablerows as $subtablerow) {
-                if (!$subtablerow->childNodes) { // Skip the whitespace.
+                if (!$subtablerow->childNodes) { // Skip any whitespace.
                     continue;
                 }
+                $subtablecols = $subtablerow->getElementsByTagName("td");
                 $schedrow->tasks[] = (object) [
-                    'name' => $subtablerow->childNodes->item(1)->nodeValue, // Task.
-                    'date' => $subtablerow->childNodes->item(3)->nodeValue, // Datedue.
-                    'tag0' => $result->tagsinsched > 0 ? $subtablerow->childNodes->item(5)->nodeValue : null, // Tag 0.
-                    'tag1' => $result->tagsinsched > 1 ? $subtablerow->childNodes->item(7)->nodeValue : null, // Tag 1.
-                    'tag2' => $result->tagsinsched > 2 ? $subtablerow->childNodes->item(9)->nodeValue : null // Tag 2.
+                    'name' => $subtablecols->item(0)->nodeValue, // Task.
+                    'date' => $subtablecols->item(1)->nodeValue, // Datedue.
+                    'tag0' => $result->tagsinsched > 0 ? $subtablecols->item(2)->nodeValue : null, // Tag 0.
+                    'tag1' => $result->tagsinsched > 1 ? $subtablecols->item(3)->nodeValue : null, // Tag 1.
+                    'tag2' => $result->tagsinsched > 2 ? $subtablecols->item(4)->nodeValue : null // Tag 2.
                 ];
             }
             $result->schedule[] = $schedrow;
@@ -275,29 +273,32 @@ class mod_cado_translatecado {
      * @return void
      */
     private function get_schedule_head($header, &$result) {
-        $row = $header->item(0)->childNodes->item(1);
-        $result->schedheads['section'] = $row->childNodes->item(1)->nodeValue;
+        $row = $header->item(0)->getElementsByTagName("tr");
+        $cols = $row->item(0)->getElementsByTagName("th");
+        $cols2class = $cols->item(1)->attributes->item(0)->nodeValue;
+
+        $result->schedheads['section'] = $cols->item(0)->nodeValue;
         // Class of 2nd col.
-        $col2class = $row->childNodes->item(3)->attributes->item(0)->nodeValue;
+        $col2class = $cols->item(1)->attributes->item(0)->nodeValue;
         $result->weekly = $col2class == "cado-tc2";
         if ($result->weekly) {
-            $result->schedheads['startdate'] = $row->childNodes->item(3)->nodeValue;
-            $itemadd = 2;
+            $result->schedheads['startdate'] = $cols->item(1)->nodeValue; // Week.
+            $itemadd = 1;
         } else {
             $result->schedheads['startdate'] = null;
             $itemadd = 0;
         };
-        $result->schedheads['name'] = $row->childNodes->item(3 + $itemadd)->nodeValue; // Topic.
-        $subtablerow = $row->childNodes->item(5 + $itemadd)->childNodes->item(1)->childNodes->item(1);
-        $result->schedheads['task'] = $subtablerow->childNodes->item(1)->nodeValue; // Task.
-        $result->schedheads['date'] = $subtablerow->childNodes->item(3)->nodeValue; // Datedue.
-        $result->tagsinsched = ($subtablerow->childNodes->length - 5) / 2;
+        $result->schedheads['name'] = $cols->item(1 + $itemadd)->nodeValue; // Topic.
+        // $cols->item(2+ $itemadd) is the column containing the following columns.
+        $result->schedheads['task'] = $cols->item(3 + $itemadd)->nodeValue; // Task.
+        $result->schedheads['date'] = $cols->item(4 + $itemadd)->nodeValue; // Datedue.
+        $result->tagsinsched = ($cols->length - 5 - $itemadd);
         if ($result->tagsinsched > 0) {
-            $result->headtag0 = $subtablerow->childNodes->item(5)->nodeValue;
+            $result->headtag0 = $cols->item(5 + $itemadd)->nodeValue;
             if ($result->tagsinsched > 1) {
-                $result->headtag1 = $subtablerow->childNodes->item(7)->nodeValue;
+                $result->headtag1 = $cols->item(6 + $itemadd)->nodeValue;
                 if ($result->tagsinsched > 2) {
-                    $result->headtag2 = $subtablerow->childNodes->item(9)->nodeValue;
+                    $result->headtag2 = $cols->item(7 + $itemadd)->nodeValue;
                 }
             }
         }
