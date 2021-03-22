@@ -156,6 +156,10 @@ div.cadocentral table.cado-inner-table {
     .path-mod-cado h4 {
         break-after: avoid;
     }
+    .path-mod-cado h2.cad-header {
+        border-style: solid none solid none;
+        border-width: thin;
+    }
     .path-mod-cado table,
     .path-mod-cado div[id*="-dates_"],
     .path-mod-cado div[id*="-completion_"],
