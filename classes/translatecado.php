@@ -189,7 +189,8 @@ class mod_cado_translatecado {
             }
         }
         // Intro.
-        $intro = $docouter->getElementById("cadoi-$type-intro_$cmodid");
+        $intro = $type == 'quiz' ? $docouter->getElementById("cadoi-$type" . "_intro_$cmodid") // Inconsistency in original.
+            : $docouter->getElementById("cadoi-$type-intro_$cmodid");
         $thismod->intro = '';
         if (is_object($intro)) {
             // Intro is encased by two text nodes, so don't include first or last childnode.
