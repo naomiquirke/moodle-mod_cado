@@ -276,7 +276,6 @@ class mod_cado_translatecado {
     private function get_schedule_head($header, &$result) {
         $row = $header->item(0)->getElementsByTagName("tr");
         $cols = $row->item(0)->getElementsByTagName("th");
-        $cols2class = $cols->item(1)->attributes->item(0)->nodeValue;
 
         $result->schedheads['section'] = $cols->item(0)->nodeValue;
         // Class of 2nd col.
