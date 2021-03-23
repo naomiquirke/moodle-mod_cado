@@ -124,8 +124,9 @@ class mod_cado_translatecado {
     /**
      * Gets module items for type.
      *
-     * @param DOMNodeList $items lines to categorise
-     * @param int $num line number
+     * @param DOMElement $moditem header element of mod being itemized.
+     * @param DOMDocument $docouter
+     * @param string $type is the mod type
      * @return array
      */
     private function getmoditems($moditem, $docouter, $type) {
