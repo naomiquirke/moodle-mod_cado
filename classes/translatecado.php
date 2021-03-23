@@ -70,16 +70,23 @@ class mod_cado_translatecado {
 
         $thispage = $this->instance->generatedpage;
         $dom = new DOMDocument();
-        $dom->loadHTML($thispage);
+        $dom->encoding = 'utf-8';
+        $dom->loadHTML(mb_convert_encoding($thispage, 'HTML-ENTITIES', 'UTF-8'));
 
         $result->fullname = $this->innerxml($dom->getElementById("cad-title")->childNodes->item(1));
-        $result->summary = $this->innerxml($dom->getElementById("cado-coursesummary")->childNodes->item(3));
-        $result->sitecomment = $this->innerxml($dom->getElementById("cado-sitecomment")->childNodes->item(1));
+        $summary = $dom->getElementById("cado-coursesummary")->getElementsByTagName("div");
+        if (is_object($summary)) {
+            $result->summary = $this->innerxml($summary->item(0));
+        }
+        $sitecomment = $dom->getElementById("cado-sitecomment")->getElementsByTagName("div");
+        if (is_object($sitecomment)) {
+            $result->sitecomment = $this->innerxml($sitecomment->item(0));
+        }
 
         // We use the DB version of intro, comment and biblio, rather than picking them up off the HTML.
         // But we need to know if comment and biblio are actually in the CADO.
-        $result->biblioexists = $dom->getElementById("cado-biblio")->hasChildNodes();
-        $result->commentexists = $dom->getElementById("cado-comment")->hasChildNodes();
+        $result->biblioexists = is_object($dom->getElementById("cado-biblio")->getElementsByTagName("div")->item(0));
+        $result->commentexists = !empty(trim($dom->getElementById("cado-comment")->textContent));
         // SCHEDULE **********************************************************************************************.
         $header = $dom->getElementsByTagName("thead");
         $result->scheduleexists = $header->length; // This is zero if no thead.
