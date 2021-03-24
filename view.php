@@ -132,15 +132,24 @@ if ($showcentral) { // Now outputting the main report.
         $myrenderer->render_compare($getcompared);
     } else {
         $coursegenerated = (object) json_decode($viewedcado->instance->generatedjson, true);
-        // Now add the bits that are in the table or are independent to the individual course details.
-        $coursegenerated->logourl = get_config('cado')->showlogo ? $myrenderer->get_logo_url() : null;
-        $coursegenerated->cadointro = $viewedcado->instance->cadointro;
-        // Include these based on site settings at time of generation.
-        $coursegenerated->cadocomment = $coursegenerated->commentexists ? $viewedcado->instance->cadocomment : null;
-        $coursegenerated->cadobiblio = $coursegenerated->biblioexists ? $viewedcado->instance->cadobiblio : null;
+        if (!isset($coursegenerated->usegeneratedhtml)) {
+            // Now add the bits that are in the table or are independent to the individual course details.
+            $coursegenerated->logourl = get_config('cado')->showlogo ? $myrenderer->get_logo_url() : null;
+            $coursegenerated->cadointro = $viewedcado->instance->cadointro;
+            // Include these based on site settings at time of generation.
+            $coursegenerated->cadocomment = $coursegenerated->commentexists ? $viewedcado->instance->cadocomment : null;
+            $coursegenerated->cadobiblio = $coursegenerated->biblioexists ? $viewedcado->instance->cadobiblio : null;
 
-        // Finally output.
-        echo $myrenderer->render_cado($coursegenerated);
+            // Finally output.
+            echo $myrenderer->render_cado($coursegenerated);
+        } else {
+            // Malformed old generatedhtml wasn't able to be translated into JSON.
+            if (has_capability('mod/cado:generate', $context) || has_capability('mod/cado:approve', $context)) {
+                // Notify user by notifying in approval status area.
+                echo $OUTPUT->notification(get_string('malformedhtml', 'cado'), 'notifyproblem');
+            }
+            echo $viewedcado->instance->generatedpage;
+        }
     }
 }
 if ($reportformat == 'print') {

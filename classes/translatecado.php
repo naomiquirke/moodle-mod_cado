@@ -71,15 +71,28 @@ class mod_cado_translatecado {
         $thispage = $this->instance->generatedpage;
         $dom = new DOMDocument();
         $dom->encoding = 'utf-8';
-        $dom->loadHTML(mb_convert_encoding($thispage, 'HTML-ENTITIES', 'UTF-8'));
+        set_error_handler(function($errno, $errstr, $errfile, $errline){
+            throw new \Exception($errstr);
+        }, E_WARNING);
+        try {
+            // Load might result in a E_WARNING if the HTML is malformed, so try to catch this.
+            $dom->loadHTML(mb_convert_encoding($thispage, 'HTML-ENTITIES', 'UTF-8') );
+        } catch (\Exception $e) {
+            // Don't display JSON derived CADO.
+            $result->usegeneratedhtml = $e->getMessage();
+            // Continue process of extracting JSON as it should in the main work and is useful for the compare function.
+        } finally {
+                restore_error_handler();
+        }
+        restore_error_handler();
 
         $result->fullname = $this->innerxml($dom->getElementById("cad-title")->childNodes->item(1));
         $summary = $dom->getElementById("cado-coursesummary")->getElementsByTagName("div");
-        if (is_object($summary)) {
+        if (is_object($summary) && is_object($summary->item(0))) {
             $result->summary = $this->innerxml($summary->item(0));
         }
         $sitecomment = $dom->getElementById("cado-sitecomment")->getElementsByTagName("div");
-        if (is_object($sitecomment)) {
+        if (is_object($sitecomment) && is_object($sitecomment->item(0))) {
             $result->sitecomment = $this->innerxml($sitecomment->item(0));
         }
 

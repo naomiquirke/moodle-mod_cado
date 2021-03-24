@@ -87,6 +87,7 @@ $string['propose'] = 'Propose';
 $string['grouping'] = 'Select grouping for CADO:';
 $string['inchidden'] = 'Show hidden activities:';
 $string['inchidden_desc'] = 'Whether hidden activities should appear in the CADO.';
+$string['malformedhtml'] = 'Displaying previously generated page due to HTML errors, most probably from activity descriptions.';
 $string['messageprovider:cadoshare'] = 'CADO share';
 $string['messageprovider:cadoworkflow'] = 'CADO workflow notification';
 $string['modulename'] = 'CADO report';
