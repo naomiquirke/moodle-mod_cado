@@ -215,7 +215,7 @@ class mod_cado_cado {
         $this->instance->generatedjson = json_encode($genwhat,
             JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
 
-        if (get_config('cado')->storegeneratedhtml) {
+        if ($siteoptions->storegeneratedhtml) {
             $genwhat->logourl = $siteoptions->showlogo ? $reportrenderer->get_logo_url() : null;
             $genwhat->cadointro = $this->instance->cadointro;
             $genwhat->cadocomment = $genwhat->commentexists ? $this->instance->cadocomment : null;
@@ -307,7 +307,8 @@ class mod_cado_cado {
 
         $courseid = $this->course->id;
         $grouping = $this->groupingid;
-        $visible = get_config('cado')->inchidden == 1 ? 0 : 1;
+        $siteoptions = get_config('cado');
+        $visible = $siteoptions->inchidden == 1 ? 0 : 1;
 
         $courseext = new stdClass;
         $courseext->cadoversion = $this->get_version();
@@ -318,7 +319,7 @@ class mod_cado_cado {
         list($schedule, $sections) = $sched->schedulesetup ? $this->startschedule2() : null;
         $courseext->weekly = $this->course->format == "weeks";
         // So that schedule can have week information removed if not relevant.
-        $modlist = get_config('cado')->activityoptions;
+        $modlist = $siteoptions->activityoptions;
         $modarray = explode(',', $modlist);
         $allmodinfo = $this->getcadodata($modarray, ['course' => $courseid, 'groupingid' => $grouping, 'visible' => $visible]);
         foreach (['forum', 'quiz', 'assign'] as $thistype) { // Include *all* possible, because need to get exists boolean below.
