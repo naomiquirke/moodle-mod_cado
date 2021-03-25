@@ -147,6 +147,12 @@ div.cadocentral table.cado-inner-table {
     .path-mod-cado a.cad-link {
         color: transparent;
     }
+    .path-mod-cado .row div[class^= col-sm] {
+        float: left;
+    }
+    .path-mod-cado .row div.col-sm-3 {
+        width: 25%;
+    }
     .path-mod-cado div[id^="cado-"] {
         widows: 2;
         orphans: 3;
