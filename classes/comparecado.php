@@ -80,12 +80,12 @@ class mod_cado_comparecado {
                 ) && $allmatched;
         }
         // Next the top level items.
-        $allmatched = $this->applytopdiff($originjson["groupingname"], $otherjson["groupingname"], "dg"
-            , "grouping") && $allmatched;
-        $allmatched = $this->applytopdiff($originjson["summary"], $otherjson["summary"], "ds"
-            , "summary") && $allmatched;
-        $allmatched = $this->applytopdiff($originjson["sitecomment"], $otherjson["sitecomment"], "dsc"
-            , "sitecomment") && $allmatched;
+        $topitems = [['groupingname', 'dg'], ['summary', 'ds'], ['sitecomment', 'dsc']];
+        foreach ($topitems as $topitem) {
+            $first = $originjson[$topitem[0]] ?? '';
+            $second = $otherjson[$topitem[0]] ?? '';
+            $allmatched = $this->applytopdiff($first, $second, $topitem[1], $topitem[0]) && $allmatched;
+        }
 
         // New we need to do the modules.
         $mods = ['forum', 'quiz', 'assign'];
