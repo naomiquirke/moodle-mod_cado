@@ -71,7 +71,7 @@ class mod_cado_translatecado {
         $thispage = $this->instance->generatedpage;
         $dom = new DOMDocument();
         $dom->encoding = 'utf-8';
-        set_error_handler(function($errno, $errstr, $errfile, $errline){
+        set_error_handler(function($errno, $errstr) {
             throw new \Exception($errstr);
         }, E_WARNING);
         try {
