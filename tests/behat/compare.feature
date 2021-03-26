@@ -1,4 +1,4 @@
-@mod @mod_cado @javascript
+@mod @mod_cado @mod_cado_compare @javascript
 Feature: Teachers can compare cado activity reports
   In order to compare cado reports
   As a teacher
@@ -111,7 +111,7 @@ Feature: Teachers can compare cado activity reports
     And I set the following fields to these values:
       | Select CADO | C1 --- CADO test 2 |
     And I press "Save changes"
-    Then I should see "Grouping 1"
+    Then I should see "Grouping ↘1"
     And I should see "involved" in the "#cado-assign .cado-different" "css_element"
     And ".cado-othermissing" "css_element" should exist in the "#cado-quiz" "css_element"
     And ".cado-originmissing" "css_element" should exist in the "#cado-forum" "css_element"
