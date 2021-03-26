@@ -101,7 +101,7 @@ Multiple CADO resources, created with different CADO settings, may be establishe
 CADOs may be presented in a page ready for printing upon selection of the print view option in the module settings menu.';
 $string['minutes'] = '(minutes)';
 $string['modulenameplural'] = 'CADO reports';
-$string['nameinstruction'] = 'Filter course name with name part';
+$string['nameinstruction'] = 'Filter by course short name';
 $string['notapprovesubjectline'] = 'CADO not approved: ';
 $string['notapproved'] = 'It has had the following comments: ';
 $string['notapplicable'] = 'Not set';

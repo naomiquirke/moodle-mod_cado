@@ -34,7 +34,7 @@ define([],
         return {
             init: function (cadolist) {
                 // cadolist has records from Cado: id and name; from Course: shortname, fullname, startdate.
-                const cadoids = Object.entries(cadolist);
+                const cadoids = Object.entries(JSON.parse(document.querySelector(cadolist).value));
                 const dateselects = document.querySelectorAll("select[id^='id_compare']");
                 dateselects.forEach(function (dateselect) {
                     dateselect.addEventListener('change', updatechoices);

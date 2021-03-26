@@ -60,30 +60,10 @@ class mod_cado_compare_form extends moodleform {
         $mform->addElement('text', 'coursename', get_string('nameinstruction', 'cado'));
         $mform->setType('coursename', PARAM_ALPHANUM);
 
-        list($details, $show) = $this->cado_list();
-        $mform->addElement('select', 'cadoid', get_string('courseinstruction', 'cado'), $show);
-        $PAGE->requires->js_call_amd('mod_cado/filterform', 'init', [$details]);
+        $mform->addElement('select', 'cadoid', get_string('courseinstruction', 'cado'), $this->_customdata['chosencourses']);
+        $PAGE->requires->js_call_amd('mod_cado/filterform', 'init', ["#id_cadolist"]);
 
         $this->add_action_buttons();
     }
 
-
-    /**
-     * Select the full list of CADOs that can be matched to the chosen requirements
-     *
-     */
-    public function cado_list() {
-        global $DB;
-        $sql = "SELECT cado.id, c.shortname, c.fullname, c.startdate, cado.name
-                FROM {cado} cado
-                JOIN {course} c on c.id = cado.course
-                WHERE cado.timegenerated > 0 AND cado.id <> :currentcado";
-
-        $courseresult = $DB->get_records_sql($sql, ["currentcado" => $this->_customdata['instance']]);
-        $chosencourses["0"] = "---";
-        foreach ($courseresult as $thisresult) {
-            $chosencourses[$thisresult->id] = $thisresult->shortname . ' --- ' . $thisresult->name;
-        }
-        return [$courseresult, $chosencourses];
-    }
 }

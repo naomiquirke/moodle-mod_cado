@@ -40,7 +40,8 @@ $PAGE->set_url($url);
 $title = get_string('modulename', 'cado');
 $PAGE->set_title($title);
 
-$compareform = new mod_cado_compare_form($url, ['instance' => $cm->instance]);
+$cadolist = new mod_cado_list($cm->instance);
+$compareform = new mod_cado_compare_form($url, ['chosencourses' => $cadolist->chosencourses()]);
 
 if ($compareform->is_cancelled()) {
     redirect(new moodle_url('/mod/cado/view.php', array('id' => $cmid)));
@@ -54,6 +55,10 @@ if ($compareform->is_cancelled()) {
 } else {
     $formrenderer = $PAGE->get_renderer('mod_cado');
     $formrenderer->render_form_header();
+    $cadodata = \html_writer::tag('input', '', ['id' => 'id_cadolist', 'type' => 'hidden'
+        , 'value' => json_encode($cadolist->courseresult)]);
+    echo $cadodata;
+
     $compareform->display();
     $formrenderer->render_form_footer();
 
