@@ -162,14 +162,17 @@ class mod_cado_translatecado {
         $thismod->introexists = false;
         $thismod->rubricexists = false;
 
+        // For each of these, deal with English default template issue of having a colon added.
         // Dates.
         $dates = $docouter->getElementById("cadoi-$type-dates_$cmodid");
         $thismod->dates = [];
         if (is_object($dates)) {
             $rows = $dates->getElementsByTagName("div");
             for ($i = 0; $i < $rows->length; $i += 3) {
+                $trimmedlabel = trim($rows->item($i + 1)->nodeValue);
+                $trimmedlabel = substr($trimmedlabel, -1) == ':' ? substr($trimmedlabel, 0, -1) : $trimmedlabel;
                 $thismod->dates[] = (object) [
-                    'label' => $rows->item($i + 1)->nodeValue,
+                    'label' => $trimmedlabel,
                     'value' => $rows->item($i + 2)->nodeValue,
                 ];
                 $thismod->datesexists = true;
@@ -181,8 +184,10 @@ class mod_cado_translatecado {
         if (is_object($completions)) {
             $rows = $completions->getElementsByTagName("div");
             for ($i = 0; $i < $rows->length; $i += 3) {
+                $trimmedlabel = trim($rows->item($i + 1)->nodeValue);
+                $trimmedlabel = substr($trimmedlabel, -1) == ':' ? substr($trimmedlabel, 0, -1) : $trimmedlabel;
                 $thismod->completion[] = (object) [
-                    'label' => $rows->item($i + 1)->nodeValue,
+                    'label' => $trimmedlabel,
                     'value' => $rows->item($i + 2)->nodeValue,
                 ];
                 $thismod->completionexists = true;
@@ -194,8 +199,10 @@ class mod_cado_translatecado {
         if (is_object($extra)) {
             $rows = $extra->getElementsByTagName("div");
             for ($i = 0; $i < $rows->length; $i += 3) {
+                $trimmedlabel = trim($rows->item($i + 1)->getElementsByTagName('h4')->item(0)->nodeValue);
+                $trimmedlabel = substr($trimmedlabel, -1) == ':' ? substr($trimmedlabel, 0, -1) : $trimmedlabel;
                 $thismod->extra[] = (object) [
-                    'label' => $rows->item($i + 1)->getElementsByTagName('h4')->item(0)->nodeValue,
+                    'label' => $trimmedlabel,
                     'value' => $rows->item($i + 2)->getElementsByTagName('h4')->item(0)->nodeValue,
                 ];
                 $thismod->extraexists = true;
