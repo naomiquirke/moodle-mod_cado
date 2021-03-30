@@ -390,7 +390,6 @@ class mod_cado_comparecado {
 
     /**
      * To put a marker in at the difference point in two texts, $a and $b.
-     * Note it is html agnostic, it will disrupt the html to place the marker.
      *
      * @param string $a
      * @param string $b
@@ -398,19 +397,24 @@ class mod_cado_comparecado {
      */
     private function get_diff_pt($a, $b) {
 
-        $a = trim($a);
-        $b = trim($b);
-        $arr1 = str_split($a);
-        $arr2 = str_split($b);
-        $z = strlen($a);
-        for ($i = 0; $i < $z; $i++) {
-            if ((isset($arr2[$i])) && ($arr1[$i] == $arr2[$i])) {
+        $sectiontext1 = preg_split('/<[^>]*>/', $a, -1, PREG_SPLIT_OFFSET_CAPTURE);
+        $sectiontext2 = preg_split('/<[^>]*>/', $b, -1, PREG_SPLIT_OFFSET_CAPTURE);
+        for ($i = 0; ($i < count($sectiontext1)) && ($i < count($sectiontext2)); $i++) {
+            if ($sectiontext1[$i][0] == $sectiontext2[$i][0]) {
                 continue;
-            } else {
-                break;
             }
+            $chars1 = preg_split('/ /', $sectiontext1[$i][0], -1, PREG_SPLIT_OFFSET_CAPTURE);
+            $chars2 = preg_split('/ /', $sectiontext2[$i][0], -1, PREG_SPLIT_OFFSET_CAPTURE);
+            for ($j = 0; ($j < count($chars1)) && ($j < count($chars2)); $j++) {
+                if ($chars1[$j][0] == $chars2[$j][0]) {
+                    continue;
+                }
+                break 2;
+            }
+            break;
         }
-        return substr_replace($a, "\u{2198}", $i, 0);
+        $difference = $sectiontext1[$i][1] + $chars1[$j][1];
+        return substr_replace($a, "\u{2198}", $difference, 0);
     }
 
 }
