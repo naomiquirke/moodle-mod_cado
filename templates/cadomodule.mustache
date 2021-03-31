@@ -162,57 +162,64 @@
     }
 }}
 <div {{#dm}}class="{{dm}}"{{/dm}}>
-  <h2 id="cadoi-{{module}}-name_{{cmodid}}" {{#dmn}}class="{{dmn}}"{{/dmn}}>{{name}} <a class="cad-link" href="{{link}}" target="_blank">&#9741;</a></h2>
-  {{#datesexists}}
-  <p class="cado-detail-heads">{{# str }} duedates, mod_cado {{/ str }}</p>
-  <div id="cadoi-{{module}}-dates_{{cmodid}}" {{#dmsd}}class="{{dmsd}}"{{/dmsd}}>
-      {{#dates}}
-      <div class="row {{dml}}">
-        <div class = "col-sm-3">{{label}}</div>
-        <div class = "col-sm-3 {{dmil}}">{{value}}</div>
-      </div>
-      {{/dates}}
-  </div>
-  {{/datesexists}}
-  {{#completionexists}}
-  <p class="cado-detail-heads">{{# str }} completion, mod_cado {{/ str }}</p>
-  <div id="cadoi-{{module}}-completion_{{cmodid}}" {{#dmsc}}class="{{dmsc}}"{{/dmsc}}>
-      {{#completion}}
-      <div class="row {{dml}}">
-        <div class = "col-sm-3">{{label}}</div>
-        <div class = "col-sm-3 {{dmil}}">{{value}}</div>
-      </div>
-      {{/completion}}
-  </div>
-  {{/completionexists}}
-  {{#extraexists}}
-  <div id="cadoi-{{module}}-extra_{{cmodid}}" {{#dmse}}class="{{dmse}}"{{/dmse}}>
-    {{#extra}}
-    <div class="row {{dml}}">
-        <div class = "col-sm-3 cado-detail-heads">{{label}}</div>
-        <div class = "col-sm-3 cado-detail-heads {{dmil}}">{{value}}</div>
-    </div>
-    {{/extra}}   
-  </div>
-  {{/extraexists}}
-  {{#introexists}}
-  <div id="cadoi-{{module}}-intro_{{cmodid}}" class="cado-inserthtml {{dmi}}">
-    {{{intro}}}
-  </div>
-  {{/introexists}}
-  {{#rubricexists}}
-  <p class="cado-detail-heads">{{# str }} rubric, mod_cado {{/ str }} </p>
-  <div id="cadoi-{{module}}-rubric_{{cmodid}}" {{#dmr}}class="{{dmr}}"{{/dmr}}>
-    <table class="table table-hover">
-      <tbody>
-        {{#rubric}}
-          <tr {{#dmrc}}class="{{dmrc}}"{{/dmrc}}>
-            <td class="cado-rubric-row-head">{{critdesc}}</td>
-            {{#levels}}<td {{#dmrl}}class="{{dmrl}}"{{/dmrl}}>{{leveldesc}}<br>({{points}})</td>{{/levels}}
-          </tr>
-        {{/rubric}}
-      </tbody>
-    </table><br>
-  </div>
-  {{/rubricexists}}
+    <h2 id="cadoi-{{module}}-name_{{cmodid}}" {{#dmn}}class="{{dmn}}"{{/dmn}}>
+        {{name}} <a class="cad-link" href="{{link}}" target="_blank">&#9741;</a>
+    </h2>
+    {{#datesexists}}
+        <p class="cado-detail-heads">{{# str }} duedates, mod_cado {{/ str }}</p>
+        <div id="cadoi-{{module}}-dates_{{cmodid}}" {{#dmsd}}class="{{dmsd}}"{{/dmsd}}>
+            {{#dates}}
+                <div class="row {{dml}}">
+                    <div class = "col-sm-3">{{label}}</div>
+                    <div class = "col-sm-3 {{dmil}}">{{value}}</div>
+                </div>
+            {{/dates}}
+        </div>
+    {{/datesexists}}
+    {{#completionexists}}
+        <p class="cado-detail-heads">{{# str }} completion, mod_cado {{/ str }}</p>
+        <div id="cadoi-{{module}}-completion_{{cmodid}}" {{#dmsc}}class="{{dmsc}}"{{/dmsc}}>
+            {{#completion}}
+                <div class="row {{dml}}">
+                    <div class = "col-sm-3">{{label}}</div>
+                    <div class = "col-sm-3 {{dmil}}">{{value}}</div>
+                </div>
+            {{/completion}}
+        </div>
+    {{/completionexists}}
+    {{#extraexists}}
+        <div id="cadoi-{{module}}-extra_{{cmodid}}" {{#dmse}}class="{{dmse}}"{{/dmse}}>
+            {{#extra}}
+                <div class="row {{dml}}">
+                    <div class = "col-sm-3 cado-detail-heads">{{label}}</div>
+                    <div class = "col-sm-3 cado-detail-heads {{dmil}}">{{value}}</div>
+                </div>
+            {{/extra}}   
+        </div>
+    {{/extraexists}}
+    {{#introexists}}
+        <div id="cadoi-{{module}}-intro_{{cmodid}}" class="cado-inserthtml {{dmi}}">
+            {{{intro}}}
+        </div>
+    {{/introexists}}
+    {{#rubricexists}}
+        <p class="cado-detail-heads">{{# str }} rubric, mod_cado {{/ str }} </p>
+        <div id="cadoi-{{module}}-rubric_{{cmodid}}" {{#dmr}}class="{{dmr}}"{{/dmr}}>
+            <table class="table table-hover">
+                <tbody>
+                    {{#rubric}}
+                        <tr {{#dmrc}}class="{{dmrc}}"{{/dmrc}}>
+                            <td class="cado-rubric-row-head">{{critdesc}}</td>
+                            {{#levels}}
+                                <td {{#dmrl}}class="{{dmrl}}"{{/dmrl}}>
+                                    {{leveldesc}}<br>({{points}})
+                                </td>
+                            {{/levels}}
+                        </tr>
+                    {{/rubric}}
+                </tbody>
+            </table>
+            <br>
+        </div>
+    {{/rubricexists}}
 </div>
