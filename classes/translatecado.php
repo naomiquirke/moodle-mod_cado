@@ -71,6 +71,7 @@ class mod_cado_translatecado {
         $thispage = $this->instance->generatedpage;
         $dom = new DOMDocument();
         $dom->encoding = 'utf-8';
+        $result->translationnote = '';
         set_error_handler(function($errno, $errstr) {
             throw new \Exception($errstr);
         }, E_WARNING);
@@ -78,22 +79,22 @@ class mod_cado_translatecado {
             // Load might result in a E_WARNING if the HTML is malformed, so try to catch this.
             $dom->loadHTML(mb_convert_encoding($thispage, 'HTML-ENTITIES', 'UTF-8') );
         } catch (\Exception $e) {
-            // Don't display JSON derived CADO.
-            $result->usegeneratedhtml = $e->getMessage();
+            // Record that there was an error.
+            $result->translationnote .= $e->getMessage();
             // Continue process of extracting JSON as it should in the main work and is useful for the compare function.
         } finally {
                 restore_error_handler();
         }
         restore_error_handler();
 
-        $result->fullname = $this->innerxml($dom->getElementById("cad-title")->childNodes->item(1));
+        $result->fullname = $dom->getElementById("cad-title")->getElementsByTagName("h1")->item(0)->textContent;
         $summary = $dom->getElementById("cado-coursesummary")->getElementsByTagName("div");
         if (is_object($summary) && is_object($summary->item(0))) {
-            $result->summary = $this->innerxml($summary->item(0));
+            $result->summary = $dom->saveHTML($summary->item(0));
         }
         $sitecomment = $dom->getElementById("cado-sitecomment")->getElementsByTagName("div");
         if (is_object($sitecomment) && is_object($sitecomment->item(0))) {
-            $result->sitecomment = $this->innerxml($sitecomment->item(0));
+            $result->sitecomment = $dom->saveHTML($sitecomment->item(0));
         }
 
         // We use the DB version of intro, comment and biblio, rather than picking them up off the HTML.
@@ -215,7 +216,7 @@ class mod_cado_translatecado {
         if (is_object($intro)) {
             // Intro is encased by two text nodes, so don't include first or last childnode.
             for ($i = 1; $i < $intro->childNodes->length - 1; $i++) {
-                $thismod->intro .= $this->innerxml($intro->childNodes->item($i));
+                $thismod->intro .= $docouter->saveHTML($intro->childNodes->item($i));
                 $thismod->introexists = true;
             }
         }
@@ -332,22 +333,4 @@ class mod_cado_translatecado {
         }
     }
 
-    /**
-     * Gets innerXML
-     *
-     * @param DOMNode $node is the dom node
-     * @return string
-     */
-    private function innerxml($node) {
-        if ($node->hasChildNodes()) {
-            $doc  = $node->ownerDocument;
-            $frag = $doc->createDocumentFragment();
-            foreach ($node->childNodes as $child) {
-                $frag->appendChild($child->cloneNode(true));
-            }
-            return $doc->saveXML($frag);
-        } else {
-            return $node->nodeValue;
-        }
-    }
 }
