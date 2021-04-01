@@ -22,7 +22,7 @@ Version 3.0
 
 Mechanism: A new database field containing JSON formatted data is now used to store CADO data rather than storing generated HTML. This JSON data will enable future activity mods to be included more flexibly, and allow the CADO template to be reorganised. Because of this, a number of functions and the mustache templates were revised.
 
-Any view of past-approved CADOs which naturally only have an HTML version will trigger the automatic creation of JSON data.  The HTML will not be overwritten.
+Any view of past-generated CADOs which only have an HTML version will trigger the automatic creation of JSON data from the existing HTML.  The HTML will not be overwritten.
 
 New option: 
 * "Store HTML version". The HTML field containing the generated CADO may continue to be loaded and stored for users wishing to access the HTML view in external reports.  By default this functionality will be turned off in plugin admin settings, just to avoid double storage.
