@@ -26,17 +26,17 @@
  * @module mod_cado/filterform
  */
 define([],
-    function () {
+    function() {
         /**
          * @alias module:mod_cado/filterform
          */
 
         return {
-            init: function (cadolist) {
-                // cadolist has records from Cado: id and name; from Course: shortname, fullname, startdate.
+            init: function(cadolist) {
+                // Var cadolist has records from Cado: id and name; from Course: shortname, fullname, startdate.
                 const cadoids = Object.entries(JSON.parse(document.querySelector(cadolist).value));
                 const dateselects = document.querySelectorAll("select[id^='id_compare']");
-                dateselects.forEach(function (dateselect) {
+                dateselects.forEach(function(dateselect) {
                     dateselect.addEventListener('change', updatechoices);
                 });
 
@@ -45,7 +45,7 @@ define([],
                 const cadochoice = document.getElementById('id_cadoid');
                 updatechoices();
 
-                // Changing the content of cadochoice selector.
+                /** Changing the content of cadochoice selector. */
                 function updatechoices() {
                     // First remove existing.
                     while (cadochoice.firstChild) {
@@ -62,7 +62,7 @@ define([],
                         document.getElementById('id_compareenddate_day').value);
                     let enddate = Math.floor(edate.getTime() / 1000);
 
-                    cadoids.forEach(function (value) {
+                    cadoids.forEach(function(value) {
                         if ((value[1].startdate >= startdate) &&
                             (value[1].startdate <= enddate) &&
                             (value[1].shortname.indexOf(coursename.value) >= 0)) {

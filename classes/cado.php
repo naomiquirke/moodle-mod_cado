@@ -387,7 +387,8 @@ class mod_cado_cado {
         $configuration = get_config('cado');
         if ($configuration->sumschedule && $configuration->tagschedule) {
             $numweeks = count($weeks);
-            $weeks[$numweeks] = ['section' => "", 'name' => "", 'tasks' => ['name' => get_string('schedulesum', 'cado')], 'sum' => true];
+            $weeks[$numweeks] = ['section' => "", 'name' => "",
+                'tasks' => ['name' => get_string('schedulesum', 'cado')], 'sum' => true];
         }
         return [$weeks, $numweeks];
     }

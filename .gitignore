@@ -353,3 +353,4 @@ MigrationBackup/
 
 # NQ
 amd/build/
+.eslintrc

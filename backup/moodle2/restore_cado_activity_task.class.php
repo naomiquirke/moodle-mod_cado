@@ -53,7 +53,7 @@ class restore_cado_activity_task extends restore_activity_task {
      * Define the contents in the activity that must be
      * processed by the link decoder
      */
-    static public function define_decode_contents() {
+    public static function define_decode_contents() {
         $contents = [];
 
         $contents[] = new restore_decode_content('cado',
@@ -66,7 +66,7 @@ class restore_cado_activity_task extends restore_activity_task {
      * Define the decoding rules for links belonging
      * to the activity to be executed by the link decoder
      */
-    static public function define_decode_rules() {
+    public static function define_decode_rules() {
         $rules = array();
 
         $rules[] = new restore_decode_rule('CADOVIEWBYID', '/mod/cado/view.php?id=$1', 'course_module');
@@ -80,7 +80,7 @@ class restore_cado_activity_task extends restore_activity_task {
      * Define the restore log rules that will be applied
      *
      */
-    static public function define_cado_log_rules() {
+    public static function define_cado_log_rules() {
         $rules = array();
 
         $rules[] = new restore_log_rule('cado', 'add', 'view.php?id={course_module}', '{cado}');
@@ -94,7 +94,7 @@ class restore_cado_activity_task extends restore_activity_task {
      * Define the restore log rules for course that will be applied
      *
      */
-    static public function define_restore_log_rules_for_course() {
+    public static function define_restore_log_rules_for_course() {
         $rules = array();
 
         $rules[] = new restore_log_rule('cado', 'view all', 'index.php?id={course}', null);
