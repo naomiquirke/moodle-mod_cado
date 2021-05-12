@@ -9,6 +9,11 @@ All the terminology within the report, including "CADO", is able to be customize
 
 Updates
 =======
+Version 3.01
+-----------
+Code style and automated testing updates.
+Declaration of availability for Moodle 3.11.
+
 Version 3.0
 -----------
 1. The mobile CADO display is now more appropriate for a small screen.
