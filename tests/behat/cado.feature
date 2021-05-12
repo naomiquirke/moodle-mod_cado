@@ -50,7 +50,7 @@ Feature: Teachers can create cado activity reports containing correctly grouped,
       | forum      | Groupings G1 forum     | Test1 forum name  | C1     | forum1       | 1         | GG1      | 1          |
       | forum      | Groupings G2 forum     | Test2 forum name  | C1     | forum2       | 1         | GG2      | 1          |
       | forum      | Groupings G3 forum     | Test3 forum name  | C1     | forum3       | 1         | GG3      | 1          |
-    And I add a "CADO report" to section "1" and I fill the form with:
+    And I add a "CADO report" to section "0" and I fill the form with:
       | Name for this CADO report        | CADO test       |
       | Grouping                         | Grouping 1      |
     When I follow "CADO test"

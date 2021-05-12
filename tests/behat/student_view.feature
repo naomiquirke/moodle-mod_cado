@@ -21,7 +21,7 @@ Feature: Students can only access approved CADOs
       | assign   | C1     | assign1  | Assign 1 | Assign 1 description |
     And I log in as "manager1"
     And I am on "Course 1" course homepage with editing mode on
-    And I add a "CADO report" to section "1" and I fill the form with:
+    And I add a "CADO report" to section "0" and I fill the form with:
       | Name for this CADO report | CADO test |
       | Grouping                  | None      |
     And I log out

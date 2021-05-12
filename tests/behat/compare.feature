@@ -57,12 +57,12 @@ Feature: Teachers can compare cado activity reports
 
   Scenario: See no differences between identical CADOs
     When I am on "Course 2" course homepage with editing mode on
-    And I add a "CADO report" to section "1" and I fill the form with:
+    And I add a "CADO report" to section "0" and I fill the form with:
       | Name for this CADO report | CADO test 3 |
       | Grouping                  | Grouping 2  |
     And I follow "CADO test 3"
     And I am on "Course 2" course homepage
-    And I add a "CADO report" to section "1" and I fill the form with:
+    And I add a "CADO report" to section "0" and I fill the form with:
       | Name for this CADO report | CADO test 4 |
       | Grouping                  | Grouping 2  |
     And I follow "CADO test 4"
@@ -74,7 +74,7 @@ Feature: Teachers can compare cado activity reports
 
   Scenario: See differences between different CADOs in different courses
     When I am on "Course 1" course homepage with editing mode on
-    And I add a "CADO report" to section "1" and I fill the form with:
+    And I add a "CADO report" to section "0" and I fill the form with:
       | Name for this CADO report | CADO test 2 |
       | Grouping                  | Grouping 2  |
     And I follow "CADO test 2"
@@ -84,7 +84,7 @@ Feature: Teachers can compare cado activity reports
     And I set the following fields to these values:
       | Tags | Hours::5 |
     And I press "Save and return to course"
-    And I add a "CADO report" to section "1" and I fill the form with:
+    And I add a "CADO report" to section "0" and I fill the form with:
       | Name for this CADO report | CADO test 3 |
       | Grouping                  | Grouping 2  |
     And I follow "CADO test 3"
@@ -98,12 +98,12 @@ Feature: Teachers can compare cado activity reports
 
   Scenario: See differences between different CADOs in the same course
     When I am on "Course 1" course homepage with editing mode on
-    And I add a "CADO report" to section "1" and I fill the form with:
+    And I add a "CADO report" to section "0" and I fill the form with:
       | Name for this CADO report | CADO test 2 |
       | Grouping                  | Grouping 2  |
     And I follow "CADO test 2"
     And I am on "Course 1" course homepage
-    And I add a "CADO report" to section "1" and I fill the form with:
+    And I add a "CADO report" to section "0" and I fill the form with:
       | Name for this CADO report | CADO test 1 |
       | Grouping                  | Grouping 1  |
     And I follow "CADO test 1"
