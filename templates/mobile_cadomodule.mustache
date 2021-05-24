@@ -24,7 +24,7 @@
     * none
 
     Data attributes required for JS:
-    * none
+    * All
 
     Context variables required for this template:
     * module string: module type
@@ -158,6 +158,7 @@
 }}
 {{=<% %>=}}
 <div>
+  <%#cmodid%>
   <ion-card>
     <ion-card-header>
         <ion-card-title text-wrap id="cadoi-<%module%>-name_<%cmodid%>">
@@ -219,4 +220,5 @@
         <%/rubricexists%>
     </ion-card-content>
   </ion-card>
+  <%/cmodid%>
 </div>

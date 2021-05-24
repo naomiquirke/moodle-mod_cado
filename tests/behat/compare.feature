@@ -54,17 +54,25 @@ Feature: Teachers can compare cado activity reports
       | forum    | Forum 2 | forum intro | C1     | forum2   | 1         | GG2      | 1          | ##tomorrow## |
       | forum    | Forum 2 | forum intro | C2     | forum3   | 1         | GG3      | 1          | ##today##    |
     And I log in as "teacher1"
-
-  Scenario: See no differences between identical CADOs
-    When I am on "Course 2" course homepage with editing mode on
+    And I am on "Course 1" course homepage with editing mode on
+    And I add a "CADO report" to section "0" and I fill the form with:
+      | Name for this CADO report | CADO test 1 |
+      | Grouping                  | Grouping 1  |
+    And I add a "CADO report" to section "0" and I fill the form with:
+      | Name for this CADO report | CADO test 2 |
+      | Grouping                  | Grouping 2  |
+    And I am on "Course 2" course homepage
     And I add a "CADO report" to section "0" and I fill the form with:
       | Name for this CADO report | CADO test 3 |
       | Grouping                  | Grouping 2  |
-    And I follow "CADO test 3"
-    And I am on "Course 2" course homepage
     And I add a "CADO report" to section "0" and I fill the form with:
       | Name for this CADO report | CADO test 4 |
       | Grouping                  | Grouping 2  |
+
+  Scenario: See no differences between identical CADOs
+    When I am on "Course 2" course homepage with editing mode on
+    And I follow "CADO test 3"
+    And I am on "Course 2" course homepage
     And I follow "CADO test 4"
     And I navigate to "Compare" in current page administration
     And I set the following fields to these values:
@@ -74,9 +82,6 @@ Feature: Teachers can compare cado activity reports
 
   Scenario: See differences between different CADOs in different courses
     When I am on "Course 1" course homepage with editing mode on
-    And I add a "CADO report" to section "0" and I fill the form with:
-      | Name for this CADO report | CADO test 2 |
-      | Grouping                  | Grouping 2  |
     And I follow "CADO test 2"
     And I am on "Course 2" course homepage
     And I follow "Assign 1"
@@ -84,28 +89,19 @@ Feature: Teachers can compare cado activity reports
     And I set the following fields to these values:
       | Tags | Hours::5 |
     And I press "Save and return to course"
-    And I add a "CADO report" to section "0" and I fill the form with:
-      | Name for this CADO report | CADO test 3 |
-      | Grouping                  | Grouping 2  |
     And I follow "CADO test 3"
     And I navigate to "Compare" in current page administration
     And I set the field "Select CADO" to "C1 --- CADO test 2"
     And I press "Save changes"
     Then I should see "Grouping 2"
-    And  I should see "Hours" in the "#cado-assign .cado-othermissing" "css_element"
+    And I should see "Hours" in the "#cado-assign .cado-othermissing" "css_element"
     And ".cado-different" "css_element" should exist in the "#cado-forum" "css_element"
     And ".cado-othermissing" "css_element" should exist in the "#cado-quiz" "css_element"
 
   Scenario: See differences between different CADOs in the same course
     When I am on "Course 1" course homepage with editing mode on
-    And I add a "CADO report" to section "0" and I fill the form with:
-      | Name for this CADO report | CADO test 2 |
-      | Grouping                  | Grouping 2  |
     And I follow "CADO test 2"
     And I am on "Course 1" course homepage
-    And I add a "CADO report" to section "0" and I fill the form with:
-      | Name for this CADO report | CADO test 1 |
-      | Grouping                  | Grouping 1  |
     And I follow "CADO test 1"
     And I navigate to "Compare" in current page administration
     And I set the following fields to these values:

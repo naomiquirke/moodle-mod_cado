@@ -1,4 +1,4 @@
-@mod @mod_cado
+@mod @mod_cado @mod_cado_approve @javascript
 Feature: Students can only access approved CADOs
   In order for students to access only approved cado reports
   As a manager
@@ -22,20 +22,20 @@ Feature: Students can only access approved CADOs
     And I log in as "manager1"
     And I am on "Course 1" course homepage with editing mode on
     And I add a "CADO report" to section "0" and I fill the form with:
-      | Name for this CADO report | CADO test |
-      | Grouping                  | None      |
+      | Name for this CADO report | CADO test2 |
+    And I follow "CADO test2"
     And I log out
 
   Scenario: See not approved message as as a student
     When I log in as "student1"
     And I am on "Course 1" course homepage
-    And I follow "CADO test"
+    And I follow "CADO test2"
     Then I should see "Sorry"
 
   Scenario: Approve the CADO as a manager and then view CADO as a student
     When I log in as "manager1"
     And I am on "Course 1" course homepage
-    And I follow "CADO test"
+    And I follow "CADO test2"
     And I navigate to "Approve?" in current page administration
     And I set the following fields to these values:
       | Approve CADO | 1 |
@@ -43,6 +43,6 @@ Feature: Students can only access approved CADOs
     And I log out
     And I log in as "student1"
     And I am on "Course 1" course homepage
-    And I follow "CADO test"
+    And I follow "CADO test2"
     Then I should see "Course Assessment and Delivery Outline"
     And I should see "Assign 1"
