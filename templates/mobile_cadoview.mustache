@@ -26,7 +26,10 @@
     * none
 
     Context variables required for this template:
-    * none
+    * cmid
+    * courseid
+    * approved
+    * data
 
     Example context (json):
     {
@@ -41,7 +44,9 @@
     <ion-list>
         <%^approved%>
             <ion-item>
-                <p><% data %></p>
+                <ion-label>
+                    <% data %>
+                </ion-label>
             </ion-item>
         <%/approved%>
         <%#approved%>
@@ -50,7 +55,10 @@
                 <%> mod_cado/mobile_cadocore %>
             </div>
             <!-- Call log WS when the template is loaded. -->
-            <span core-site-plugins-call-ws-on-load name="mod_cado_view_cado" [params]="{cadoid: <% cadoid %>}" [preSets]="{getFromCache: 0, saveToCache: 0}"></span>
+            <div core-site-plugins-call-ws-on-load name="mod_cado_view_cado"
+                [params]="{cadoid: <% cadoid %>}"
+                [preSets]="{getFromCache: 0, saveToCache: 0}">
+            </div>
             <%/data%>
         <%/approved%>
     </ion-list>
