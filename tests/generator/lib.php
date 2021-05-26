@@ -53,9 +53,9 @@ class mod_cado_generator extends testing_module_generator {
             'timemodified' => time(),
             'timegenerated' => 0,
             'generateuser' => 0,
-            'cadointro' => 'Hello!',
-            'cadocomment' => 'Hello again!',
-            'cadobiblio' => 'Goodbye!',
+            'cadointro' => ['text' => 'Intro', 'format' => FORMAT_MOODLE],
+            'cadobiblio' => ['text' => 'Biblio', 'format' => FORMAT_MOODLE],
+            'cadocomment' => ['text' => 'Comment', 'format' => FORMAT_MOODLE],
         );
 
         foreach ($defaultsettings as $name => $value) {
