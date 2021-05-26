@@ -36,6 +36,7 @@ class approved_cado_viewed extends \core\event\base {
 
     /**
      * Init method.
+     * @return void
      */
     protected function init() {
         $this->data['crud'] = 'r';

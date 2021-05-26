@@ -53,6 +53,10 @@ Feature: Teachers can compare cado activity reports
       | forum    | Forum 1 | forum intro | C1     | forum1   | 1         | GG1      | 1          | ##tomorrow## |
       | forum    | Forum 2 | forum intro | C1     | forum2   | 1         | GG2      | 1          | ##tomorrow## |
       | forum    | Forum 2 | forum intro | C2     | forum3   | 1         | GG3      | 1          | ##today##    |
+    And the following "activities" exist:
+      | activity | name    | course | idnumber | groupmode | grouping |
+      | cado     | Cado1   | C1     | CAD001   | 1         | GG1      |
+
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
     And I add a "CADO report" to section "0" and I fill the form with:
