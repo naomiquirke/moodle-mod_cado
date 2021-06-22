@@ -21,6 +21,10 @@
         <FIELD NAME="cadobiblio" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="One of the free text fields available"/>
         <FIELD NAME="cadointro" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="One of the free text fields available"/>
         <FIELD NAME="generatedjson" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="The generated cado report JSON"/>
+        <FIELD NAME="approvecommentformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="1" SEQUENCE="false"/>
+        <FIELD NAME="cadocommentformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="1" SEQUENCE="false"/>
+        <FIELD NAME="cadobiblioformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="1" SEQUENCE="false"/>
+        <FIELD NAME="cadointroformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="1" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

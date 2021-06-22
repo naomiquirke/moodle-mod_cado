@@ -50,6 +50,21 @@ function xmldb_cado_upgrade($oldversion = 0) {
 
         upgrade_mod_savepoint(true, 2021012000, 'cado');
     }
+    if ($oldversion < 2021062201) {
+        $table = new xmldb_table('cado');
+        $field = [];
+        $field[0] = new xmldb_field('approvecommentformat', XMLDB_TYPE_INTEGER, '4', null, XMLDB_NOTNULL, null, FORMAT_HTML, null);
+        $field[1] = new xmldb_field('cadocommentformat', XMLDB_TYPE_INTEGER, '4', null, XMLDB_NOTNULL, null, FORMAT_HTML, null);
+        $field[2] = new xmldb_field('cadobiblioformat', XMLDB_TYPE_INTEGER, '4', null, XMLDB_NOTNULL, null, FORMAT_HTML, null);
+        $field[3] = new xmldb_field('cadointroformat', XMLDB_TYPE_INTEGER, '4', null, XMLDB_NOTNULL, null, FORMAT_HTML, null);
+        foreach ($field as $newfield) {
+            if (!$dbman->field_exists($table, $newfield)) {
+                $dbman->add_field($table, $newfield);
+            }
+        }
+
+        upgrade_mod_savepoint(true, 2021062201, 'cado');
+    }
 
     return $result;
 }

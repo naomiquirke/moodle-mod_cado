@@ -101,7 +101,7 @@ if (!$viewedcado->instance->timeapproved) {  // If not approved.
             $cs->notapprovedcomment = get_string('notapproved', 'cado');
             // Note cannot add who didn't approve because it may show someone to whom the cado was subsequently proposed.
             // So add this information automatically to approve/not approved comment.
-            $cs->approvecomment = $viewedcado->instance->approvecomment;
+            $cs->approvecomment = format_text($viewedcado->instance->approvecomment, $viewedcado->instance->approvecommentformat);
         }
     }
 } else { // This is when CADO is approved.
@@ -109,7 +109,7 @@ if (!$viewedcado->instance->timeapproved) {  // If not approved.
     if (has_capability('mod/cado:generate', $context) || has_capability('mod/cado:approve', $context)) {
         $cs->statecomment = get_string('approvedon', 'cado',
             ['approver' => mod_cado_check::getusername($viewedcado->instance->approveuser)]);
-        $cs->approvecomment = $viewedcado->instance->approvecomment;
+        $cs->approvecomment = format_text($viewedcado->instance->approvecomment, $viewedcado->instance->approvecommentformat);
         $cs->showtime = $viewedcado->instance->timeapproved;
         // Note add time separately so that it can be formatted by user specification.
     } else { // Now for when reader only has view rights to CADO, not to approval information.
@@ -134,10 +134,12 @@ if ($showcentral) { // Now outputting the main report.
         $coursegenerated = (object) json_decode($viewedcado->instance->generatedjson, true);
         // Now add the bits that are in the table or are independent to the individual course details.
         $coursegenerated->logourl = get_config('cado')->showlogo ? $myrenderer->get_logo_url() : null;
-        $coursegenerated->cadointro = $viewedcado->instance->cadointro;
+        $coursegenerated->cadointro = format_text($viewedcado->instance->cadointro, $viewedcado->instance->cadointroformat);
         // Include these based on site settings at time of generation.
-        $coursegenerated->cadocomment = $coursegenerated->commentexists ? $viewedcado->instance->cadocomment : null;
-        $coursegenerated->cadobiblio = $coursegenerated->biblioexists ? $viewedcado->instance->cadobiblio : null;
+        $coursegenerated->cadocomment = $coursegenerated->commentexists ?
+            format_text($viewedcado->instance->cadocomment, $viewedcado->instance->cadocommentformat) : null;
+        $coursegenerated->cadobiblio = $coursegenerated->biblioexists ?
+            format_text($viewedcado->instance->cadobiblio, $viewedcado->instance->cadobiblioformat) : null;
 
         // Finally output.
         echo $myrenderer->render_cado($coursegenerated);

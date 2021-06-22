@@ -102,6 +102,36 @@ class mod_cado_cado {
         self::updatecadorecord($this->instance);
     }
     /**
+     * We need to combine form text with comments in html format, so format form text as html.
+     *
+     * @param string $thistext text given.
+     * @param int $thisformat text format given.
+     */
+    private function cado_format_text($thistext, $thisformat) {
+        switch ($thisformat) {
+            case FORMAT_HTML:
+                return $thistext;
+            case FORMAT_MARKDOWN:
+                return markdown_to_html($text);
+            default:  // FORMAT_MOODLE or anything else.
+                // Remove any whitespace that may be between HTML tags.
+                $text = preg_replace("~>([[:space:]]+)<~i", "><", $text);
+
+                // Remove any returns that precede or follow HTML tags.
+                $text = preg_replace("~([\n\r])<~i", " <", $text);
+                $text = preg_replace("~>([\n\r])~i", "> ", $text);
+
+                // Make returns into HTML newlines.
+                if ($newlines) {
+                    $text = nl2br($text);
+                }
+
+                // Wrap the whole thing in a div.
+                return '<div>'.$text.'</div>';
+        }
+
+    }
+    /**
      * Update cado instance in database due to an approval / not-approval event, or an update to comments.
      *
      * @param stdClass $data as data from form
@@ -113,15 +143,13 @@ class mod_cado_cado {
         . get_string('approvecommentreviewed', 'cado', ['user' => fullname($USER), 'date' => userdate(time())])
         . '</p>';
         $thehistory = $prev->approvecomment;
-        $thisapprovecomment = format_text($data->comment['text'], $data->comment['format']);
-        if ($data->allowedit == 1) {
-            $thehistory = format_text($data->history['text'], $data->history['format']);
-            if ($prev->approvecomment <> $thehistory) { // Then the approval history has been edited.
-                $thehistory = $thehistory
-                    . '<p class="approvecommentreviewed">'
-                    . get_string('approvehistoryedited', 'cado', ['user' => fullname($USER), 'date' => userdate(time())])
-                    . '</p>';
-            }
+        $thisapprovecomment = $this->cado_format_text($data->comment['text'], $data->comment['format']);
+        if (($data->allowedit == 1) && ($thehistory <> $data->history['text'])) {
+            // Then the approval history has been edited.
+            $thehistory = $this->cado_format_text($data->history['text'], $data->history['format']);
+            $thehistory += '<p class="approvecommentreviewed">'
+                . get_string('approvehistoryedited', 'cado', ['user' => fullname($USER), 'date' => userdate(time())])
+                . '</p>';
         }
         if ($data->approved) {
             if ($prev->timeapproved == 0) {
@@ -139,6 +167,7 @@ class mod_cado_cado {
             $this->instance->timeapproved = 0;
         }
         $this->instance->approvecomment = $thisapprovecomment . $commenttag . $thehistory;
+        $this->instance->approvecommentformat = FORMAT_HTML;
         $this->instance->approveuser = $USER->id;
         self::updatecadorecord($this->instance);
     }
@@ -155,12 +184,16 @@ class mod_cado_cado {
         $newcadorec->name = $formdata->name;
         $newcadorec->course = $formdata->course;
         $newcadorec->timegenerated = 0;
-        $newcadorec->cadointro = format_text($formdata->cadointro['text'] , $formdata->cadointro['format']);
+        $newcadorec->cadointro = $formdata->cadobiblio['text'];
+        $newcadorec->cadointroformat = $formdata->cadobiblio['format'];
+        // file_postupdate_standard_editor($formdata, "cadointro", [], context_module::instance($PAGE->cm->id));
         if (mod_cado_check::options('cadobiblio', 'cadooptions')) {
-            $newcadorec->cadobiblio = format_text($formdata->cadobiblio['text'], $formdata->cadobiblio['format']);
+            $newcadorec->cadobiblio = $formdata->cadobiblio['text'];
+            $newcadorec->cadobiblioformat = $formdata->cadobiblio['format'];
         }
         if (mod_cado_check::options('cadocomment', 'cadooptions')) {
-            $newcadorec->cadocomment = format_text($formdata->cadocomment['text'], $formdata->cadocomment['format']);
+            $newcadorec->cadocomment = $formdata->cadobiblio['text'];
+            $newcadorec->cadocommentformat = $formdata->cadobiblio['format'];
         }
         return $DB->insert_record('cado', $newcadorec);
     }

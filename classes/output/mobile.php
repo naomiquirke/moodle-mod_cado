@@ -63,10 +63,12 @@ class mobile {
         } else {
             $args->approved = true;
             $args->data = (object) json_decode($cadoinstance->generatedjson, true);
-            $args->data->cadointro = $cadoinstance->cadointro;
+            $args->data->cadointro = format_text($cadoinstance->cadointro, $cadoinstance->cadointroformat);
             // Include these based on site settings at time of generation.
-            $args->data->cadocomment = $args->data->commentexists ? $cadoinstance->cadocomment : null;
-            $args->data->cadobiblio = $args->data->biblioexists ? $cadoinstance->cadobiblio : null;
+            $args->data->cadocomment = $args->data->commentexists ?
+                format_text($cadoinstance->cadocomment, $cadoinstance->cadocommentformat) : null;
+            $args->data->cadobiblio = $args->data->biblioexists ?
+                format_text($cadoinstance->cadobiblio, $cadoinstance->cadobiblioformat) : null;
 
             $args->data->mobileapp = 1;
         }

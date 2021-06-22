@@ -86,12 +86,12 @@ class mod_cado_mod_form extends moodleform_mod {
             $instance = mod_cado_cado::getcadorecord($id);
             $mform->setDefault('isapproved', $instance->timeapproved ? 1 : 0);
             if ($this->comment) {
-                $mform->setDefault('cadocomment', array('text' => $instance->cadocomment));
+                $mform->setDefault('cadocomment', ['text' => $instance->cadocomment, 'format' => $instance->cadocommentformat]);
             }
             if ($this->biblio) {
-                $mform->setDefault('cadobiblio', array('text' => $instance->cadobiblio));
+                $mform->setDefault('cadobiblio', ['text' => $instance->cadobiblio, 'format' => $instance->cadobiblioformat]);
             }
-            $mform->setDefault('cadointro', array('text' => $instance->cadointro));
+            $mform->setDefault('cadointro', ['text' => $instance->cadointro, 'format' => $instance->cadointroformat]);
 
             if ($instance->timeapproved) { // Note check for approved, if approved don't allow editing of these.
                 $mform->freeze('groupingid');
