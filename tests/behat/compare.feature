@@ -1,4 +1,4 @@
-@mod @mod_cado @mod_cado_compare @javascript
+@mod @mod_cado @mod_cado_compare
 Feature: Teachers can compare cado activity reports
   In order to compare cado reports
   As a teacher
@@ -54,24 +54,13 @@ Feature: Teachers can compare cado activity reports
       | forum    | Forum 2 | forum intro | C1     | forum2   | 1         | GG2      | 1          | ##tomorrow## |
       | forum    | Forum 2 | forum intro | C2     | forum3   | 1         | GG3      | 1          | ##today##    |
     And the following "activities" exist:
-      | activity | name    | course | idnumber | groupmode | grouping |
-      | cado     | Cado1   | C1     | CAD001   | 1         | GG1      |
+      | activity | name        | course | idnumber | groupmode | grouping |
+      | cado     | CADO test 1 | C1     | CAD001   | 1         | GG1      |
+      | cado     | CADO test 2 | C1     | CAD002   | 1         | GG2      |
+      | cado     | CADO test 3 | C2     | CAD003   | 1         | GG3      |
+      | cado     | CADO test 4 | C2     | CAD004   | 1         | GG3      |
 
     And I log in as "teacher1"
-    And I am on "Course 1" course homepage with editing mode on
-    And I add a "CADO report" to section "0" and I fill the form with:
-      | Name for this CADO report | CADO test 1 |
-      | Grouping                  | Grouping 1  |
-    And I add a "CADO report" to section "0" and I fill the form with:
-      | Name for this CADO report | CADO test 2 |
-      | Grouping                  | Grouping 2  |
-    And I am on "Course 2" course homepage
-    And I add a "CADO report" to section "0" and I fill the form with:
-      | Name for this CADO report | CADO test 3 |
-      | Grouping                  | Grouping 2  |
-    And I add a "CADO report" to section "0" and I fill the form with:
-      | Name for this CADO report | CADO test 4 |
-      | Grouping                  | Grouping 2  |
 
   Scenario: See no differences between identical CADOs
     When I am on "Course 2" course homepage with editing mode on
@@ -84,6 +73,7 @@ Feature: Teachers can compare cado activity reports
     And I press "Save changes"
     Then I should see "Identical CADOs"
 
+  @javascript
   Scenario: See differences between different CADOs in different courses
     When I am on "Course 1" course homepage with editing mode on
     And I follow "CADO test 2"

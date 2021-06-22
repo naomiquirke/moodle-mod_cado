@@ -32,11 +32,11 @@ Feature: Data obtain and delete due to the privacy API
     And the following "activities" exist:
       | activity | course | idnumber | name     | intro                |
       | assign   | C1     | assign1  | Assign 1 | Assign 1 description |
+    And the following "activities" exist:
+      | activity | name      | course | idnumber | groupmode |
+      | cado     | CADO test | C1     | CAD001   | 0         |
     And I log in as "sad"
     And I am on "Course 1" course homepage with editing mode on
-    And I add a "CADO report" to section "0" and I fill the form with:
-      | Name for this CADO report | CADO test |
-      | Grouping                  | None      |
     And I follow "CADO test"
     And I log out
     When I log in as "mad"

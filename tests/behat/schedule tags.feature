@@ -9,8 +9,8 @@ Feature: CADOs can have schedules with tag values totalled
       | fullname | shortname | summary         | category | startdate  | enddate                    | format |
       | Course 1 | C1        | Base course     | 0        |  ##today## | ##last day of next month## | weeks  |
     And the following "tags" exist:
-      | name         | isstandard  |
-      | Neverusedtag | 1           |
+      | name   | isstandard  |
+      | Easy   | 1           |
     And the following "users" exist:
       | username | firstname | lastname  | email                |
       | teacher1 | Teacher   | T1        | teacher1@example.com |
@@ -52,7 +52,7 @@ Feature: CADOs can have schedules with tag values totalled
     And I follow "Forum 1"
     And I navigate to "Edit settings" in current page administration
     And I set the following fields to these values:
-      | Tags | Hours::5, Frogs::Green Tree, Easy::20 |
+      | Tags | Hours::5, Frogs::Green Tree, Easy |
     And I press "Save and return to course"
     And I follow "CADO test 1"
 # Because "Easy" does not appear in the CADO site admin settings, it should not appear in the CADO at all.

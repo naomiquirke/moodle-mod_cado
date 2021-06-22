@@ -1,4 +1,4 @@
-@mod @mod_cado @mod_cado_approve @javascript
+@mod @mod_cado @mod_cado_approve
 Feature: Students can only access approved CADOs
   In order for students to access only approved cado reports
   As a manager
@@ -19,10 +19,11 @@ Feature: Students can only access approved CADOs
     And the following "activities" exist:
       | activity | course | idnumber | name     | intro                |
       | assign   | C1     | assign1  | Assign 1 | Assign 1 description |
+    And the following "activities" exist:
+      | activity | name       | course | idnumber |
+      | cado     | CADO test2 | C1     | CAD001   |
     And I log in as "manager1"
     And I am on "Course 1" course homepage with editing mode on
-    And I add a "CADO report" to section "0" and I fill the form with:
-      | Name for this CADO report | CADO test2 |
     And I follow "CADO test2"
     And I log out
 
