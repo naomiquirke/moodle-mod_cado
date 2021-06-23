@@ -111,26 +111,27 @@ class mod_cado_cado {
      * @return string text as html
      */
     private function cado_format_text($thistext, $thisformat) {
+        if (empty($thistext)) {
+            return '<div></div>';
+        }
         switch ($thisformat) {
             case FORMAT_HTML:
-                return $thistext;
+                return "<div>$thistext</div>";
             case FORMAT_MARKDOWN:
-                return markdown_to_html($text);
+                return markdown_to_html($thistext);
             default:  // FORMAT_MOODLE or anything else.
                 // Remove any whitespace that may be between HTML tags.
-                $text = preg_replace("~>([[:space:]]+)<~i", "><", $text);
+                $thistext = preg_replace("~>([[:space:]]+)<~i", "><", $thistext);
 
                 // Remove any returns that precede or follow HTML tags.
-                $text = preg_replace("~([\n\r])<~i", " <", $text);
-                $text = preg_replace("~>([\n\r])~i", "> ", $text);
+                $thistext = preg_replace("~([\n\r])<~i", " <", $thistext);
+                $thistext = preg_replace("~>([\n\r])~i", "> ", $thistext);
 
                 // Make returns into HTML newlines.
-                if ($newlines) {
-                    $text = nl2br($text);
-                }
+                $thistext = nl2br($thistext);
 
                 // Wrap the whole thing in a div.
-                return '<div>'.$text.'</div>';
+                return "<div>$thistext</div>";
         }
 
     }
@@ -150,7 +151,7 @@ class mod_cado_cado {
         if (($data->allowedit == 1) && ($thehistory <> $data->history['text'])) {
             // Then the approval history has been edited.
             $thehistory = $this->cado_format_text($data->history['text'], $data->history['format']);
-            $thehistory += '<p class="approvecommentreviewed">'
+            $thehistory .= '<p class="approvecommentreviewed">'
                 . get_string('approvehistoryedited', 'cado', ['user' => fullname($USER), 'date' => userdate(time())])
                 . '</p>';
         }
@@ -249,7 +250,8 @@ class mod_cado_cado {
         $genwhat->biblioexists = in_array( 'cadobiblio' , $chosenset );
         // Keep this because it is not obvious why an activity may have been included or not in the future.
         $genwhat->inchidden = $siteoptions->inchidden;
-        $genwhat->summary = in_array( 'summary' , $chosenset ) ? $this->course->summary : null;
+        $genwhat->summary = in_array( 'summary' , $chosenset ) ?
+            format_text($this->course->summary, $this->course->summaryformat) : null;
         $genwhat->sitecomment = mod_cado_check::sitecomment();
         $genwhat->fullname = $this->course->fullname;
         $this->instance->generatedjson = json_encode($genwhat,
