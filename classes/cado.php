@@ -81,6 +81,7 @@ class mod_cado_cado {
      * Update cado instance in database due to an edit settings event.
      *
      * @param stdClass $update as data
+     * @return bool success of update
      */
     public static function updatecadorecord(stdClass $update) {
         global $DB;
@@ -92,6 +93,7 @@ class mod_cado_cado {
      * Update cado instance in database due to a proposal event.
      *
      * @param int $chosenapprover userid
+     * @return bool success of update
      */
     public function proposeupdate(int $chosenapprover) {
         global $USER;
@@ -106,6 +108,7 @@ class mod_cado_cado {
      *
      * @param string $thistext text given.
      * @param int $thisformat text format given.
+     * @return string text as html
      */
     private function cado_format_text($thistext, $thisformat) {
         switch ($thisformat) {
@@ -186,7 +189,6 @@ class mod_cado_cado {
         $newcadorec->timegenerated = 0;
         $newcadorec->cadointro = $formdata->cadobiblio['text'];
         $newcadorec->cadointroformat = $formdata->cadobiblio['format'];
-        // file_postupdate_standard_editor($formdata, "cadointro", [], context_module::instance($PAGE->cm->id));
         if (mod_cado_check::options('cadobiblio', 'cadooptions')) {
             $newcadorec->cadobiblio = $formdata->cadobiblio['text'];
             $newcadorec->cadobiblioformat = $formdata->cadobiblio['format'];
@@ -202,6 +204,7 @@ class mod_cado_cado {
      * Update this instance to the database, checks to ensure updates are valid to make.
      *
      * @param stdClass $formdata The data submitted from the form
+     * @return boolean success of update.
      */
     public static function update_instance(stdClass $formdata) {
         $update = new stdClass();
@@ -213,13 +216,17 @@ class mod_cado_cado {
             // We have to test for options, because if it is not available then it won't be present in the form,
             // and we don't want to overwrite with nulls.
             if (mod_cado_check::options('cadobiblio', 'cadooptions')) {
-                $update->cadobiblio = format_text($formdata->cadobiblio['text'], $formdata->cadobiblio['format']);
+                $update->cadobiblio = $formdata->cadobiblio['text'];
+                $update->cadobiblioformat = $formdata->cadobiblio['format'];
             }
             if (mod_cado_check::options('cadocomment', 'cadooptions')) {
-                $update->cadocomment = format_text($formdata->cadocomment['text'], $formdata->cadocomment['format']);
+                $update->cadocomment = $formdata->cadocomment['text'];
+                $update->cadocommentformat = $formdata->cadocomment['format'];
             }
-            $update->cadointro = format_text($formdata->cadointro['text'] , $formdata->cadointro['format']);
-                // Grouping handled by cm.
+            $update->cadointro = $formdata->cadointro['text'];
+            $update->cadointroformat = $formdata->cadointro['format'];
+
+            // Grouping handled by cm.
         }
         return self::updatecadorecord($update);
     }
@@ -464,14 +471,16 @@ class mod_cado_cado {
             $thismod->quizcutoffdate = 0;
         };
         $this->labelout($dates, get_string("{$modtype}expectcompleted", 'cado'), $this->usetime($thismod->completionexpected));
-        $intro = "{$modtype}intro";
+        $introbase = "{$modtype}intro";
+        $introformat = "{$modtype}introformat";
+        $intro = format_text($thismod->$introbase, $thismod->$introformat);
         $name = "{$modtype}name";
         $contents = [ // Seems to need automatically defined keys for mustache.
             'module' => $modtype,
             'cmodid' => $thismod->id,
             'name' => htmlspecialchars_decode($thismod->$name),
             'link' => new moodle_url("/mod/{$modtype}/view.php", ['id' => $thismod->id]),
-            'intro' => $thismod->$intro,
+            'intro' => $intro,
             'introexists' => $intro == true,
             'dates' => $dates,
             'datesexists' => !empty($dates),
@@ -595,7 +604,7 @@ class mod_cado_cado {
         $sqlorderby = "
             ORDER BY cm.modtype ";
         if ($forum) {
-            $sqlselect .= ", f.name forumname, f.intro forumintro
+            $sqlselect .= ", f.name forumname, f.intro forumintro, f.introformat forumintroformat
                 , f.duedate forumduedate, f.cutoffdate forumcutoffdate
                 , completiondiscussions, completionreplies, completionposts";
             $sqlfroms .= "
@@ -603,14 +612,14 @@ class mod_cado_cado {
             $sqlorderby .= ", f.duedate";
         }
         if ($quiz) {
-            $sqlselect .= ", q.name quizname, q.intro quizintro
+            $sqlselect .= ", q.name quizname, q.intro quizintro, q.introformat quizintroformat
                 , timeclose, timeopen, timelimit, attempts ";
             $sqlfroms .= "
                 LEFT JOIN {quiz} q on q.id = cm.instance and cm.modtype = 'quiz' ";
             $sqlorderby .= ", timeclose";
         }
         if ($assign) {
-            $sqlselect .= ", a.name assignname, a.intro assignintro
+            $sqlselect .= ", a.name assignname, a.intro assignintro, a.introformat assignintroformat
                 , a.duedate assignduedate, a.cutoffdate assigncutoffdate ";
             $sqlfroms .= "
                 LEFT JOIN {assign} a on a.id = cm.instance and cm.modtype = 'assign' ";

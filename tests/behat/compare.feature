@@ -54,11 +54,11 @@ Feature: Teachers can compare cado activity reports
       | forum    | Forum 2 | forum intro | C1     | forum2   | 1         | GG2      | 1          | ##tomorrow## |
       | forum    | Forum 2 | forum intro | C2     | forum3   | 1         | GG3      | 1          | ##today##    |
     And the following "activities" exist:
-      | activity | name        | course | idnumber | groupmode | grouping |
-      | cado     | CADO test 1 | C1     | CAD001   | 1         | GG1      |
-      | cado     | CADO test 2 | C1     | CAD002   | 1         | GG2      |
-      | cado     | CADO test 3 | C2     | CAD003   | 1         | GG3      |
-      | cado     | CADO test 4 | C2     | CAD004   | 1         | GG3      |
+      | activity | name        | course | idnumber | groupmode | grouping | cadointro      | cadointroformat |
+      | cado     | CADO test 1 | C1     | CAD001   | 1         | GG1      | <h1>Hello</h1> | 1               |
+      | cado     | CADO test 2 | C1     | CAD002   | 1         | GG2      | <h1>Hello</h1> | 1               |
+      | cado     | CADO test 3 | C2     | CAD003   | 1         | GG3      | <h1>Hello</h1> | 1               |
+      | cado     | CADO test 4 | C2     | CAD004   | 1         | GG3      | # Hello        | 4               |
 
     And I log in as "teacher1"
 

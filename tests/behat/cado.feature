@@ -1,5 +1,5 @@
 @mod @mod_cado @mod_cado_create
-Feature: Cado activity reports contain correctly grouped, completion enabled, activities
+Feature: Cado activity reports contain correctly grouped, completion enabled, activities with their correct description.
   In order to create cado reports
   As a teacher
   I need to create a cado report from existing activities that have completion enabled, taking account their groupings
@@ -34,8 +34,8 @@ Feature: Cado activity reports contain correctly grouped, completion enabled, ac
       | GG3      | G1    |
       | GG3      | G2    |
     And the following "activities" exist:
-      | activity | course | idnumber | name     | intro                | completion |
-      | assign   | C1     | assign1  | Assign 1 | Assign 1 description | 1          |
+      | activity | course | idnumber | name     | intro                             | introformat | completion |
+      | assign   | C1     | assign1  | Assign 1 | Desc<br />===<br />I am **bold**. | 4           | 1          |
     And the following "activities" exist:
       | activity   | course | idnumber | name   | intro              | completion |
       | quiz       | C1     | quiz1    | Quiz 1 | Quiz 1 description | 2          |
@@ -56,9 +56,10 @@ Feature: Cado activity reports contain correctly grouped, completion enabled, ac
     And I should see "Grouping 1"
     And I should see "Course Assessment and Delivery Outline"
     And I should see "Assign 1"
-    And I should see "Quiz 1"
+    And I should see "Quiz 1 description"
     And I should not see "Quiz 2"
     And I should see "No group forum"
     And I should see "Groupings G1 forum"
     And I should not see "Groupings G2 forum"
     And I should see "Groupings G3 forum"
+    And I should not see "**bold**"
