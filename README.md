@@ -9,6 +9,11 @@ All the terminology within the report, including "CADO", is able to be customize
 
 Updates
 =======
+Version 3.02
+-----------
+Fix to allow module introductions in varying formats. CADO table update to include format information fields.
+Code style and automated testing updates.
+
 Version 3.01
 -----------
 Code style and automated testing updates.

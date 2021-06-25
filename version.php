@@ -24,11 +24,11 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2021062309;
+$plugin->version = 2021062500;
 $plugin->requires = 2018051700; // Requires 3.5.
 $plugin->supported = [35, 311]; // Range from 3.5 to 3.11.
 $plugin->component = 'mod_cado';
 $plugin->release = '3.02';
-$plugin->maturity  = MATURITY_BETA;
+$plugin->maturity  = MATURITY_STABLE;
 $plugin->dependencies = [
 ];
