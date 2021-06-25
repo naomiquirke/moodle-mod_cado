@@ -38,7 +38,7 @@ use context_module;
 class mobile {
 
     /**
-     * Returns the cado view for the mobile app, currently no different than browser view.
+     * Returns the cado view for the mobile app.
      * @param  array $args Arguments from tool_mobile_get_content WS
      *
      * @return array       HTML, javascript and otherdata
