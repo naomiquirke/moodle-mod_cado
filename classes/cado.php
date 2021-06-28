@@ -251,7 +251,7 @@ class mod_cado_cado {
         // Keep this because it is not obvious why an activity may have been included or not in the future.
         $genwhat->inchidden = $siteoptions->inchidden;
         $genwhat->summary = in_array( 'summary' , $chosenset ) ?
-            format_text($this->course->summary, $this->course->summaryformat) : null;
+            $this->cado_format_text($this->course->summary, $this->course->summaryformat) : null;
         $genwhat->sitecomment = mod_cado_check::sitecomment();
         $genwhat->fullname = $this->course->fullname;
         $this->instance->generatedjson = json_encode($genwhat,
@@ -473,11 +473,17 @@ class mod_cado_cado {
             $thismod->quizcutoffdate = 0;
         };
         $this->labelout($dates, get_string("{$modtype}expectcompleted", 'cado'), $this->usetime($thismod->completionexpected));
-        $introbase = "{$modtype}intro";
-        $introformat = "{$modtype}introformat";
-        $intro = format_text($thismod->$introbase, $thismod->$introformat);
+        $introfieldname = "{$modtype}intro";
+        $intro = $thismod->$introfieldname;
+        if ($intro) {
+            $contextmodule = context_module::instance($thismod->id);
+            $intro = file_rewrite_pluginfile_urls($intro, 'pluginfile.php', $contextmodule->id
+                , "mod_$modtype", 'intro', null);
+            $introfieldname .= 'format';
+            $intro = $this->cado_format_text($intro, $thismod->$introfieldname);
+        }
         $name = "{$modtype}name";
-        $contents = [ // Seems to need automatically defined keys for mustache.
+        $contents = [
             'module' => $modtype,
             'cmodid' => $thismod->id,
             'name' => htmlspecialchars_decode($thismod->$name),

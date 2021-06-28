@@ -162,7 +162,7 @@
   <ion-card>
     <ion-card-header>
         <ion-card-title text-wrap id="cadoi-<%module%>-name_<%cmodid%>">
-            <%name%> <a class="cad-link" href="<%link%>" target="_blank" core-link capture="true">&#9741;</a>
+            <%name%> <a class="cad-link" href="<% link %>" core-link capture="true">&#9741;</a>
         </ion-card-title>
     </ion-card-header>
     <ion-card-content class="cado-cardcontent">
@@ -203,8 +203,8 @@
             </ion-grid>
         <%/extraexists%>
         <%#introexists%>
-            <div id="cadoi-<%module%>-intro_<%cmodid%>" class="cado-inserthtml">
-                <%{intro}%>
+            <div id="cadoi-<% module %>-intro_<% cmodid %>" class="cado-inserthtml">
+                <core-format-text text="<% intro %>" component="mod_<% module %>" componentId="<% cmodid %>"></core-format-text>
             </div>
         <%/introexists%>
         <%#rubricexists%>

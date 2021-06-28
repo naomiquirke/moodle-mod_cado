@@ -31,13 +31,13 @@
 
     Example context (json):
   {
-    "cadobiblio": "<p dir=\"ltr\" style=\"text-align:left;\">sdfsdf</p>",
-    "cadocomment": "<p dir=\"ltr\" style=\"text-align:left;\">sdfsdf</p>",
-    "cadointro": "<p dir=\"ltr\" style=\"text-align:left;\">fsdfsdf</p>",
+    "cadobiblio": "<p>This is a biblio</p>",
+    "cadocomment": "<p>This is a comment</p>",
+    "cadointro": "<p>This is an intro</p>",
     "groupingname": "First",
     "fullname": "Introduction to Logic",
     "summary": "<p>First course on PHP test system</p>",
-    "sitecomment": "<p dir=\"ltr\" style=\"text-align: left;\">sadfs d sfs fsf sf sfsdf sdf </p>",
+    "sitecomment": "<p>Be careful out there</p>",
     "scheduleexists": 1,
     "schedheads": {
         "section": "Section",
@@ -394,53 +394,61 @@
 {{=<% %>=}}
 <%#fullname%>
 <div class="cadocentral">
-  <div id="cad-title" class = "cado-title">
-    <h1><%fullname%></h1>
-    <h3><%# str %> cadotitle, mod_cado <%/ str %>          
-        <%#groupingname%>
-        <span><%# str %> forgroup, mod_cado <%/ str %></span>
-        <span id="cado-grouping">
-           <%groupingname%>
-        </span>         
-        <%/groupingname%> 
-    </h3>
-  </div>
-  <div style="clear:both;">
-    <hr>
-  </div>
-  <%#cadointro%> 
-  <div id="cado-intro"><%{cadointro}%></div>
-  <%/cadointro%>
-  <%#summary%>       
-  <h2><%# str %> description, mod_cado <%/ str %></h2>
-  <div id="cado-coursesummary"><%{summary}%></div>
-  <%/summary%>
-  <%#scheduleexists%><%> mod_cado/mobile_cadoschedule%><%/scheduleexists%>
-  <%#cadocomment%><div id="cado-comment"><%{cadocomment}%></div><%/cadocomment%>
-  <%#forumexists%>
-  <div id="cado-forum">
-    <h2 class="cad-header"><%# str %> forum, mod_cado <%/ str %></h2>
-    <%#forum%><%> mod_cado/mobile_cadomodule%><%/forum%>
-  </div>
-  <%/forumexists%>
-  <%#quizexists%>
-  <div id="cado-quiz">
-    <h2 class="cad-header"><%# str %> quiz, mod_cado <%/ str %></h2>
-    <%#quiz%><%> mod_cado/mobile_cadomodule%><%/quiz%>
-  </div>
-  <%/quizexists%>
-  <%#assignexists%>
-  <div id="cado-assign">
-    <h2 class="cad-header"><%# str %> assign, mod_cado <%/ str %></h2>
-    <%#assign%><%> mod_cado/mobile_cadomodule%><%/assign%>
-  </div>
-  <%/assignexists%>
-  <br><hr><br>
-  <%#sitecomment%>
-  <div id="cado-sitecomment"><%{sitecomment}%></div>
-  <%/sitecomment%>
-  <%#cadobiblio%>
-  <div id="cado-biblio"><%{cadobiblio}%></div>
-  <%/cadobiblio%>
+    <div id="cad-title" class = "cado-title">
+        <h1><%fullname%></h1>
+        <h3><%# str %> cadotitle, mod_cado <%/ str %>          
+            <%#groupingname%>
+            <span><%# str %> forgroup, mod_cado <%/ str %></span>
+            <span id="cado-grouping">
+            <%groupingname%>
+            </span>         
+            <%/groupingname%> 
+        </h3>
+    </div>
+    <div style="clear:both;">
+        <hr>
+    </div>
+    <%#cadointro%> 
+    <div id="cado-intro">
+        <core-format-text text="<% cadointro %>"></core-format-text>
+    </div>
+    <%/cadointro%>
+    <%#summary%>       
+    <h2><%# str %> description, mod_cado <%/ str %></h2>
+    <div id="cado-coursesummary">
+        <core-format-text text="<% summary %>"></core-format-text>
+    </div>
+    <%/summary%>
+    <%#scheduleexists%><%> mod_cado/mobile_cadoschedule%><%/scheduleexists%>
+    <%#cadocomment%><div id="cado-comment"><%{cadocomment}%></div><%/cadocomment%>
+    <%#forumexists%>
+    <div id="cado-forum">
+        <h2 class="cad-header"><%# str %> forum, mod_cado <%/ str %></h2>
+        <%#forum%><%> mod_cado/mobile_cadomodule%><%/forum%>
+    </div>
+    <%/forumexists%>
+    <%#quizexists%>
+    <div id="cado-quiz">
+        <h2 class="cad-header"><%# str %> quiz, mod_cado <%/ str %></h2>
+        <%#quiz%><%> mod_cado/mobile_cadomodule%><%/quiz%>
+    </div>
+    <%/quizexists%>
+    <%#assignexists%>
+    <div id="cado-assign">
+        <h2 class="cad-header"><%# str %> assign, mod_cado <%/ str %></h2>
+        <%#assign%><%> mod_cado/mobile_cadomodule%><%/assign%>
+    </div>
+    <%/assignexists%>
+    <br><hr><br>
+    <%#sitecomment%>
+    <div id="cado-sitecomment">
+        <core-format-text text="<% sitecomment %>"></core-format-text>
+    </div>
+    <%/sitecomment%>
+    <%#cadobiblio%>
+    <div id="cado-biblio">
+        <core-format-text text="<% cadobiblio %>"></core-format-text>
+    </div>
+    <%/cadobiblio%>
 </div>
 <%/fullname%>
