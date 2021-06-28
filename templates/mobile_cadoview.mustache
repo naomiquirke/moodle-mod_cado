@@ -26,14 +26,14 @@
     * none
 
     Context variables required for this template:
-    * cmid
+    * cadoid
     * courseid
     * approved
     * data
 
     Example context (json):
     {
-      "cmid": "62",
+      "cadoid": "32",
       "courseid": "5",
       "approved": "false",
       "data": "Sorry, this CADO is not yet available."
@@ -55,10 +55,7 @@
                 <%> mod_cado/mobile_cadocore %>
             </div>
             <!-- Call log WS when the template is loaded. -->
-            <div core-site-plugins-call-ws-on-load name="mod_cado_view_cado"
-                [params]="{cadoid: <% cadoid %>}"
-                [preSets]="{getFromCache: 0, saveToCache: 0}">
-            </div>
+            <div core-site-plugins-call-ws-on-load name="mod_cado_view_cado" [params]="{cadoid: <% cadoid %>}"></div>
             <%/data%>
         <%/approved%>
     </ion-list>
