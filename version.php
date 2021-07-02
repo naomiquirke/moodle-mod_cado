@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version 3.02 release
+ * Version 3.021 release
  *
  * @package    mod_cado
  * @copyright  2020 Naomi Quirke
@@ -24,11 +24,11 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2021062804;
+$plugin->version = 2021070200;
 $plugin->requires = 2018051700; // Requires 3.5.
 $plugin->supported = [35, 311]; // Range from 3.5 to 3.11.
 $plugin->component = 'mod_cado';
-$plugin->release = '3.02';
+$plugin->release = '3.021';
 $plugin->maturity  = MATURITY_STABLE;
 $plugin->dependencies = [
 ];
