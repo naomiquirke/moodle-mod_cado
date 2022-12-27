@@ -614,17 +614,17 @@ class mod_cado_cado {
         if ($forum) {
             $sqlselect .= ", f.name forumname, f.intro forumintro, f.introformat forumintroformat
                 , f.duedate forumduedate, f.cutoffdate forumcutoffdate
-                , completiondiscussions, completionreplies, completionposts";
+                , f.completiondiscussions, f.completionreplies, f.completionposts";
             $sqlfroms .= "
                 LEFT JOIN {forum} f on f.id = cm.instance and cm.modtype = 'forum' ";
             $sqlorderby .= ", f.duedate";
         }
         if ($quiz) {
             $sqlselect .= ", q.name quizname, q.intro quizintro, q.introformat quizintroformat
-                , timeclose, timeopen, timelimit, attempts ";
+                , q.timeclose, q.timeopen, q.timelimit, q.attempts ";
             $sqlfroms .= "
                 LEFT JOIN {quiz} q on q.id = cm.instance and cm.modtype = 'quiz' ";
-            $sqlorderby .= ", timeclose";
+            $sqlorderby .= ", q.timeclose";
         }
         if ($assign) {
             $sqlselect .= ", a.name assignname, a.intro assignintro, a.introformat assignintroformat
