@@ -33,7 +33,6 @@ use core_privacy\local\request\userlist;
 use core_privacy\local\request\transform;
 use core_privacy\local\request\writer;
 
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class for privacy implementation for mod_cado.
@@ -42,13 +41,13 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright 2020 Naomi Quirke
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class provider implements
+class provider implements {
     // This plugin stores data entered by user with role generator,
     // and comments made by user with role approver to user with CADO generator.
     \core_privacy\local\metadata\provider,
     \core_privacy\local\request\plugin\provider,
     \core_privacy\local\request\core_userlist_provider
- {
+ 
 
     /**
      * Return meta data about this plugin.

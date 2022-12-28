@@ -29,7 +29,6 @@
  */
 
  namespace mod_cado\event;
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Event triggered after CADO not approved.

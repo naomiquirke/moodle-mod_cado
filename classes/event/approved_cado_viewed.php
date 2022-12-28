@@ -23,7 +23,6 @@
  */
 
 namespace mod_cado\event;
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * The mod_cado course module viewed event class.

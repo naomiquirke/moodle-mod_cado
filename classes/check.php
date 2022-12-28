@@ -22,7 +22,6 @@
  * @copyright 2020 Naomi Quirke
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-defined('MOODLE_INTERNAL') || die;
 
 /**
  * Misc class used to get a) cado module configuration settings, b) names of users, and c) schedule info.

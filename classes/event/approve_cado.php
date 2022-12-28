@@ -29,7 +29,6 @@
  */
 
  namespace mod_cado\event;
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * The mod_cado approval event class.

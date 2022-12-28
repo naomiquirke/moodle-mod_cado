@@ -23,9 +23,6 @@
  */
 
 namespace mod_cado\output;
-
-defined('MOODLE_INTERNAL') || die();
-
 use context_module;
 
 /**

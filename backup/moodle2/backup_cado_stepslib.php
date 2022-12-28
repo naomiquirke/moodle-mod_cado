@@ -21,7 +21,6 @@
  * @copyright 2020 Naomi Quirke
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class that represents the backup steps added in define_my_steps within backup_cado_activity_task
