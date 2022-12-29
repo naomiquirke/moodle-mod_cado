@@ -351,5 +351,4 @@ MigrationBackup/
 .vscode/settings.json
 
 # NQ
-amd/build/
 .eslintrc
