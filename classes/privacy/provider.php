@@ -36,8 +36,6 @@ use core_privacy\local\request\writer;
 
 /**
  * Class for privacy implementation for mod_cado.
- * This plugin stores data entered by user with role generator,
- * and comments made by user with role approver to user with CADO generator.
  *
  * @package   mod_cado
  * @copyright 2020 Naomi Quirke
