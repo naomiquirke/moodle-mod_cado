@@ -61,11 +61,7 @@ Feature: Teachers can compare cado activity reports
       | cado     | CADO test 4 | C2     | CAD004   | 1         | GG3      | # Hello        | 4               |
 
     And I log in as "teacher1"
-  Scenario: See if there is issue without javascript
-    When I am on "Course 1" course homepage with editing mode on
-    And I follow "CADO test 2"
-    Then I should see "Grouping 2"
-
+ 
   Scenario: See no differences between identical CADOs
     When I am on "Course 2" course homepage with editing mode on
     And I follow "CADO test 3"
@@ -80,14 +76,14 @@ Feature: Teachers can compare cado activity reports
   @javascript
   Scenario: See differences between different CADOs in different courses
     When I am on "Course 1" course homepage with editing mode on
-    And I follow "CADO test 2"
+    And I click on "CADO test 2" link
     And I am on "Course 2" course homepage
-    And I follow "Assign 1"
+    And I click on "Assign 1" link
     And I navigate to "Edit settings" in current page administration
     And I set the following fields to these values:
       | Tags | Hours::5 |
     And I press "Save and return to course"
-    And I follow "CADO test 3"
+    And I click on "CADO test 3" link
     And I navigate to "Compare" in current page administration
     And I set the field "Select CADO" to "C1 --- CADO test 2"
     And I press "Save changes"

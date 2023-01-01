@@ -39,22 +39,22 @@ Feature: CADOs can have schedules with tag values totalled
     And I am on "Course 1" course homepage with editing mode on
     And I add a "CADO report" to section "0" and I fill the form with:
       | Name for this CADO report | CADO test 1 |
-    And I follow "Quiz 1"
+    And I click on "Quiz 1" link
     And I navigate to "Edit settings" in current page administration
     And I set the following fields to these values:
       | Tags | Hours::5, Frogs::Tree, Difficulty::100 |
     And I press "Save and return to course"
-    And I follow "Assign 1"
+    And I click on "Assign 1" link
     And I navigate to "Edit settings" in current page administration
     And I set the following fields to these values:
       | Tags | Hours::5, Frogs::Green, Difficulty::5 |
     And I press "Save and return to course"
-    And I follow "Forum 1"
+    And I click on "Forum 1" link
     And I navigate to "Edit settings" in current page administration
     And I set the following fields to these values:
       | Tags | Hours::5, Frogs::Green Tree, Easy |
     And I press "Save and return to course"
-    And I follow "CADO test 1"
+    And I click on "CADO test 1" link
 # Because "Easy" does not appear in the CADO site admin settings, it should not appear in the CADO at all.
     Then I should not see "Easy"
     And I should see "1" occurrences of "Frogs" in the "#cado-schedule" "css_element"
