@@ -60,7 +60,7 @@ Feature: Teachers can compare cado activity reports
 
   @javascript
   Scenario: See differences between different CADOs in different courses
-    When I am on the "Assign 1 temp" "assign activity" page logged in as teacher1
+    When I am on the "Assign 1 temp" "assign activity editing" page logged in as teacher1
     And I set the following fields to these values:
       | Tags | Hours::5 |
       | name | Assign 1 |

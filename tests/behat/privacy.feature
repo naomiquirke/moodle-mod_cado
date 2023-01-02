@@ -40,7 +40,7 @@ Feature: Data obtain and delete due to the privacy API
     And I click on "CADO test" "activity"
     And I log out
     And I log in as "mad"
-    And I am on "CADO test" "mod_cado activity" page
+    And I click on "CADO test" "text"
     And I navigate to "Approve?" in current page administration
     And I set the following fields to these values:
       | Approve CADO | 0 |
