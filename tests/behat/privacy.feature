@@ -45,7 +45,7 @@ Feature: Data obtain and delete due to the privacy API
     And I click on "Approve?" "button"
     And I set the following fields to these values:
       | Approve CADO | 0 |
-    And I click on "Save changes" "button"
+    And I press "Save changes"
     And I log out
 
   @javascript
@@ -55,14 +55,14 @@ Feature: Data obtain and delete due to the privacy API
     And I follow "Data requests"
     And I follow "New request"
     And I set the field "Type" to "Delete all of my personal data"
-    And I click on "Save changes" "button"
+    And I press "Save changes"
     And I log out
     And I log in as "mad"
     And I follow "Profile" in the user menu
     And I follow "Data requests"
     And I follow "New request"
     And I set the field "Type" to "Delete all of my personal data"
-    And I click on "Save changes" "button"
+    And I press "Save changes"
     And I log out
     And I log in as "admin"
     And I navigate to "Users > Privacy and policies > Data requests" in site administration

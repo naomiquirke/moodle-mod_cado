@@ -43,17 +43,17 @@ Feature: CADOs can have schedules with tag values totalled
     And I navigate to "Settings" in current page administration
     And I set the following fields to these values:
       | Tags | Hours::5, Frogs::Tree, Difficulty::100 |
-    And I click on "Save and return to course" "button"
+    And I press "Save and return to course"
     And I click on "Assign 1" "activity"
     And I navigate to "Settings" in current page administration
     And I set the following fields to these values:
       | Tags | Hours::5, Frogs::Green, Difficulty::5 |
-    And I click on "Save and return to course" "button"
+    And I press "Save and return to course"
     And I click on "Forum 1" "activity"
     And I navigate to "Settings" in current page administration
     And I set the following fields to these values:
       | Tags | Hours::5, Frogs::Green Tree, Easy |
-    And I click on "Save and return to course" "button"
+    And I press "Save and return to course"
     And I click on "CADO test 1" "activity"
 # Because "Easy" does not appear in the CADO site admin settings, it should not appear in the CADO at all.
     Then I should not see "Easy"
