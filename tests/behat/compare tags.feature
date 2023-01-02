@@ -40,10 +40,10 @@ Feature: Teachers can compare cado activity reports
       | GG2      | G2    |
       | GG3      | G3    |
     And the following "activities" exist:
-      | activity | course | idnumber | name     | intro                         | completion | groupmode | grouping | duedate   |
-      | assign   | C1     | assign1  | Assign 1 | Assign 1 involved description | 1          | 1         | GG1      | ##today## |
-      | assign   | C1     | assign2  | Assign 1 | Assign 1 description          | 1          | 1         | GG2      | ##today## |
-      | assign   | C2     | assign3  | Assign 1 | Assign 1 description          | 1          | 1         | GG3      | ##today## |
+      | activity | course | idnumber | name          | intro                         | completion | groupmode | grouping | duedate   |
+      | assign   | C1     | assign1  | Assign 2      | Assign 2 involved description | 1          | 1         | GG1      | ##today## |
+      | assign   | C1     | assign2  | Assign 1 temp | Assign 1 description          | 1          | 1         | GG2      | ##today## |
+      | assign   | C2     | assign3  | Assign 1      | Assign 1 description          | 1          | 1         | GG3      | ##today## |
     And the following "activities" exist:
       | activity | course | idnumber | name   | intro              | completion | groupmode | grouping |
       | quiz     | C1     | quiz1    | Quiz 1 | Quiz 1 description | 1          | 1         | GG1      |
@@ -55,35 +55,25 @@ Feature: Teachers can compare cado activity reports
       | forum    | Forum 2 | forum intro | C2     | forum3   | 1         | GG3      | 1          | ##today##    |
     And the following "activities" exist:
       | activity | name        | course | idnumber | groupmode | grouping | cadointro      | cadointroformat |
-      | cado     | CADO test 1 | C1     | CAD001   | 1         | GG1      | <h1>Hello</h1> | 1               |
       | cado     | CADO test 2 | C1     | CAD002   | 1         | GG2      | <h1>Hello</h1> | 1               |
       | cado     | CADO test 3 | C2     | CAD003   | 1         | GG3      | <h1>Hello</h1> | 1               |
-      | cado     | CADO test 4 | C2     | CAD004   | 1         | GG3      | # Hello        | 4               |
 
-    And I log in as "teacher1"
-
-  Scenario: See no differences between identical CADOs
-    When I am on "Course 2" course homepage with editing mode on
-    And I follow "CADO test 3"
+  @javascript
+  Scenario: See differences between different CADOs in different courses
+    When I am on the "Assign 1 temp" "assign activity" page logged in as teacher1
+    And I set the following fields to these values:
+      | Tags | Hours::5 |
+      | name | Assign 1 |
+    And I press "Save and return to course"
+    And I click on "CADO test 2" "text"
+#    And I am on the "CADO test 2" "cado activity" page
     And I am on "Course 2" course homepage
-    And I follow "CADO test 4"
+    And I click on "CADO test 3" "text"
     And I navigate to "Compare" in current page administration
-    And I set the following fields to these values:
-      | Select CADO | C2 --- CADO test 3 |
+    And I set the field "Select CADO" to "C1 --- CADO test 2"
     And I press "Save changes"
-    Then I should see "Identical CADOs"
-
-  Scenario: See differences between different CADOs in the same course
-    When I am on "Course 1" course homepage with editing mode on
-    And I follow "CADO test 2"
-    And I am on "Course 1" course homepage
-    And I follow "CADO test 1"
-    And I navigate to "Compare" in current page administration
-    And I set the following fields to these values:
-      | Select CADO | C1 --- CADO test 2 |
-    And I press "Save changes"
-    Then I should see "Grouping ↘1"
-    And I should see "involved" in the "#cado-assign .cado-different" "css_element"
+    Then I should see "Grouping 2"
+    And I should see "Hours" in the "#cado-assign .cado-othermissing" "css_element"
+    And ".cado-different" "css_element" should exist in the "#cado-forum" "css_element"
     And ".cado-othermissing" "css_element" should exist in the "#cado-quiz" "css_element"
-    And ".cado-originmissing" "css_element" should exist in the "#cado-forum" "css_element"
-    And ".cado-othermissing" "css_element" should exist in the "#cado-forum" "css_element"
+
