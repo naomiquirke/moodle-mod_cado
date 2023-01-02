@@ -61,7 +61,7 @@ Feature: Teachers can compare cado activity reports
       | cado     | CADO test 4 | C2     | CAD004   | 1         | GG3      | # Hello        | 4               |
 
     And I log in as "teacher1"
- 
+
   Scenario: See no differences between identical CADOs
     When I am on "Course 2" course homepage with editing mode on
     And I follow "CADO test 3"
@@ -79,7 +79,7 @@ Feature: Teachers can compare cado activity reports
     And I click on "CADO test 2" "activity"
     And I am on "Course 2" course homepage
     And I click on "Assign 1" "activity"
-    And I navigate to "Edit settings" in current page administration
+    And I navigate to "Settings" in current page administration
     And I set the following fields to these values:
       | Tags | Hours::5 |
     And I press "Save and return to course"

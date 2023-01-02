@@ -39,7 +39,7 @@ Feature: Data obtain and delete due to the privacy API
     And I am on "Course 1" course homepage with editing mode on
     And I click on "CADO test" "activity"
     And I log out
-    When I log in as "mad"
+    And I log in as "mad"
     And I am on "Course 1" course homepage
     And I click on "CADO test" "activity"
     And I navigate to "Approve?" in current page administration

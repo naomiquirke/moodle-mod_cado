@@ -40,17 +40,17 @@ Feature: CADOs can have schedules with tag values totalled
     And I add a "CADO report" to section "0" and I fill the form with:
       | Name for this CADO report | CADO test 1 |
     And I click on "Quiz 1" "activity" skipping visibility check
-    And I navigate to "Edit settings" in current page administration
+    And I navigate to "Settings" in current page administration
     And I set the following fields to these values:
       | Tags | Hours::5, Frogs::Tree, Difficulty::100 |
     And I press "Save and return to course"
     And I click on "Assign 1" "activity" skipping visibility check
-    And I navigate to "Edit settings" in current page administration
+    And I navigate to "Settings" in current page administration
     And I set the following fields to these values:
       | Tags | Hours::5, Frogs::Green, Difficulty::5 |
     And I press "Save and return to course"
     And I click on "Forum 1" "activity" skipping visibility check
-    And I navigate to "Edit settings" in current page administration
+    And I navigate to "Settings" in current page administration
     And I set the following fields to these values:
       | Tags | Hours::5, Frogs::Green Tree, Easy |
     And I press "Save and return to course"
