@@ -39,8 +39,7 @@ Feature: CADOs can have schedules with tag values totalled
     And I am on "Course 1" course homepage with editing mode on
     And I add a "CADO report" to section "0" and I fill the form with:
       | Name for this CADO report | CADO test 1 |
-    And I click on "Quiz 1" "activity"
-    And I navigate to "Settings" in current page administration
+    And I am on the "Quiz 1" "quiz activity" page logged in as teacher1
     And I set the following fields to these values:
       | Tags | Hours::5, Frogs::Tree, Difficulty::100 |
     And I press "Save and return to course"

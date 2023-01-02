@@ -39,7 +39,7 @@ Feature: Data obtain and delete due to the privacy API
     And I am on "Course 1" course homepage with editing mode on
     And I click on "CADO test" "activity"
     And I log out
-    And I am on "CADO test" "mod_cado > approve" logged in as "mad"
+    And I am on "CADO test" "mod_cado activity" page logged in as mad
     And I set the following fields to these values:
       | Approve CADO | 0 |
     And I press "Save changes"

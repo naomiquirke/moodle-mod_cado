@@ -77,7 +77,7 @@ Feature: Teachers can compare cado activity reports
   Scenario: See differences between different CADOs in different courses
     When I am on "Course 1" course homepage with editing mode on
     And I click on "CADO test 2" "activity"
-    And I am on "Assign 1" "mod_assign > update" logged in as "mad"
+    And I am on the "Assign 1" "assign activity" page logged in as mad
     And I set the following fields to these values:
       | Tags | Hours::5 |
     And I press "Save and return to course"
