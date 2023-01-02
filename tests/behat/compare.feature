@@ -76,7 +76,8 @@ Feature: Teachers can compare cado activity reports
   @javascript
   Scenario: See differences between different CADOs in different courses
     When I am on "Course 1" course homepage with editing mode on
-    And I click on "CADO test 2" "activity"
+#    And I click on "CADO test 2" "activity"
+    And I am on the "CADO test 2" "cado activity" page
     And I am on the "Assign 1" "assign activity" page logged in as mad
     And I set the following fields to these values:
       | Tags | Hours::5 |
