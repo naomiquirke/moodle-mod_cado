@@ -82,11 +82,11 @@ Feature: Teachers can compare cado activity reports
     And I navigate to "Settings" in current page administration
     And I set the following fields to these values:
       | Tags | Hours::5 |
-    And I press "Save and return to course"
+    And I click on "Save and return to course" "button"
     And I click on "CADO test 3" "activity"
     And I navigate to "Compare" in current page administration
     And I set the field "Select CADO" to "C1 --- CADO test 2"
-    And I press "Save changes"
+    And I click on "Save changes" "button"
     Then I should see "Grouping 2"
     And I should see "Hours" in the "#cado-assign .cado-othermissing" "css_element"
     And ".cado-different" "css_element" should exist in the "#cado-forum" "css_element"

@@ -42,10 +42,10 @@ Feature: Data obtain and delete due to the privacy API
     And I log in as "mad"
     And I am on "Course 1" course homepage
     And I click on "CADO test" "activity"
-    And I navigate to "Approve?" in current page administration
+    And I click on "Approve?" "button"
     And I set the following fields to these values:
       | Approve CADO | 0 |
-    And I press "Save changes"
+    And I click on "Save changes" "button"
     And I log out
 
   @javascript
@@ -55,23 +55,23 @@ Feature: Data obtain and delete due to the privacy API
     And I follow "Data requests"
     And I follow "New request"
     And I set the field "Type" to "Delete all of my personal data"
-    And I press "Save changes"
+    And I click on "Save changes" "button"
     And I log out
     And I log in as "mad"
     And I follow "Profile" in the user menu
     And I follow "Data requests"
     And I follow "New request"
     And I set the field "Type" to "Delete all of my personal data"
-    And I press "Save changes"
+    And I click on "Save changes" "button"
     And I log out
     And I log in as "admin"
     And I navigate to "Users > Privacy and policies > Data requests" in site administration
     And I open the action menu in "Sad Teacher" "table_row"
     And I follow "Approve request"
-    And I press "Approve request"
+    And I click on "Approve request" "button"
     And I open the action menu in "Mad Manager" "table_row"
     And I follow "Approve request"
-    And I press "Approve request"
+    And I click on "Approve request" "button"
     And I run all adhoc tasks
     And I am on "Course 1" course homepage
     When I click on "CADO test" "activity"
