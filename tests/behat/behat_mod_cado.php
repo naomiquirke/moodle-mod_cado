@@ -62,11 +62,11 @@ class behat_mod_cado extends behat_question_base {
      *
      * Recognised page names are:
      * | pagetype          | name meaning                                | description                                   |
-     * | View              | cado name                                   | The cado page (view.php)                      |
-     * | Compare           | cado name                                   | The compare page for a cado  (compare.php)    |
+     * | view              | cado name                                   | The cado page (view.php)                      |
+     * | compare           | cado name                                   | The compare page for a cado  (compare.php)    |
      *
-     * @param string $type identifies which type of page this is, e.g. 'Attempt review'.
-     * @param string $identifier identifies the particular page, e.g. 'Test cado > student > Attempt 1'.
+     * @param string $type identifies which type of page this is, e.g. 'compare'.
+     * @param string $identifier identifies the particular page, e.g. 'Test cado'.
      * @return moodle_url the corresponding URL.
      * @throws Exception with a meaningful error message if the specified page cannot be found.
      */
@@ -78,12 +78,10 @@ class behat_mod_cado extends behat_question_base {
                 return new moodle_url('/mod/cado/view.php',
                         ['id' => $this->get_cm_by_cado_name($identifier)->id]);
 
-
             case 'question bank':
                 return new moodle_url('/mod/cado/compare.php', [
                     'cmid' => $this->get_cm_by_cado_name($identifier)->id,
                 ]);
-
 
             default:
                 throw new Exception('Unrecognised cado page type "' . $type . '."');

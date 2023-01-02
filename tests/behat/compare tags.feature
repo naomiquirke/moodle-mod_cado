@@ -1,4 +1,4 @@
-@mod @mod_cado @mod_cado_compare
+@mod @mod_cado @mod_cado_compare_tags
 Feature: Teachers can compare cado activity reports
   In order to compare cado reports
   As a teacher
@@ -65,15 +65,12 @@ Feature: Teachers can compare cado activity reports
       | Tags | Hours::5 |
       | name | Assign 1 |
     And I press "Save and return to course"
-    And I click on "CADO test 2" "text"
-#    And I am on the "CADO test 2" "cado activity" page
-    And I am on "Course 2" course homepage
-    And I click on "CADO test 3" "text"
+    And I am on the "CADO test 2" "cado > view" page
+    And I am on the "CADO test 3" "cado > view" page
     And I navigate to "Compare" in current page administration
     And I set the field "Select CADO" to "C1 --- CADO test 2"
     And I press "Save changes"
     Then I should see "Grouping 2"
-    And I should see "Hours" in the "#cado-assign .cado-othermissing" "css_element"
     And ".cado-different" "css_element" should exist in the "#cado-forum" "css_element"
     And ".cado-othermissing" "css_element" should exist in the "#cado-quiz" "css_element"
-
+    And I should see "Hours" in the "#cado-assign .cado-othermissing" "css_element"

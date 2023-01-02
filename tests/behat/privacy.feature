@@ -36,11 +36,10 @@ Feature: Data obtain and delete due to the privacy API
       | activity | name      | course | idnumber | groupmode |
       | cado     | CADO test | C1     | CAD001   | 0         |
     And I log in as "sad"
-    And I am on "Course 1" course homepage with editing mode on
-    And I click on "CADO test" "activity"
+    And I am on the "CADO test" "cado > view" page
     And I log out
     And I log in as "mad"
-    And I click on "CADO test" "text"
+    And I am on the "CADO test" "cado > view" page
     And I navigate to "Approve?" in current page administration
     And I set the following fields to these values:
       | Approve CADO | 0 |
