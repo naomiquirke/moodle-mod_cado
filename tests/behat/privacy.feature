@@ -39,8 +39,11 @@ Feature: Data obtain and delete due to the privacy API
     And I am on the "CADO test" "mod_cado > view" page
     And I log out
     And I log in as "mad"
-    And I am on the "CADO test" "mod_cado > view" page
-    And I navigate to "Approve?" in current page administration
+    And I am on the "CADO test" "mod_cado > approve" page
+    And I set the following fields to these values:
+      | Approve CADO | 1 |
+    And I press "Save changes"
+    And I am on the "CADO test" "mod_cado > approve" page
     And I set the following fields to these values:
       | Approve CADO | 0 |
     And I press "Save changes"

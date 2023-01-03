@@ -66,6 +66,8 @@ Feature: Teachers can compare cado activity reports between different CADOs in d
       | name | Assign 1 |
     And I press "Save and return to course"
     And I am on the "CADO test 2" "mod_cado > view" page
+    And I should not see "Assign 1 temp" in the "#cado-assign "css_element"
+    And I should see "Hours" in the "#cado-assign .cado-detail-heads" "css_element"
     And I am on the "CADO test 3" "mod_cado > view" page
     And I navigate to "Compare" in current page administration
     And I set the field "Select CADO" to "C1 --- CADO test 2"

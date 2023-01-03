@@ -61,6 +61,7 @@ class behat_mod_cado extends behat_base {
      * | pagetype          | name meaning                                | description                                   |
      * | view              | cado name                                   | The cado page (view.php)                      |
      * | compare           | cado name                                   | The compare page for a cado  (compare.php)    |
+     * | approve           | cado name                                   | The approve page for a cado  (approve.php)    |
      *
      * @param string $type identifies which type of page this is, e.g. 'compare'.
      * @param string $identifier identifies the particular page, e.g. 'Test cado'.
@@ -75,8 +76,13 @@ class behat_mod_cado extends behat_base {
                 return new moodle_url('/mod/cado/view.php',
                         ['id' => $this->get_cm_by_cado_name($identifier)->id]);
 
-            case 'question bank':
+            case 'compare':
                 return new moodle_url('/mod/cado/compare.php', [
+                    'cmid' => $this->get_cm_by_cado_name($identifier)->id,
+                ]);
+
+            case 'approve':
+                return new moodle_url('/mod/cado/approve.php', [
                     'cmid' => $this->get_cm_by_cado_name($identifier)->id,
                 ]);
 
