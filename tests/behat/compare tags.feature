@@ -1,5 +1,5 @@
 @mod @mod_cado @mod_cado_compare_tags
-Feature: Teachers can compare cado activity reports
+Feature: Teachers can compare cado activity reports between different CADOs in different courses
   In order to compare cado reports
   As a teacher
   I need to compare two cado reports from one or two courses
@@ -65,8 +65,8 @@ Feature: Teachers can compare cado activity reports
       | Tags | Hours::5 |
       | name | Assign 1 |
     And I press "Save and return to course"
-    And I am on the "CADO test 2" "cado > view" page
-    And I am on the "CADO test 3" "cado > view" page
+    And I am on the "CADO test 2" "mod_cado > view" page
+    And I am on the "CADO test 3" "mod_cado > view" page
     And I navigate to "Compare" in current page administration
     And I set the field "Select CADO" to "C1 --- CADO test 2"
     And I press "Save changes"
