@@ -395,6 +395,9 @@ class mod_cado_comparecado {
      * @return string updated $a.
      */
     private function get_diff_pt($a, $b) {
+        if (($a == null) || ($b==null)) {
+            return $a & "\u{2198}";
+        }
 
         $sectiontext1 = preg_split('/<[^>]*>/', $a, -1, PREG_SPLIT_OFFSET_CAPTURE);
         $sectiontext2 = preg_split('/<[^>]*>/', $b, -1, PREG_SPLIT_OFFSET_CAPTURE);

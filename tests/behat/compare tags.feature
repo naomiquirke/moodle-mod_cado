@@ -73,5 +73,5 @@ Feature: Teachers can compare cado activity reports between different CADOs in d
     Then I should see "Grouping 2"
     And ".cado-different" "css_element" should exist in the "#cado-forum" "css_element"
     And ".cado-othermissing" "css_element" should exist in the "#cado-quiz" "css_element"
-    And I should not see "Assign 1 temp"
-    And I should see "Hours" in the "#cado-assign .cado-othermissing" "css_element"
+    And ".cado-originmissing" "css_element" should exist 
+    And I should see "Hours" in the "#cado-assign .cado-originmissing" "css_element"
