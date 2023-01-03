@@ -395,7 +395,7 @@ class mod_cado_comparecado {
      * @return string updated $a.
      */
     private function get_diff_pt($a, $b) {
-        if (($a == null) || ($b==null)) {
+        if (($a == null) || ($b == null)) {
             return $a & "\u{2198}";
         }
 

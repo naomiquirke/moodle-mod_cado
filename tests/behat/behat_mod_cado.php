@@ -74,7 +74,7 @@ class behat_mod_cado extends behat_base {
         switch (strtolower($type)) {
             case 'view':
                 return new moodle_url('/mod/cado/view.php',
-                        ['id' => $this->get_cm_by_cado_name($identifier)->id]);
+                    ['id' => $this->get_cm_by_cado_name($identifier)->id]);
 
             case 'compare':
                 return new moodle_url('/mod/cado/compare.php',
