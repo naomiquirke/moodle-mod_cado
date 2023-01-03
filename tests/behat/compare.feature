@@ -63,10 +63,8 @@ Feature: Teachers can compare cado activity reports
     And I log in as "teacher1"
 
   Scenario: See no differences between identical CADOs
-    When I am on "Course 2" course homepage with editing mode on
-    And I follow "CADO test 3"
-    And I am on "Course 2" course homepage
-    And I follow "CADO test 4"
+    When I am on the "CADO test 3" "mod_cado > view" page
+    And I am on the "CADO test 4" "mod_cado > view" page
     And I navigate to "Compare" in current page administration
     And I set the following fields to these values:
       | Select CADO | C2 --- CADO test 3 |
@@ -74,10 +72,8 @@ Feature: Teachers can compare cado activity reports
     Then I should see "Identical CADOs"
 
   Scenario: See differences between different CADOs in the same course
-    When I am on "Course 1" course homepage with editing mode on
-    And I follow "CADO test 2"
-    And I am on "Course 1" course homepage
-    And I follow "CADO test 1"
+    When I am on the "CADO test 2" "mod_cado > view" page
+    And I am on the "CADO test 1" "mod_cado > view" page
     And I navigate to "Compare" in current page administration
     And I set the following fields to these values:
       | Select CADO | C1 --- CADO test 2 |

@@ -23,27 +23,22 @@ Feature: Students can only access approved CADOs
       | activity | name       | course | idnumber |
       | cado     | CADO test2 | C1     | CAD001   |
     And I log in as "manager1"
-    And I am on "Course 1" course homepage with editing mode on
-    And I follow "CADO test2"
+    And I am on the "CADO test 2" "mod_cado > view" page
     And I log out
 
   Scenario: See not approved message as as a student
     When I log in as "student1"
-    And I am on "Course 1" course homepage
-    And I follow "CADO test2"
+    And I am on the "CADO test 2" "mod_cado > view" page
     Then I should see "Sorry"
 
   Scenario: Approve the CADO as a manager and then view CADO as a student
     When I log in as "manager1"
-    And I am on "Course 1" course homepage
-    And I follow "CADO test2"
-    And I navigate to "Approve?" in current page administration
+    And I am on the "CADO test 2" "mod_cado > approve" page
     And I set the following fields to these values:
       | Approve CADO | 1 |
     And I press "Save changes"
     And I log out
     And I log in as "student1"
-    And I am on "Course 1" course homepage
-    And I follow "CADO test2"
+    And I am on the "CADO test 2" "mod_cado > view" page
     Then I should see "Course Assessment and Delivery Outline"
     And I should see "Assign 1"
