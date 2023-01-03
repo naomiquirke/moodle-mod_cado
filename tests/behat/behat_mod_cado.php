@@ -77,14 +77,12 @@ class behat_mod_cado extends behat_base {
                         ['id' => $this->get_cm_by_cado_name($identifier)->id]);
 
             case 'compare':
-                return new moodle_url('/mod/cado/compare.php', [
-                    'cmid' => $this->get_cm_by_cado_name($identifier)->id,
-                ]);
+                return new moodle_url('/mod/cado/compare.php',
+                    ['id' => $this->get_cm_by_cado_name($identifier)->id]);
 
             case 'approve':
-                return new moodle_url('/mod/cado/approve.php', [
-                    'cmid' => $this->get_cm_by_cado_name($identifier)->id,
-                ]);
+                return new moodle_url('/mod/cado/approve.php',
+                    ['id' => $this->get_cm_by_cado_name($identifier)->id]);
 
             default:
                 throw new Exception('Unrecognised cado page type "' . $type . '."');
