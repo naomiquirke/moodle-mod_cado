@@ -54,7 +54,7 @@ Feature: CADOs can have schedules with tag values totalled
     And I set the following fields to these values:
       | Tags | Hours::5, Frogs::Green Tree, Easy |
     And I press "Save and return to course"
-    And I click on "CADO test 1" "text"
+    And I am on the "CADO test 1" "cado > view" page
 # Because "Easy" does not appear in the CADO site admin settings, it should not appear in the CADO at all.
     Then I should not see "Easy"
     And I should see "1" occurrences of "Frogs" in the "#cado-schedule" "css_element"

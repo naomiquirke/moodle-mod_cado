@@ -26,7 +26,6 @@
 // NOTE: no MOODLE_INTERNAL test here, this file may be required by behat before including /config.php.
 
 require_once(__DIR__ . '/../../../../lib/behat/behat_base.php');
-require_once(__DIR__ . '/../../../../question/tests/behat/behat_question_base.php');
 
 use Behat\Gherkin\Node\TableNode as TableNode;
 
@@ -38,7 +37,7 @@ use Behat\Mink\Exception\ExpectationException as ExpectationException;
  * @copyright 2023 Naomi Quirke
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class behat_mod_cado extends behat_question_base {
+class behat_mod_cado extends behat_base {
 
     /**
      * Convert page names to URLs for steps like 'When I am on the "[page name]" page'.
