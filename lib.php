@@ -97,27 +97,27 @@ function cado_delete_instance($id) {
  * @return void
  */
 function cado_extend_settings_navigation(settings_navigation $settingsnav, navigation_node $cadonode) {
-    global $PAGE, $CFG;
+    global $CFG;
 
     // Approve link.
-    if (has_capability('mod/cado:approve', $PAGE->cm->context)) {
+    if (has_capability('mod/cado:approve', $settingsnav->get_page()->cm->context)) {
         $cadonode->add(get_string('approvelink', 'cado'),
-                new moodle_url($CFG->wwwroot . '/mod/cado/approve.php', array('id' => $PAGE->cm->id)));
+                new moodle_url($CFG->wwwroot . '/mod/cado/approve.php', array('id' => $settingsnav->get_page()->cm->id)));
     }
 
     // Printview link.
     $cadonode->add(get_string('printview', 'cado'),
-        new moodle_url($CFG->wwwroot . '/mod/cado/view.php', array('id' => $PAGE->cm->id, 'reportformat' => 'print')));
+        new moodle_url($CFG->wwwroot . '/mod/cado/view.php', array('id' => $settingsnav->get_page()->cm->id, 'reportformat' => 'print')));
 
     // Compare link.
-    if (has_capability('mod/cado:compare', $PAGE->cm->context)) {
+    if (has_capability('mod/cado:compare', $settingsnav->get_page()->cm->context)) {
           $cadonode->add(get_string('comparelink', 'cado'),
-                new moodle_url($CFG->wwwroot . '/mod/cado/compare.php', array('id' => $PAGE->cm->id)));
+                new moodle_url($CFG->wwwroot . '/mod/cado/compare.php', array('id' => $settingsnav->get_page()->cm->id)));
     }
     // Send message to approvers.
-    if (has_capability('mod/cado:generate', $PAGE->cm->context)) {
+    if (has_capability('mod/cado:generate', $settingsnav->get_page()->cm->context)) {
           $cadonode->add(get_string('propose', 'cado'),
-                new moodle_url($CFG->wwwroot . '/mod/cado/propose.php', array('id' => $PAGE->cm->id)));
+                new moodle_url($CFG->wwwroot . '/mod/cado/propose.php', array('id' => $settingsnav->get_page()->cm->id)));
     }
 
 }
