@@ -21,7 +21,7 @@ Feature: Students can only access approved CADOs
       | assign   | C1     | assign1  | Assign 1 | Assign 1 description |
     And the following "activities" exist:
       | activity | name       | course | idnumber |
-      | cado     | CADO test2 | C1     | CAD001   |
+      | cado     | CADO test 2 | C1     | CAD001   |
     And I log in as "manager1"
     And I am on the "CADO test 2" "mod_cado > view" page
     And I log out
