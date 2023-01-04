@@ -39,24 +39,28 @@
       "data": "Sorry, this CADO is not yet available."
     }
 }}
-{{=~% %~=}}
+{{=<% %>=}}
 <div>
     <ion-list>
-        ~%^approved%~
+        <%^approved%>
             <ion-item>
                 <ion-label>
-                    ~% data %~
+                    <% data %>
                 </ion-label>
             </ion-item>
-        ~%/approved%~
-        ~%#approved%~
-            ~%#data%~
+        <%/approved%>
+        <%#approved%>
+            <%#data%>
             <div>
-                ~%> mod_cado/mobile_cadocore %~
+                <%> mod_cado/mobile_cadocore %>
             </div>
             <!-- Call log WS when the template is loaded. -->
-            <span core-site-plugins-call-ws-on-load name="mod_cado_view_cado" [params]="{cadoid: ~% cadoid %~}"></span>
-            ~%/data%~
-        ~%/approved%~
+            <span core-site-plugins-call-ws-on-load
+                name="mod_cado_view_cado"
+                [params]="{cadoid: <% cadoid %>}"
+                [preSets]="{getFromCache: 0, saveToCache: 0}">
+            </span>
+            <%/data%>
+        <%/approved%>
     </ion-list>
 </div>
