@@ -107,7 +107,8 @@ function cado_extend_settings_navigation(settings_navigation $settingsnav, navig
 
     // Printview link.
     $cadonode->add(get_string('printview', 'cado'),
-        new moodle_url($CFG->wwwroot . '/mod/cado/view.php', array('id' => $settingsnav->get_page()->cm->id, 'reportformat' => 'print')));
+        new moodle_url($CFG->wwwroot . '/mod/cado/view.php',
+                array('id' => $settingsnav->get_page()->cm->id, 'reportformat' => 'print')));
 
     // Compare link.
     if (has_capability('mod/cado:compare', $settingsnav->get_page()->cm->context)) {
