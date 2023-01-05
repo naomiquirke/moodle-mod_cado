@@ -34,8 +34,6 @@ function xmldb_cado_upgrade($oldversion = 0) {
 
     $dbman = $DB->get_manager(); // Loads ddl manager and xmldb classes.
 
-    $result = true;
-
     if ($oldversion < 2021012000) {
         $table = new xmldb_table('cado');
 
@@ -64,5 +62,5 @@ function xmldb_cado_upgrade($oldversion = 0) {
         upgrade_mod_savepoint(true, 2021062201, 'cado');
     }
 
-    return $result;
+    return true;
 }
