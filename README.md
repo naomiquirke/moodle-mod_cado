@@ -7,8 +7,14 @@ Course variants, such as those created by different user groupings, or caused by
 
 All the terminology within the report, including "CADO", is able to be customized using Moodle's language settings.
 
+Please contact the developer if you need module updated.
+
 Updates
 =======
+Version 4.0
+-----------
+Update for Moodle 4.0 etc. New style of logo. Automated testing updates for new Moodle UI.
+
 Version 3.02
 -----------
 Fix to allow module introductions in varying formats and with pictures. CADO table update to include format information fields.
