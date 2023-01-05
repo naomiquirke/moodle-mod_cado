@@ -30,7 +30,7 @@ $addons = array(
             'cado' => array( // Handler unique name (can be anything).
                 'displaydata' => array(
                     'title' => 'pluginname',
-                    'icon' => $CFG->wwwroot . '/mod/cado/pix/icon.svg',
+                    'icon' => $CFG->wwwroot . '/mod/cado/pix/monologo.svg',
                     'class' => '',
                 ),
                 'delegate' => 'CoreCourseModuleDelegate', // Delegate (where to display the link to the add-on).
